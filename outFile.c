@@ -25,6 +25,8 @@ int i,j;
 #include "system.lib"
 #include "scheme.lib"
 
+#include "builtins.lib"
+
 CONTINUE:
 
 /*==================*/
@@ -57,11 +59,6 @@ CALL(MAKE_SOB_BOOL);
 DROP(1);
 
 // Making INT object
-PUSH(IMM(5));
-CALL(MAKE_SOB_INTEGER);
-DROP(1);
-
-// Making INT object
 PUSH(IMM(1));
 CALL(MAKE_SOB_INTEGER);
 DROP(1);
@@ -82,40 +79,167 @@ CALL(MAKE_SOB_INTEGER);
 DROP(1);
 
 // Making INT object
+PUSH(IMM(5));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making INT object
 PUSH(IMM(6));
 CALL(MAKE_SOB_INTEGER);
 DROP(1);
 
+// Making INT object
+PUSH(IMM(7));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making INT object
+PUSH(IMM(8));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making INT object
+PUSH(IMM(9));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making INT object
+PUSH(IMM(0));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making vector object
+PUSH(IMM(8));
+
+PUSH(IMM(1));
+CALL(MAKE_SOB_VECTOR);
+DROP(2);
+
+// Making CHAR object
+PUSH(IMM(122));
+CALL(MAKE_SOB_CHAR);
+DROP(1);
+
+// Making STRING object
+PUSH(IMM(65));
+PUSH(IMM(1));
+CALL(MAKE_SOB_STRING);
+DROP(2);
+
+// Making STRING object
+PUSH(IMM(66));
+PUSH(IMM(67));
+PUSH(IMM(68));
+PUSH(IMM(3));
+CALL(MAKE_SOB_STRING);
+DROP(4);
+
+// Making STRING object
+PUSH(IMM(65));
+PUSH(IMM(107));
+PUSH(IMM(117));
+PUSH(IMM(110));
+PUSH(IMM(97));
+PUSH(IMM(5));
+CALL(MAKE_SOB_STRING);
+DROP(6);
+
+// Making STRING object
+PUSH(IMM(77));
+PUSH(IMM(97));
+PUSH(IMM(116));
+PUSH(IMM(97));
+PUSH(IMM(116));
+PUSH(IMM(97));
+PUSH(IMM(6));
+CALL(MAKE_SOB_STRING);
+DROP(7);
+
+// Making CHAR object
+PUSH(IMM(97));
+CALL(MAKE_SOB_CHAR);
+DROP(1);
+
+// Making CHAR object
+PUSH(IMM(98));
+CALL(MAKE_SOB_CHAR);
+DROP(1);
+
+// Making CHAR object
+PUSH(IMM(99));
+CALL(MAKE_SOB_CHAR);
+DROP(1);
+
+// Making CHAR object
+PUSH(IMM(100));
+CALL(MAKE_SOB_CHAR);
+DROP(1);
+
+// Making CHAR object
+PUSH(IMM(101));
+CALL(MAKE_SOB_CHAR);
+DROP(1);
+
+// Making CHAR object
+PUSH(IMM(102));
+CALL(MAKE_SOB_CHAR);
+DROP(1);
+
+// Making CHAR object
+PUSH(IMM(103));
+CALL(MAKE_SOB_CHAR);
+DROP(1);
+
+// Making INT object
+PUSH(IMM(-24));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making INT object
+PUSH(IMM(10));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making INT object
+PUSH(IMM(12));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making INT object
+PUSH(IMM(-2/3));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making STRING object
+PUSH(IMM(65));
+PUSH(IMM(98));
+PUSH(IMM(67));
+PUSH(IMM(49));
+PUSH(IMM(50));
+PUSH(IMM(51));
+PUSH(IMM(52));
+PUSH(IMM(53));
+PUSH(IMM(54));
+PUSH(IMM(55));
+PUSH(IMM(56));
+PUSH(IMM(57));
+PUSH(IMM(48));
+PUSH(IMM(13));
+CALL(MAKE_SOB_STRING);
+DROP(14);
+
 // Makeing PAIR object
 PUSH(IMM(3));
-PUSH(IMM(18));
-CALL(MAKE_SOB_PAIR);
-DROP(2);
-// Makeing PAIR object
-PUSH(IMM(20));
-PUSH(IMM(8));
-CALL(MAKE_SOB_PAIR);
-DROP(2);
-// Makeing PAIR object
-PUSH(IMM(23));
 PUSH(IMM(16));
 CALL(MAKE_SOB_PAIR);
 DROP(2);
+
 // Makeing PAIR object
-PUSH(IMM(26));
+PUSH(IMM(93));
 PUSH(IMM(14));
 CALL(MAKE_SOB_PAIR);
 DROP(2);
-// Makeing PAIR object
-PUSH(IMM(29));
-PUSH(IMM(12));
-CALL(MAKE_SOB_PAIR);
-DROP(2);
-// Makeing PAIR object
-PUSH(IMM(32));
-PUSH(IMM(10));
-CALL(MAKE_SOB_PAIR);
-DROP(2);
+
 // Making STRING object
 PUSH(IMM(97));
 PUSH(IMM(98));
@@ -128,6 +252,51 @@ PUSH(IMM(51));
 PUSH(IMM(8));
 CALL(MAKE_SOB_STRING);
 DROP(9);
+
+// Makeing PAIR object
+PUSH(IMM(3));
+PUSH(IMM(18));
+CALL(MAKE_SOB_PAIR);
+DROP(2);
+
+// Makeing PAIR object
+PUSH(IMM(109));
+PUSH(IMM(16));
+CALL(MAKE_SOB_PAIR);
+DROP(2);
+
+// Makeing PAIR object
+PUSH(IMM(112));
+PUSH(IMM(14));
+CALL(MAKE_SOB_PAIR);
+DROP(2);
+
+// Makeing PAIR object
+PUSH(IMM(115));
+PUSH(IMM(12));
+CALL(MAKE_SOB_PAIR);
+DROP(2);
+
+// Makeing PAIR object
+PUSH(IMM(118));
+PUSH(IMM(10));
+CALL(MAKE_SOB_PAIR);
+DROP(2);
+
+// Makeing PAIR object
+PUSH(IMM(121));
+PUSH(IMM(8));
+CALL(MAKE_SOB_PAIR);
+DROP(2);
+
+// Making vector object
+PUSH(IMM(8));
+PUSH(IMM(10));
+PUSH(IMM(12));
+
+PUSH(IMM(3));
+CALL(MAKE_SOB_VECTOR);
+DROP(4);
 
 
 

@@ -998,6 +998,11 @@
 							 (val  (caddr curr)))
 
 							;;body
+							; (disp curr "cgen-ct")
+							; (disp val "cgen-ct")
+							; (if (vector? val)
+							; 		(disp (vector->list val) "cgen-ct"))
+
 							(string-append
 								(cond
 									;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1055,7 +1060,6 @@
 									;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 									((eq? type 'T_SYMBOL) 
 												; (disp type "T_SYMBOL")
-
 												(let* 
 												((string-addr (get-from-ct (symbol->string val))))
 												(string-append
@@ -1070,26 +1074,40 @@
 												"PUSH(R0);"  																		newl
 												"CALL(MAKE_SOB_PAIR);" 													newl
 												"DROP(2);"																			newl
-												"MOV(IND(SOB_SYM_LIST), R0);" 									newl
+												"MOV(IND(SOB_SYM_LIST), R0);" 									newl newl
 												)))
 
 									;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 									((eq? type 'T_PAIR) 
 												; (disp val "cgen-TPAIR:")
 												; (disp (get-from-ct (car val)) "cgen-TPAIR:")
-												
 												; (disp (car val) )
 												(string-append
 												"// Makeing PAIR object"																				newl
 												"PUSH(IMM(" (number->string (get-from-ct (cdr val))) "));"			newl
 		    								"PUSH(IMM(" (number->string (get-from-ct (car val))) "));"			newl
 												"CALL(MAKE_SOB_PAIR);"																					newl
-												"DROP(2);"																											newl
+												"DROP(2);"																											newl newl
 												))
-									;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-									((eq? type 'T_VECTOR) (string-append
 
-												))
+									;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+									((eq? type 'T_VECTOR) 
+												(let 
+													;; ribs
+													((vec-elements (vector->list val))
+													 (vec-length (length (vector->list val))))
+												;; body
+												(string-append
+												"// Making vector object"		newl
+												(apply string-append 
+													(map (lambda (vec-element)
+																	(string-append 
+																		"PUSH(IMM(" (number->string (get-from-ct vec-element)) "));" newl)
+																	) vec-elements)) 		newl
+												"PUSH(IMM(" (number->string vec-length) "));" 	newl
+												"CALL(MAKE_SOB_VECTOR);" 												newl
+												"DROP(" (number->string (+ 1 vec-length)) ");"	newl newl
+												)))
 									;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 									((eq? type 'T_CLOSURE) (string-append
 
@@ -1113,7 +1131,7 @@
 				 (label-done (if3-label-done)))
 			;;body 
 			(string-append
-					"//--if3-- exp " newl
+					"// ---if3--- exp " newl
 					test newl
 					"CMP(R0, IMM(SOB_BOOL_FALSE));" newl
 					"JUMP_EQ(" label-else ");" newl
@@ -1142,7 +1160,7 @@
 
 
 			newl newl
-			"//---or--- exp " 		newl
+			"// ---or--- exp " 		newl
 			cgen-or-code			 		newl
 			label-done ":" 				newl
 		)
@@ -1152,7 +1170,7 @@
 	(lambda (pe env-len params-len)
 		(string-append 
 			newl
-			"//---seq--- " 		newl
+			"// ---seq--- " 		newl
 			(apply string-append 
 				(map (lambda (item) (cgen item env-len params-len)) pe)
 			))
@@ -1164,32 +1182,157 @@
 		(string-append "MOV(R0, IMM(" (number->string  (get-from-ct pe)) "));\n")
 	))
 
+(define cgen-arg
+	(lambda (arg env-len params-len) 
+		(string-append
+			(cgen arg env-len params-len)
+			"PUSH(R0);" newl
+		)))
+
+(define cgen-bvar 
+	(lambda (pe)
+		(let
+			;; ribs 
+			((minor (number->string (caddr pe)))
+			 (major (number->string (cadr pe))))
+		;; body
+		(string-append 
+																				newl 
+			"// ---bvar---" 									newl
+			; Name for debugging
+			"// "(symbol->string (car pe)) newl 
+			"MOV(R0, FPARG(0));" 							newl
+			;"SHOW(\" -> Bvar fparg: \", R0);" nl
+			"MOV(R0, INDD(R0, " major "));" 	newl
+			"MOV(R0, INDD(R0, " minor "));" 	newl newl
+		))
+	))
+
+(define cgen-pvar 
+	(lambda (pe)
+		(let 
+			((arg-position (+ 2 (cadr pe))))
+		(string-append 
+																														newl 
+			"// ---pvar---"									 											newl
+			; Name for debugging
+			"// " (symbol->string (car pe)) 											newl
+			"MOV(R0, FPARG(" (number->string arg-position) "));" 	newl newl
+		))
+	))
+
+(define cgen-applic 
+	(lambda (pe env-len params-len)
+		(let* (
+			(expr (car pe))
+			(args (cadr pe))
+			(num-of-args (length args))
+			; (cgen-arg (lambda (arg) (string-append
+			; 	(cg arg env-len params-len)
+			; 	"PUSH(R0);" newl
+			; )))
+			(generated-code (cgen expr env-len params-len))
+			(all-args (apply string-append 
+				(map 
+					(lambda (arg) 
+						(cgen-arg arg env-len params-len)) 
+					(reverse args))))
+			)
+		(string-append 
+													newl 
+			"//---applic---" 		newl
+			;; arguments
+			all-args
+
+			;; num of argments
+			"PUSH(IMM(" (number->string num-of-args) "));" 	newl
+
+			;; 
+			generated-code 									newl
+		
+			"// check valid closuse" 				newl
+			"CMP(INDD(R0,0), T_CLOSURE);" 	newl
+			"JUMP_NE(L_RUNTIME_ERROR);" 		newl
+
+			;; env argument
+			"PUSH(INDD(R0,1)); "			 			newl
+
+			;; go to funtion code
+			"CALLA(INDD(R0, 2));" 					newl
+
+			"DROP(2 + STARG(0));"						newl
+		))
+	))
+
+(define cgen-tc-applic 
+	(lambda (pe env-len params-len)
+		(let* 
+			;; ribs
+			((proc (car pe))
+			(args (cadr pe))
+			(num-of-args (length args))
+			(all-args (apply string-append 
+					(map (lambda (arg) (cgen-arg arg env-len params-len)) 
+						(reverse args))))
+			(generated-proc (cgen proc env-len params-len)))
+		;; body
+		(string-append 
+																														newl 
+			"// ---applic-tc---" 																	newl
+			;; args to stack
+			all-args
+
+			"PUSH(IMM("(number->string num-of-args) "));"					newl
+
+			; ----- Get function -----
+			generated-proc 																				newl
+			
+			"// validate closure" 																newl
+			"CMP(INDD(R0,0), T_CLOSURE);" 												newl
+			"JUMP_NE(L_RUNTIME_ERROR);" 													newl
+
+			; env
+			"PUSH(INDD(R0,1)); "			 														newl
+
+			"MOV(R1, FPARG(-2));" 																newl
+			"PUSH(FPARG(-1));" 																		newl newl
+																			
+			"// overwrite old-fp" 																newl
+			"PUSH(IMM(" (number->string (+ 3 num-of-args))"));" 	newl
+			"PUSH(FP);"									  												newl
+			"MOV(R2, FP);" 																				newl
+			"SUB(R2, 4);" 																				newl 
+			"SUB(R2, FPARG(1));" 																	newl 
+			"PUSH(R2);     " 																			newl
+			"CALL(STACKCPY);" 																		newl
+			
+			; update fp
+			"MOV(FP, R1); " 																			newl
+			"ADD(R2, " (number->string (+ 3 num-of-args)) ");" 		newl
+			"MOV(SP, R2);" 																				newl
+			; jump to function
+			"JUMPA((void *) INDD(R0, 2));" 												newl
+		))
+	))
 
 ;; ------------------- lambda code gen -------------------- ;;
 
 (define cgen-lambda-code 
 	(lambda (pe body env-len params-len)
 		(let 
+			;;ribs
 			((label-code (lambda-label))
-			 (label-code-done (lambda-label-done))
-			;(proc-body-compiled (cg proc-body (add1 env-size) param-size))
-			;(proc-args (car value))
-			;(proc-args-length (length proc-args))
-			;(proc-body (cadr value))
-			)
+			 (label-code-done (lambda-label-done)))
+		;;body
 		(string-append 
 																													newl 
 			"//---lambda-code---"																newl
-
-			; TODO: Back up R1
-			;"PUSH(R1);" nl
-			;"PUSH(R2);" nl
 
 			"// Init env " 																			newl
 			"PUSH(IMM(" (number->string (+ 1 env-len)) "));" 		newl
 			"CALL(MALLOC);" 																		newl 
 			"DROP(1);" 																					newl
-			; Save the new env pointer
+			;; Back up env pointer
 			"MOV(R1, R0);" 																			newl
 			; Create new env
 			(if (zero? env-len)
@@ -1226,47 +1369,41 @@
 			"CALL(MAKE_SOB_CLOSURE);" 									newl 
 			"DROP(2);" 																	newl
 
-			;"SHOW(\"Create closure in: \", R0);"
-			; Skip code		
-			"JUMP(" label-closure-done ");" 						newl
+			; Finished builder closure
+			"JUMP(" label-code-done ");" 								newl
 			; Function code
 			label-code ":" 															newl
 			"PUSH(FP);" 																newl
 	  	"MOV(FP, SP);"															newl
-			proc-body-compiled 													newl
+			body 																				newl
 			"POP(FP);" 																	newl 
 			"RETURN;" 																	newl
 
-			label-closure-done ":" 											newl
-			;"POP(R2);"
-			;"POP(R1);"
+			label-code-done ":" 												newl
 		))
 	))
 
 (define cgen-lambda-simple
 	(lambda (pe env-len params-len)
-		(let (
-			;(proc-args (car value))
-			;(proc-args-length (length proc-args))
-			;(label-closure (^label-closure))
-			;(label-closure-exit (^label-closure-exit))
-			(compiled-body (cgen (cadr pe) (+ 1 env-len) params-len))
-			)
-		(cgen-lambda-code pe compiled-body env-len params-len)
-		)
+		(let
+				;;ribs 
+				((compiled-body (cgen (cadr pe) (+ 1 env-len) params-len)))
+			;;body
+			(cgen-lambda-code pe compiled-body env-len params-len))
   ))
 
 (define cgen
-	(lambda (pe env-len param-len) 
+	(lambda (pe env-len params-len) 
 		(cond 
 			((const-pe? pe) (cgen-const (cadr pe)))
-			((seq-pe? pe) (cgen-seq (cadr pe) env-len param-len))
-			((if3-pe? pe) (cgen-if3 (cdr pe) env-len param-len))
-			((or-pe? pe) (cgen-or (cadr pe) env-len param-len))
-			((lambda-simple-pe? pe) (cgen-lambda-simple (cdr pe) env-len param-len))
-			; ((pvar-pe? exp)  )
-			; ((bvar-pe? exp)  )
-			; ((fvar-pe? exp)  )
+			((seq-pe? pe) (cgen-seq (cadr pe) env-len params-len))
+			((if3-pe? pe) (cgen-if3 (cdr pe) env-len params-len))
+			((or-pe? pe) (cgen-or (cadr pe) env-len params-len))
+			((lambda-simple-pe? pe) (cgen-lambda-simple (cdr pe) env-len params-len))
+			((applic-pe? pe) (cgen-applic (cdr pe) env-len params-len))
+			((tc-applic-pe? pe) (cgen-tc-applic (cdr pe) env-len params-len))
+			((bvar-pe? pe) (cgen-bvar (cdr pe)))
+			((pvar-pe? pe) (cgen-pvar (cdr pe)))
 			; ((applic-pe? exp) )
 			(else (compilation-error "Unsupported symbol" pe))
 		)))
@@ -1304,11 +1441,9 @@
 ))
 
 
-
 ;; ======================================================================================================================
 ;; 																						Const table functions
 ;; ======================================================================================================================
-
 
 (define const-table
 	`(
@@ -1633,7 +1768,7 @@
 				"#include \"string.lib\""								newl
 				"#include \"system.lib\""								newl
 				"#include \"scheme.lib\""								newl newl
-				; "#include \"builtins.lib\""							newl newl
+				"#include \"builtins.lib\""							newl newl
 
 				"CONTINUE:"															newl newl
 
