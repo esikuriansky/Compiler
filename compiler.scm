@@ -967,7 +967,9 @@
 (define lambda-opt-new-args (^make-label "L_OPT_NEW_ARGS"))
 (define lambda-opt-new-args-done (^make-label "L_OPT_NEW_ARGS_DONE"))
 
-;; 
+;; LAMBDA VARIADIC
+(define lambda-var-loop (^make-label "L_VAR_LOOP"))
+(define lambda-var-loop-done (^make-label "L_VAR_LOOP_DONE"))
 
 (define newl (list->string (list #\newline)))
 
@@ -1464,6 +1466,61 @@
 		)
 	))
 
+(define cgen-lambda-variadic 
+	(lambda (pe env-len params-len)
+		(let* 
+			;; ribs
+			((body (cadr pe))
+			(args (car pe))
+			(label-var-loop (lambda-var-loop))
+			(label-var-loop-done (lambda-var-loop-done))
+			(generated-body (cgen body (+ 1 env-len) params-size)))
+		;; body
+		(cen-lambda-code pe (string-append
+				"// ---lamda-variadic--- " 	newl
+				"MOV(R1, FPARG(1));" 				newl
+				"INCR(R1);" 								newl
+
+				lambda-var-loop ":" 								newl
+				"CMP(1, R1);" 											newl
+				"JUMP_EQ(" label-var-loop-done ");" newl
+				"PUSH(FPARG(R1));" 									newl
+				"DECR(R1);" 												newl
+				"JUMP(" label-var-loop ");" 				newl
+				label-var-loop-done ":" 						newl
+
+				"PUSH(FPARG(1));" 		newl
+				"CALL(MAKE_LIST);" 		newl
+				"DROP(1);"						newl
+				"DROP(FPARG(1));" 		newl 
+
+				"MOV(R3, SP);" 				newl
+
+				"PUSH(R0);" 					newl 					
+				"PUSH(IMM(1));" 			newl				
+				"PUSH(FPARG(0));" 		newl			
+				"PUSH(FPARG(-1));" 		newl			
+				"PUSH(FPARG(-2));" 		newl newl 	
+				
+				"PUSH(IMM(5));"  			newl
+				"PUSH(R3);"  					newl
+				"MOV(R3, FP);" 				newl
+				"SUB(R3, 4);" 				newl 		
+				"SUB(R3, FPARG(1));" 	newl 
+				"PUSH(R3);" 					newl
+				"CALL(STACKCPY);" 		newl
+				"DROP(3);" 						newl
+
+															newl
+				"ADD(R3, 5);" 				newl
+				"MOV(FP, R3);" 				newl	 
+				"MOV(SP, R3);" 				newl
+
+				generated-body
+			) env-len params-len)
+		)
+	))
+
 (define cgen
 	(lambda (pe env-len params-len) 
 		(cond 
@@ -1511,7 +1568,6 @@
 				`(,@(apply append (map handle-const (vector->list exp))) ,exp))
 			(else `(,exp)))
 ))
-
 
 ;; ======================================================================================================================
 ;; 																						Const table functions
