@@ -961,6 +961,13 @@
 (define lambda-label (^make-label "L_CLOSURE"))
 (define lambda-label-done (^make-label "L_CLOSURE_DONE"))
 
+;; LAMBDA OPT
+(define lambda-opt-loop (^make-label "L_OPT_LOOP"))
+(define lambda-opt-loop-done (^make-label "L_OPT_LOOP_DONE"))
+(define lambda-opt-new-args (^make-label "L_OPT_NEW_ARGS"))
+(define lambda-opt-new-args-done (^make-label "L_OPT_NEW_ARGS_DONE"))
+
+;; 
 
 (define newl (list->string (list #\newline)))
 
@@ -1199,10 +1206,8 @@
 		(string-append 
 																				newl 
 			"// ---bvar---" 									newl
-			; Name for debugging
-			"// "(symbol->string (car pe)) newl 
+			"// "(symbol->string (car pe)) 		newl 
 			"MOV(R0, FPARG(0));" 							newl
-			;"SHOW(\" -> Bvar fparg: \", R0);" nl
 			"MOV(R0, INDD(R0, " major "));" 	newl
 			"MOV(R0, INDD(R0, " minor "));" 	newl newl
 		))
@@ -1215,7 +1220,6 @@
 		(string-append 
 																														newl 
 			"// ---pvar---"									 											newl
-			; Name for debugging
 			"// " (symbol->string (car pe)) 											newl
 			"MOV(R0, FPARG(" (number->string arg-position) "));" 	newl newl
 		))
@@ -1227,10 +1231,6 @@
 			(expr (car pe))
 			(args (cadr pe))
 			(num-of-args (length args))
-			; (cgen-arg (lambda (arg) (string-append
-			; 	(cg arg env-len params-len)
-			; 	"PUSH(R0);" newl
-			; )))
 			(generated-code (cgen expr env-len params-len))
 			(all-args (apply string-append 
 				(map 
@@ -1243,11 +1243,9 @@
 			"//---applic---" 		newl
 			;; arguments
 			all-args
-
 			;; num of argments
 			"PUSH(IMM(" (number->string num-of-args) "));" 	newl
 
-			;; 
 			generated-code 									newl
 		
 			"// check valid closuse" 				newl
@@ -1259,7 +1257,6 @@
 
 			;; go to funtion code
 			"CALLA(INDD(R0, 2));" 					newl
-
 			"DROP(2 + STARG(0));"						newl
 		))
 	))
@@ -1392,6 +1389,81 @@
 			(cgen-lambda-code pe compiled-body env-len params-len))
   ))
 
+(define cgen-lambda-opt
+	(lambda (pe env-len params-len)
+		(let* 
+			;; ribs
+			((args (car pe))
+			(num-of-args (length args))
+			(body (caddr pe))
+			(label-opt-loop (lambda-opt-loop))
+			(label-opt-loop-done (lambda-opt-loop-done))
+			(label-new-args (lambda-opt-new-args))
+			(label-new-args-done (lambda-opt-new-args-done))
+			(generated-body (cgen body (+ 1 env-len) params-len)))
+		;; body
+		(cgen-lambda-code pe (string-append
+
+				"// ---lambda-opt--- " 	newl
+				"// convert optional " 	newl
+				"// arguments to list"  newl newl
+
+				"MOV(R1, FPARG(1));" 		newl 
+				"INCR(R1);" 						newl
+
+				;; args to stack
+				label-opt-loop ":" 																				newl
+				"CMP(" (number->string (+ 1 num-of-args)) ", R1);" 				newl
+				"JUMP_EQ(" label-opt-loop-done ");" 											newl
+				"PUSH(FPARG(R1));" 																				newl
+				"DECR(R1);" 																							newl
+				"JUMP("label-opt-loop");" 																newl
+				label-opt-loop-done ":" 																	newl
+
+				"MOV(R1, FPARG(1));" 																			newl
+				"SUB(R1, IMM(" (number->string num-of-args) "));" 				newl
+				"PUSH(R1);" 																							newl
+				"CALL(BUILD_LIST);" 																			newl
+				"DROP(1);"																								newl
+				"DROP(R1);" 																							newl
+
+				"MOV(R3, SP);"																						newl
+				"PUSH(R0);" 																							newl 					
+
+				;; push args
+				"MOV(R1, " (number->string (+ 1 num-of-args)) ");" 	newl
+				label-new-args ":" 									newl 
+				"CMP(1, R1);" 											newl
+				"JUMP_EQ(" label-new-args-done ");" newl
+				"PUSH(FPARG(R1));" 									newl
+				"DECR(R1);" 												newl
+				"JUMP(" label-new-args ");" 				newl
+				label-new-args-done ":" 						newl 
+				
+				"PUSH(IMM(" (number->string (+ 1 num-of-args)) "));" 	newl
+				"PUSH(FPARG(0));" 																		newl			
+				"PUSH(FPARG(-1));" 																		newl			
+				"PUSH(FPARG(-2));" 																		newl newl 		
+
+				"PUSH(IMM(" (number->string (+ 5 num-of-args)) "));"  newl
+				"PUSH(R3);  /* source */"  														newl
+				"MOV(R3, FP);" 																				newl
+				"SUB(R3, 4);" 																				newl 
+				"SUB(R3, FPARG(1));" 																	newl 
+
+				"PUSH(R3); /* destination */"  												newl
+				"CALL(STACKCPY);" 																		newl
+				"DROP(3);" 																						newl newl
+																												
+				"ADD(R3, " (number->string (+ 5 num-of-args)) ");" 		newl 	
+				"MOV(FP, R3);" 																				newl 	 
+				"MOV(SP, R3);" 																				newl 
+
+				generated-body
+			) env-len params-len)
+		)
+	))
+
 (define cgen
 	(lambda (pe env-len params-len) 
 		(cond 
@@ -1400,11 +1472,11 @@
 			((if3-pe? pe) (cgen-if3 (cdr pe) env-len params-len))
 			((or-pe? pe) (cgen-or (cadr pe) env-len params-len))
 			((lambda-simple-pe? pe) (cgen-lambda-simple (cdr pe) env-len params-len))
+			((lambda-opt-pe? pe) (cgen-lambda-opt (cdr pe) env-len params-len))
 			((applic-pe? pe) (cgen-applic (cdr pe) env-len params-len))
 			((tc-applic-pe? pe) (cgen-tc-applic (cdr pe) env-len params-len))
 			((bvar-pe? pe) (cgen-bvar (cdr pe)))
 			((pvar-pe? pe) (cgen-pvar (cdr pe)))
-			; ((applic-pe? exp) )
 			(else (compilation-error "Unsupported symbol" pe))
 		)))
 

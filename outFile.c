@@ -108,95 +108,13 @@ PUSH(IMM(0));
 CALL(MAKE_SOB_INTEGER);
 DROP(1);
 
-// Making vector object
-PUSH(IMM(8));
-
-PUSH(IMM(1));
-CALL(MAKE_SOB_VECTOR);
-DROP(2);
-
-// Making CHAR object
-PUSH(IMM(122));
-CALL(MAKE_SOB_CHAR);
-DROP(1);
-
-// Making STRING object
-PUSH(IMM(65));
-PUSH(IMM(1));
-CALL(MAKE_SOB_STRING);
-DROP(2);
-
-// Making STRING object
-PUSH(IMM(66));
-PUSH(IMM(67));
-PUSH(IMM(68));
-PUSH(IMM(3));
-CALL(MAKE_SOB_STRING);
-DROP(4);
-
-// Making STRING object
-PUSH(IMM(65));
-PUSH(IMM(107));
-PUSH(IMM(117));
-PUSH(IMM(110));
-PUSH(IMM(97));
-PUSH(IMM(5));
-CALL(MAKE_SOB_STRING);
-DROP(6);
-
-// Making STRING object
-PUSH(IMM(77));
-PUSH(IMM(97));
-PUSH(IMM(116));
-PUSH(IMM(97));
-PUSH(IMM(116));
-PUSH(IMM(97));
-PUSH(IMM(6));
-CALL(MAKE_SOB_STRING);
-DROP(7);
-
-// Making CHAR object
-PUSH(IMM(97));
-CALL(MAKE_SOB_CHAR);
-DROP(1);
-
-// Making CHAR object
-PUSH(IMM(98));
-CALL(MAKE_SOB_CHAR);
-DROP(1);
-
-// Making CHAR object
-PUSH(IMM(99));
-CALL(MAKE_SOB_CHAR);
-DROP(1);
-
-// Making CHAR object
-PUSH(IMM(100));
-CALL(MAKE_SOB_CHAR);
-DROP(1);
-
-// Making CHAR object
-PUSH(IMM(101));
-CALL(MAKE_SOB_CHAR);
-DROP(1);
-
-// Making CHAR object
-PUSH(IMM(102));
-CALL(MAKE_SOB_CHAR);
-DROP(1);
-
-// Making CHAR object
-PUSH(IMM(103));
-CALL(MAKE_SOB_CHAR);
-DROP(1);
-
 // Making INT object
-PUSH(IMM(-24));
+PUSH(IMM(-3/4));
 CALL(MAKE_SOB_INTEGER);
 DROP(1);
 
 // Making INT object
-PUSH(IMM(10));
+PUSH(IMM(5/6));
 CALL(MAKE_SOB_INTEGER);
 DROP(1);
 
@@ -206,97 +124,14 @@ CALL(MAKE_SOB_INTEGER);
 DROP(1);
 
 // Making INT object
-PUSH(IMM(-2/3));
-CALL(MAKE_SOB_INTEGER);
-DROP(1);
-
-// Making STRING object
-PUSH(IMM(65));
-PUSH(IMM(98));
-PUSH(IMM(67));
-PUSH(IMM(49));
-PUSH(IMM(50));
-PUSH(IMM(51));
-PUSH(IMM(52));
-PUSH(IMM(53));
-PUSH(IMM(54));
-PUSH(IMM(55));
-PUSH(IMM(56));
-PUSH(IMM(57));
-PUSH(IMM(48));
 PUSH(IMM(13));
-CALL(MAKE_SOB_STRING);
-DROP(14);
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
 
-// Makeing PAIR object
-PUSH(IMM(3));
-PUSH(IMM(16));
-CALL(MAKE_SOB_PAIR);
-DROP(2);
-
-// Makeing PAIR object
-PUSH(IMM(93));
+// Making INT object
 PUSH(IMM(14));
-CALL(MAKE_SOB_PAIR);
-DROP(2);
-
-// Making STRING object
-PUSH(IMM(97));
-PUSH(IMM(98));
-PUSH(IMM(67));
-PUSH(IMM(100));
-PUSH(IMM(69));
-PUSH(IMM(49));
-PUSH(IMM(50));
-PUSH(IMM(51));
-PUSH(IMM(8));
-CALL(MAKE_SOB_STRING);
-DROP(9);
-
-// Makeing PAIR object
-PUSH(IMM(3));
-PUSH(IMM(18));
-CALL(MAKE_SOB_PAIR);
-DROP(2);
-
-// Makeing PAIR object
-PUSH(IMM(109));
-PUSH(IMM(16));
-CALL(MAKE_SOB_PAIR);
-DROP(2);
-
-// Makeing PAIR object
-PUSH(IMM(112));
-PUSH(IMM(14));
-CALL(MAKE_SOB_PAIR);
-DROP(2);
-
-// Makeing PAIR object
-PUSH(IMM(115));
-PUSH(IMM(12));
-CALL(MAKE_SOB_PAIR);
-DROP(2);
-
-// Makeing PAIR object
-PUSH(IMM(118));
-PUSH(IMM(10));
-CALL(MAKE_SOB_PAIR);
-DROP(2);
-
-// Makeing PAIR object
-PUSH(IMM(121));
-PUSH(IMM(8));
-CALL(MAKE_SOB_PAIR);
-DROP(2);
-
-// Making vector object
-PUSH(IMM(8));
-PUSH(IMM(10));
-PUSH(IMM(12));
-
-PUSH(IMM(3));
-CALL(MAKE_SOB_VECTOR);
-DROP(4);
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
 
 
 
@@ -314,7 +149,99 @@ DROP(4);
 /*         Compiled code       */
 /*=============================*/
 
-MOV(R0, IMM(4));
+
+//---applic---
+MOV(R0, IMM(18));
+PUSH(R0);
+MOV(R0, IMM(16));
+PUSH(R0);
+MOV(R0, IMM(14));
+PUSH(R0);
+MOV(R0, IMM(12));
+PUSH(R0);
+MOV(R0, IMM(10));
+PUSH(R0);
+MOV(R0, IMM(8));
+PUSH(R0);
+PUSH(IMM(6));
+
+//---lambda-code---
+// Init env 
+PUSH(IMM(1));
+CALL(MALLOC);
+DROP(1);
+MOV(R1, R0);
+MOV(INDD(R1, 0), SOB_NIL);PUSH(LABEL(L_CLOSURE20));
+
+PUSH(R1);
+CALL(MAKE_SOB_CLOSURE);
+DROP(2);
+JUMP(L_CLOSURE_DONE20);
+L_CLOSURE20:
+PUSH(FP);
+MOV(FP, SP);
+// ---lambda-opt--- 
+// convert optional 
+// arguments to list
+
+MOV(R1, FPARG(1));
+INCR(R1);
+L_OPT_LOOP19:
+CMP(2, R1);
+JUMP_EQ(L_OPT_LOOP_DONE19);
+PUSH(FPARG(R1));
+DECR(R1);
+JUMP(L_OPT_LOOP19);
+L_OPT_LOOP_DONE19:
+MOV(R1, FPARG(1));
+SUB(R1, IMM(1));
+PUSH(R1);
+CALL(BUILD_LIST);
+DROP(1);
+DROP(R1);
+MOV(R3, SP);
+PUSH(R0);
+MOV(R1, 2);
+L_OPT_NEW_ARGS19:
+CMP(1, R1);
+JUMP_EQ(L_OPT_NEW_ARGS_DONE19);
+PUSH(FPARG(R1));
+DECR(R1);
+JUMP(L_OPT_NEW_ARGS19);
+L_OPT_NEW_ARGS_DONE19:
+PUSH(IMM(2));
+PUSH(FPARG(0));
+PUSH(FPARG(-1));
+PUSH(FPARG(-2));
+
+PUSH(IMM(6));
+PUSH(R3);  /* source */
+MOV(R3, FP);
+SUB(R3, 4);
+SUB(R3, FPARG(1));
+PUSH(R3); /* destination */
+CALL(STACKCPY);
+DROP(3);
+
+ADD(R3, 6);
+MOV(FP, R3);
+MOV(SP, R3);
+
+// ---pvar---
+// y
+MOV(R0, FPARG(3));
+
+
+POP(FP);
+RETURN;
+L_CLOSURE_DONE20:
+
+// check valid closuse
+CMP(INDD(R0,0), T_CLOSURE);
+JUMP_NE(L_RUNTIME_ERROR);
+PUSH(INDD(R0,1)); 
+CALLA(INDD(R0, 2));
+DROP(2 + STARG(0));
 
 
 /*==============================*/
