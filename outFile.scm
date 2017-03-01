@@ -1,1 +1,1 @@
-#\space
+(char->integer #\A)

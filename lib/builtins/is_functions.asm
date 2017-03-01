@@ -1,0 +1,143 @@
+
+IS_STRING:
+    PUSH(FP);
+    MOV(FP, SP);
+
+    PUSH(FPARG(2)); //object
+    CALL(IS_SOB_STRING); //Call mayer function
+    DROP(1);
+
+    CMP(R0, IMM(0));
+    JUMP_EQ(IS_FUNCTIONS_RETURN_FALSE);
+    JUMP(IS_FUNCTIONS_RETURN_TRUE);
+
+IS_INTEGER:
+    PUSH(FP);
+    MOV(FP, SP);
+
+    PUSH(FPARG(2)); //object
+    CALL(IS_SOB_INTEGER); //Call mayer function
+    DROP(1);
+
+    CMP(R0, IMM(0));
+    JUMP_EQ(IS_FUNCTIONS_RETURN_FALSE);
+    JUMP(IS_FUNCTIONS_RETURN_TRUE);
+
+IS_BOOL:
+    PUSH(FP);
+    MOV(FP, SP);
+
+    PUSH(FPARG(2)); //object
+    CALL(IS_SOB_BOOL); //Call mayer function
+    DROP(1);
+
+    CMP(R0, IMM(0));
+    JUMP_EQ(IS_FUNCTIONS_RETURN_FALSE);
+    JUMP(IS_FUNCTIONS_RETURN_TRUE);
+
+
+IS_CHAR:
+    PUSH(FP);
+    MOV(FP, SP);
+
+    PUSH(FPARG(2)); //object
+    CALL(IS_SOB_CHAR); //Call mayer function
+    DROP(1);
+
+    CMP(R0, IMM(0));
+    JUMP_EQ(IS_FUNCTIONS_RETURN_FALSE);
+    JUMP(IS_FUNCTIONS_RETURN_TRUE);
+
+
+IS_NILL:
+    PUSH(FP);
+    MOV(FP, SP);
+
+    PUSH(FPARG(2)); //object
+    CALL(IS_SOB_NIL); //Call mayer function
+    DROP(1);
+
+    CMP(R0, IMM(0));
+    JUMP_EQ(IS_FUNCTIONS_RETURN_FALSE);
+    JUMP(IS_FUNCTIONS_RETURN_TRUE);
+
+
+IS_VOID:
+    PUSH(FP);
+    MOV(FP, SP);
+
+    PUSH(FPARG(2)); //object
+    CALL(IS_SOB_VOID); //Call mayer function
+    DROP(1);
+
+    CMP(R0, IMM(0));
+    JUMP_EQ(IS_FUNCTIONS_RETURN_FALSE);
+    JUMP(IS_FUNCTIONS_RETURN_TRUE);
+
+
+IS_PAIR:
+    PUSH(FP);
+    MOV(FP, SP);
+
+    PUSH(FPARG(2)); //object
+    CALL(IS_SOB_PAIR); //Call mayer function
+    DROP(1);
+
+    CMP(R0, IMM(0));
+    JUMP_EQ(IS_FUNCTIONS_RETURN_FALSE);
+    JUMP(IS_FUNCTIONS_RETURN_TRUE);
+
+
+IS_VECTOR:
+    PUSH(FP);
+    MOV(FP, SP);
+
+    PUSH(FPARG(2)); //object
+    CALL(IS_SOB_VECTOR); //Call mayer function
+    DROP(1);
+
+    CMP(R0, IMM(0));
+    JUMP_EQ(IS_FUNCTIONS_RETURN_FALSE);
+    JUMP(IS_FUNCTIONS_RETURN_TRUE);
+
+
+IS_SYMBOL:
+    PUSH(FP);
+    MOV(FP, SP);
+
+    PUSH(FPARG(2)); //object
+    CALL(IS_SOB_SYMBOL); //Call mayer function
+    DROP(1);
+
+    CMP(R0, IMM(0));
+    JUMP_EQ(IS_FUNCTIONS_RETURN_FALSE);
+    JUMP(IS_FUNCTIONS_RETURN_TRUE);
+
+
+IS_CLOSURE:
+    PUSH(FP);
+    MOV(FP, SP);
+
+    PUSH(FPARG(2)); //object
+    CALL(IS_SOB_CLOSURE); //Call mayer function
+    DROP(1);
+
+    CMP(R0, IMM(0));
+    JUMP_EQ(IS_FUNCTIONS_RETURN_FALSE);
+    JUMP(IS_FUNCTIONS_RETURN_TRUE);
+
+    
+
+IS_FUNCTIONS_RETURN_TRUE:
+    MOV(R0, SOB_BOOL_TRUE);
+    JUMP(IS_FUNCTIONS_EXIT);
+
+IS_FUNCTIONS_RETURN_FALSE:
+    MOV(R0, SOB_BOOL_FALSE);
+    JUMP(IS_FUNCTIONS_EXIT);
+
+
+IS_FUNCTIONS_EXIT:
+
+    POP(FP);
+    RETURN;

@@ -1,4 +1,3 @@
-// UTIL FUNCTIONS
 
 STACKCPY:
         PUSH(FP);

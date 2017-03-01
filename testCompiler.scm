@@ -828,10 +828,10 @@
 	  "(1 . (2 . (3 . ())))\n")
 	  
     ;;set fvar
-    (cons "(set! x 5) x" "5\n")
-    (cons "(begin (set! x 5) (set! y x) y)" "5\n")
-    (cons "(begin (set! x 5) (set! y -12/35) y)" "-12/35\n")
-    (cons "(begin (set! x 5) (set! x -12/35) x)" "-12/35\n")
+    ; (cons "(set! x 5) x" "5\n")
+    ; (cons "(begin (set! x 5) (set! y x) y)" "5\n")
+    ; (cons "(begin (set! x 5) (set! y -12/35) y)" "-12/35\n")
+    ; (cons "(begin (set! x 5) (set! x -12/35) x)" "-12/35\n")
     
     ;;;; box-set box-get box test
     (cons "((lambda (x) ((lambda (y) (set! x 12) 2) 3) x) 5)" "12\n")
@@ -1184,7 +1184,7 @@
       ; (cons "Constants Table" constants-table-tests)  
       ; (cons "Or, If and Begin" or-if-begin-tests)      
       ; (cons "Lambda-simple" lambda-simple-tests)
-      (cons "Lambda-opt" lambda-opt-tests)
+      ; (cons "Lambda-opt" lambda-opt-tests)
       ; (cons "Lambda-var" lambda-var-tests)
       ; (cons "tc-applic-tests" tc-applic-tests)
       ; (cons "Comp161 torture if test" comp161-torture-if-test)
@@ -1192,11 +1192,7 @@
       ; (cons "Set" set-tests)
       ; (cons "pvar-bvar" pvar-bvar-tests)
       ; (cons "Define" define-tests)
-      ; (cons "Primitive Functions" primitive-functions-tests)
-      
-
-
-
+      (cons "Primitive Functions" primitive-functions-tests)
       ;(cons "Internal Helper Procedures" internal-helper-procedures-tests)
       ;(cons "Debugging" tests)  
       

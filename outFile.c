@@ -59,22 +59,22 @@ CALL(MAKE_SOB_BOOL);
 DROP(1);
 
 // Making INT object
-PUSH(IMM(1));
+PUSH(IMM(5/6));
 CALL(MAKE_SOB_INTEGER);
 DROP(1);
 
 // Making INT object
-PUSH(IMM(2));
+PUSH(IMM(6/7));
 CALL(MAKE_SOB_INTEGER);
 DROP(1);
 
 // Making INT object
-PUSH(IMM(3));
+PUSH(IMM(7/8));
 CALL(MAKE_SOB_INTEGER);
 DROP(1);
 
 // Making INT object
-PUSH(IMM(4));
+PUSH(IMM(9));
 CALL(MAKE_SOB_INTEGER);
 DROP(1);
 
@@ -94,17 +94,22 @@ CALL(MAKE_SOB_INTEGER);
 DROP(1);
 
 // Making INT object
-PUSH(IMM(8));
+PUSH(IMM(1));
 CALL(MAKE_SOB_INTEGER);
 DROP(1);
 
 // Making INT object
-PUSH(IMM(9));
+PUSH(IMM(2));
 CALL(MAKE_SOB_INTEGER);
 DROP(1);
 
 // Making INT object
-PUSH(IMM(0));
+PUSH(IMM(3));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making INT object
+PUSH(IMM(-1/2));
 CALL(MAKE_SOB_INTEGER);
 DROP(1);
 
@@ -114,7 +119,32 @@ CALL(MAKE_SOB_INTEGER);
 DROP(1);
 
 // Making INT object
-PUSH(IMM(5/6));
+PUSH(IMM(-5/6));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making INT object
+PUSH(IMM(-7/8));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making INT object
+PUSH(IMM(12/5));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making INT object
+PUSH(IMM(11));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making INT object
+PUSH(IMM(-12));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making INT object
+PUSH(IMM(-12/11));
 CALL(MAKE_SOB_INTEGER);
 DROP(1);
 
@@ -124,12 +154,385 @@ CALL(MAKE_SOB_INTEGER);
 DROP(1);
 
 // Making INT object
-PUSH(IMM(13));
+PUSH(IMM(1/2));
 CALL(MAKE_SOB_INTEGER);
 DROP(1);
 
 // Making INT object
-PUSH(IMM(14));
+PUSH(IMM(3/2));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making INT object
+PUSH(IMM(-3/2));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making STRING object
+PUSH(IMM(65));
+PUSH(IMM(66));
+PUSH(IMM(67));
+PUSH(IMM(3));
+CALL(MAKE_SOB_STRING);
+DROP(4);
+
+// Making STRING object
+PUSH(IMM(97));
+PUSH(IMM(1));
+CALL(MAKE_SOB_STRING);
+DROP(2);
+
+// Makeing SYMBOL object
+PUSH(IMM(57));
+CALL(MAKE_SOB_SYMBOL);
+DROP(1);
+// Build symbol link
+PUSH(IND(SOB_SYM_LIST));
+PUSH(R0);
+CALL(MAKE_SOB_PAIR);
+DROP(2);
+MOV(IND(SOB_SYM_LIST), R0);
+
+// Makeing PAIR object
+PUSH(IMM(3));
+PUSH(IMM(60));
+CALL(MAKE_SOB_PAIR);
+DROP(2);
+
+// Making vector object
+PUSH(IMM(52));
+PUSH(IMM(22));
+PUSH(IMM(4));
+PUSH(IMM(24));
+PUSH(IMM(6));
+PUSH(IMM(26));
+PUSH(IMM(65));
+
+PUSH(IMM(7));
+CALL(MAKE_SOB_VECTOR);
+DROP(8);
+
+// Making INT object
+PUSH(IMM(4));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making STRING object
+PUSH(IMM(65));
+PUSH(IMM(66));
+PUSH(IMM(99));
+PUSH(IMM(68));
+PUSH(IMM(49));
+PUSH(IMM(50));
+PUSH(IMM(51));
+PUSH(IMM(52));
+PUSH(IMM(8));
+CALL(MAKE_SOB_STRING);
+DROP(9);
+
+// Making INT object
+PUSH(IMM(0));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making CHAR object
+PUSH(IMM(98));
+CALL(MAKE_SOB_CHAR);
+DROP(1);
+
+// Making CHAR object
+PUSH(IMM(97));
+CALL(MAKE_SOB_CHAR);
+DROP(1);
+
+// Making CHAR object
+PUSH(IMM(65));
+CALL(MAKE_SOB_CHAR);
+DROP(1);
+
+// Making CHAR object
+PUSH(IMM(32));
+CALL(MAKE_SOB_CHAR);
+DROP(1);
+
+// Making INT object
+PUSH(IMM(2/13));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making INT object
+PUSH(IMM(3/4));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making CHAR object
+PUSH(IMM(67));
+CALL(MAKE_SOB_CHAR);
+DROP(1);
+
+// Making STRING object
+PUSH(IMM(83));
+PUSH(IMM(116));
+PUSH(IMM(82));
+PUSH(IMM(3));
+CALL(MAKE_SOB_STRING);
+DROP(4);
+
+// Makeing PAIR object
+PUSH(IMM(3));
+PUSH(IMM(105));
+CALL(MAKE_SOB_PAIR);
+DROP(2);
+
+// Makeing PAIR object
+PUSH(IMM(110));
+PUSH(IMM(103));
+CALL(MAKE_SOB_PAIR);
+DROP(2);
+
+// Makeing PAIR object
+PUSH(IMM(113));
+PUSH(IMM(91));
+CALL(MAKE_SOB_PAIR);
+DROP(2);
+
+// Makeing PAIR object
+PUSH(IMM(116));
+PUSH(IMM(93));
+CALL(MAKE_SOB_PAIR);
+DROP(2);
+
+// Making vector object
+PUSH(IMM(22));
+PUSH(IMM(24));
+PUSH(IMM(26));
+PUSH(IMM(4));
+PUSH(IMM(6));
+PUSH(IMM(101));
+PUSH(IMM(119));
+
+PUSH(IMM(7));
+CALL(MAKE_SOB_VECTOR);
+DROP(8);
+
+// Making vector object
+PUSH(IMM(22));
+PUSH(IMM(24));
+PUSH(IMM(26));
+
+PUSH(IMM(3));
+CALL(MAKE_SOB_VECTOR);
+DROP(4);
+
+// Making vector object
+PUSH(IMM(22));
+PUSH(IMM(24));
+PUSH(IMM(26));
+PUSH(IMM(4));
+PUSH(IMM(6));
+PUSH(IMM(101));
+
+PUSH(IMM(6));
+CALL(MAKE_SOB_VECTOR);
+DROP(7);
+
+// Making INT object
+PUSH(IMM(100));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making vector object
+PUSH(IMM(22));
+
+PUSH(IMM(1));
+CALL(MAKE_SOB_VECTOR);
+DROP(2);
+
+// Making STRING object
+PUSH(IMM(115));
+PUSH(IMM(121));
+PUSH(IMM(109));
+PUSH(IMM(98));
+PUSH(IMM(111));
+PUSH(IMM(108));
+PUSH(IMM(49));
+PUSH(IMM(7));
+CALL(MAKE_SOB_STRING);
+DROP(8);
+
+// Makeing SYMBOL object
+PUSH(IMM(149));
+CALL(MAKE_SOB_SYMBOL);
+DROP(1);
+// Build symbol link
+PUSH(IND(SOB_SYM_LIST));
+PUSH(R0);
+CALL(MAKE_SOB_PAIR);
+DROP(2);
+MOV(IND(SOB_SYM_LIST), R0);
+
+// Makeing PAIR object
+PUSH(IMM(3));
+PUSH(IMM(22));
+CALL(MAKE_SOB_PAIR);
+DROP(2);
+
+// Making CHAR object
+PUSH(IMM(99));
+CALL(MAKE_SOB_CHAR);
+DROP(1);
+
+// Making vector object
+
+PUSH(IMM(0));
+CALL(MAKE_SOB_VECTOR);
+DROP(1);
+
+// Making STRING object
+PUSH(IMM(83));
+PUSH(IMM(116));
+PUSH(IMM(114));
+PUSH(IMM(3));
+CALL(MAKE_SOB_STRING);
+DROP(4);
+
+// Making STRING object
+PUSH(IMM(116));
+PUSH(IMM(104));
+PUSH(IMM(105));
+PUSH(IMM(115));
+PUSH(IMM(45));
+PUSH(IMM(105));
+PUSH(IMM(115));
+PUSH(IMM(45));
+PUSH(IMM(97));
+PUSH(IMM(45));
+PUSH(IMM(115));
+PUSH(IMM(121));
+PUSH(IMM(109));
+PUSH(IMM(98));
+PUSH(IMM(111));
+PUSH(IMM(108));
+PUSH(IMM(16));
+CALL(MAKE_SOB_STRING);
+DROP(17);
+
+// Makeing SYMBOL object
+PUSH(IMM(175));
+CALL(MAKE_SOB_SYMBOL);
+DROP(1);
+// Build symbol link
+PUSH(IND(SOB_SYM_LIST));
+PUSH(R0);
+CALL(MAKE_SOB_PAIR);
+DROP(2);
+MOV(IND(SOB_SYM_LIST), R0);
+
+// Making INT object
+PUSH(IMM(20));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making CHAR object
+PUSH(IMM(89));
+CALL(MAKE_SOB_CHAR);
+DROP(1);
+
+// Making STRING object
+PUSH(IMM(116));
+PUSH(IMM(104));
+PUSH(IMM(105));
+PUSH(IMM(115));
+PUSH(IMM(32));
+PUSH(IMM(105));
+PUSH(IMM(115));
+PUSH(IMM(32));
+PUSH(IMM(65));
+PUSH(IMM(32));
+PUSH(IMM(83));
+PUSH(IMM(84));
+PUSH(IMM(82));
+PUSH(IMM(73));
+PUSH(IMM(78));
+PUSH(IMM(71));
+PUSH(IMM(33));
+PUSH(IMM(17));
+CALL(MAKE_SOB_STRING);
+DROP(18);
+
+// Making STRING object
+PUSH(IMM(0));
+CALL(MAKE_SOB_STRING);
+DROP(1);
+
+// Making CHAR object
+PUSH(IMM(90));
+CALL(MAKE_SOB_CHAR);
+DROP(1);
+
+// Making INT object
+PUSH(IMM(-1/45));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making INT object
+PUSH(IMM(-6));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making INT object
+PUSH(IMM(-54));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making STRING object
+PUSH(IMM(97));
+PUSH(IMM(98));
+PUSH(IMM(99));
+PUSH(IMM(100));
+PUSH(IMM(101));
+PUSH(IMM(49));
+PUSH(IMM(50));
+PUSH(IMM(51));
+PUSH(IMM(8));
+CALL(MAKE_SOB_STRING);
+DROP(9);
+
+// Making STRING object
+PUSH(IMM(116));
+PUSH(IMM(104));
+PUSH(IMM(105));
+PUSH(IMM(115));
+PUSH(IMM(45));
+PUSH(IMM(105));
+PUSH(IMM(115));
+PUSH(IMM(32));
+PUSH(IMM(97));
+PUSH(IMM(32));
+PUSH(IMM(83));
+PUSH(IMM(84));
+PUSH(IMM(82));
+PUSH(IMM(73));
+PUSH(IMM(78));
+PUSH(IMM(71));
+PUSH(IMM(32));
+PUSH(IMM(33));
+PUSH(IMM(18));
+CALL(MAKE_SOB_STRING);
+DROP(19);
+
+// Making INT object
+PUSH(IMM(65));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making INT object
+PUSH(IMM(32));
+CALL(MAKE_SOB_INTEGER);
+DROP(1);
+
+// Making INT object
+PUSH(IMM(97));
 CALL(MAKE_SOB_INTEGER);
 DROP(1);
 
@@ -139,6 +542,12 @@ DROP(1);
 /*   Symbol table cgen code    */
 /*=============================*/
 
+
+// Space for sym: char->integer
+PUSH(IMM(1));
+CALL(MALLOC);
+DROP(1);
+MOV(IND(R0), T_VOID);
 /**************************************************/
 /* Update primitive symbols */
 /**************************************************/
@@ -151,90 +560,12 @@ DROP(1);
 
 
 //---applic---
-MOV(R0, IMM(18));
+MOV(R0, IMM(95));
 PUSH(R0);
-MOV(R0, IMM(16));
-PUSH(R0);
-MOV(R0, IMM(14));
-PUSH(R0);
-MOV(R0, IMM(12));
-PUSH(R0);
-MOV(R0, IMM(10));
-PUSH(R0);
-MOV(R0, IMM(8));
-PUSH(R0);
-PUSH(IMM(6));
-
-//---lambda-code---
-// Init env 
 PUSH(IMM(1));
-CALL(MALLOC);
-DROP(1);
-MOV(R1, R0);
-MOV(INDD(R1, 0), SOB_NIL);PUSH(LABEL(L_CLOSURE20));
 
-PUSH(R1);
-CALL(MAKE_SOB_CLOSURE);
-DROP(2);
-JUMP(L_CLOSURE_DONE20);
-L_CLOSURE20:
-PUSH(FP);
-MOV(FP, SP);
-// ---lambda-opt--- 
-// convert optional 
-// arguments to list
-
-MOV(R1, FPARG(1));
-INCR(R1);
-L_OPT_LOOP19:
-CMP(2, R1);
-JUMP_EQ(L_OPT_LOOP_DONE19);
-PUSH(FPARG(R1));
-DECR(R1);
-JUMP(L_OPT_LOOP19);
-L_OPT_LOOP_DONE19:
-MOV(R1, FPARG(1));
-SUB(R1, IMM(1));
-PUSH(R1);
-CALL(BUILD_LIST);
-DROP(1);
-DROP(R1);
-MOV(R3, SP);
-PUSH(R0);
-MOV(R1, 2);
-L_OPT_NEW_ARGS19:
-CMP(1, R1);
-JUMP_EQ(L_OPT_NEW_ARGS_DONE19);
-PUSH(FPARG(R1));
-DECR(R1);
-JUMP(L_OPT_NEW_ARGS19);
-L_OPT_NEW_ARGS_DONE19:
-PUSH(IMM(2));
-PUSH(FPARG(0));
-PUSH(FPARG(-1));
-PUSH(FPARG(-2));
-
-PUSH(IMM(6));
-PUSH(R3);  /* source */
-MOV(R3, FP);
-SUB(R3, 4);
-SUB(R3, FPARG(1));
-PUSH(R3); /* destination */
-CALL(STACKCPY);
-DROP(3);
-
-ADD(R3, 6);
-MOV(FP, R3);
-MOV(SP, R3);
-
-// ---pvar---
-// y
-MOV(R0, FPARG(3));
-
-
-POP(FP);
-RETURN;
-L_CLOSURE_DONE20:
+// ---fvar---
+MOV(R0, IND(267));
 
 // check valid closuse
 CMP(INDD(R0,0), T_CLOSURE);

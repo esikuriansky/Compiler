@@ -987,7 +987,6 @@
 )))))
 
 
-
 ;; ===============================================================================================================================
 ;; 													                           code-gen
 ;; ===============================================================================================================================	
@@ -1199,16 +1198,16 @@
 		)))
 
 (define cgen-bvar 
-	(lambda (pe)
+	(lambda (bvar)
 		(let
 			;; ribs 
-			((minor (number->string (caddr pe)))
-			 (major (number->string (cadr pe))))
+			((minor (number->string (caddr bvar)))
+			 (major (number->string (cadr bvar))))
 		;; body
 		(string-append 
 																				newl 
 			"// ---bvar---" 									newl
-			"// "(symbol->string (car pe)) 		newl 
+			"// "(symbol->string (car bvar)) 	newl 
 			"MOV(R0, FPARG(0));" 							newl
 			"MOV(R0, INDD(R0, " major "));" 	newl
 			"MOV(R0, INDD(R0, " minor "));" 	newl newl
@@ -1216,14 +1215,50 @@
 	))
 
 (define cgen-pvar 
-	(lambda (pe)
+	(lambda (pvar)
 		(let 
-			((arg-position (+ 2 (cadr pe))))
+			((arg-position (+ 2 (cadr pvar))))
 		(string-append 
 																														newl 
 			"// ---pvar---"									 											newl
-			"// " (symbol->string (car pe)) 											newl
+			"// " (symbol->string (car pvar)) 											newl
 			"MOV(R0, FPARG(" (number->string arg-position) "));" 	newl newl
+		))
+	))
+
+(define cgen-fvar 
+	(lambda (fvar)
+		; (disp fvar "cgen-fvar")
+		(let* 
+			;; ribs
+			((exists-resolve (find-symbol (car fvar)))
+			(address (number->string (car exists-resolve))))
+		;; body
+		; (disp address "cgen-fvar")
+		; (if (not exists-resolve) (compilation-error "[!] FVAR: symbol does not exist." fvar))
+		(string-append 
+																			newl 
+			"// ---fvar---"									newl
+			"MOV(R0, IND(" address "));" 		newl
+		))
+	))
+
+(define cgen-define 
+	(lambda (pe env-len params-len)
+		; (disp pe "cgen-define")
+		(let* 
+			;; ribs
+			((fvar (cadar pe))
+			(expr (cadr pe))
+			(exists-resolve (find-symbol fvar))
+			(address (number->string (car exists-resolve))))
+		;; body
+		; (if (not exists-resolve) (compilation-error "[!] FVAR: symbol does not exist." fvar))
+		(string-append 
+																			newl 
+			"// ---define--- "  						newl
+			(cgen expr env-len params-len) 	newl
+			"MOV(IND(" address "), R0);" 		newl
 		))
 	))
 
@@ -1474,14 +1509,14 @@
 			(args (car pe))
 			(label-var-loop (lambda-var-loop))
 			(label-var-loop-done (lambda-var-loop-done))
-			(generated-body (cgen body (+ 1 env-len) params-size)))
+			(generated-body (cgen body (+ 1 env-len) params-len)))
 		;; body
-		(cen-lambda-code pe (string-append
+		(cgen-lambda-code pe (string-append
 				"// ---lamda-variadic--- " 	newl
 				"MOV(R1, FPARG(1));" 				newl
 				"INCR(R1);" 								newl
 
-				lambda-var-loop ":" 								newl
+				label-var-loop ":" 									newl
 				"CMP(1, R1);" 											newl
 				"JUMP_EQ(" label-var-loop-done ");" newl
 				"PUSH(FPARG(R1));" 									newl
@@ -1490,18 +1525,15 @@
 				label-var-loop-done ":" 						newl
 
 				"PUSH(FPARG(1));" 		newl
-				"CALL(MAKE_LIST);" 		newl
+				"CALL(BUILD_LIST);" 		newl
 				"DROP(1);"						newl
 				"DROP(FPARG(1));" 		newl 
-
 				"MOV(R3, SP);" 				newl
-
 				"PUSH(R0);" 					newl 					
 				"PUSH(IMM(1));" 			newl				
 				"PUSH(FPARG(0));" 		newl			
 				"PUSH(FPARG(-1));" 		newl			
 				"PUSH(FPARG(-2));" 		newl newl 	
-				
 				"PUSH(IMM(5));"  			newl
 				"PUSH(R3);"  					newl
 				"MOV(R3, FP);" 				newl
@@ -1509,9 +1541,7 @@
 				"SUB(R3, FPARG(1));" 	newl 
 				"PUSH(R3);" 					newl
 				"CALL(STACKCPY);" 		newl
-				"DROP(3);" 						newl
-
-															newl
+				"DROP(3);" 						newl newl							
 				"ADD(R3, 5);" 				newl
 				"MOV(FP, R3);" 				newl	 
 				"MOV(SP, R3);" 				newl
@@ -1523,6 +1553,7 @@
 
 (define cgen
 	(lambda (pe env-len params-len) 
+		; (disp pe "cgen")
 		(cond 
 			((const-pe? pe) (cgen-const (cadr pe)))
 			((seq-pe? pe) (cgen-seq (cadr pe) env-len params-len))
@@ -1530,10 +1561,13 @@
 			((or-pe? pe) (cgen-or (cadr pe) env-len params-len))
 			((lambda-simple-pe? pe) (cgen-lambda-simple (cdr pe) env-len params-len))
 			((lambda-opt-pe? pe) (cgen-lambda-opt (cdr pe) env-len params-len))
+			((lambda-var-pe? pe) (cgen-lambda-variadic (cdr pe) env-len params-len))
 			((applic-pe? pe) (cgen-applic (cdr pe) env-len params-len))
 			((tc-applic-pe? pe) (cgen-tc-applic (cdr pe) env-len params-len))
+			((define-pe? pe) (cgen-define (cdr pe) env-len params-len))
 			((bvar-pe? pe) (cgen-bvar (cdr pe)))
 			((pvar-pe? pe) (cgen-pvar (cdr pe)))
+			((fvar-pe? pe) (cgen-fvar (cdr pe)))
 			(else (compilation-error "Unsupported symbol" pe))
 		)))
 
@@ -1655,17 +1689,6 @@
 			;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	)))
 
-; (add-to-ct 0)
-; (add-to-ct 1)
-; (add-to-ct 2)
-; (add-to-ct 3)
-; (add-to-ct 4)
-; (add-to-ct 5)
-; (add-to-ct 6)
-; (add-to-ct 7)
-; (add-to-ct 8)
-; (add-to-ct 9)
-
 (define add-consts-to-table
 	(lambda (consts)
 		(cond
@@ -1729,18 +1752,32 @@
 
 (define find-symbol
 	(lambda (sym)
+		; (disp sym "find-symbol")
 		(letrec 
 			((helper 
 				(lambda (symbol lst)
 						(cond 
 							((or (null? lst) (not (pair? lst))) #f)
-					    	((eq? sym (cdar lst)) (car lst))
-					    	(else (helper sym (cdr lst)))
+					    	((eq? symbol (cdar lst)) (car lst))
+					    	(else (helper symbol (cdr lst)))
 					    )	
 					)))
 		(helper sym symbol-table)
 		)
 ))
+
+; (define (symbols-find symbol)
+; 	(letrec ((sfind (lambda (symbol lst)
+; 		(cond 
+; 			((or (null? lst) (not (pair? lst))) #f)
+; 	    	((eq? symbol (cdar lst)) (car lst))
+; 	    	(else (sfind symbol (cdr lst)))
+; 	    )	
+; 	)))
+; 	(sfind symbol symbols-table)
+; 	)
+; )
+
 
 ;; ==================================================
 ;;   Primitives
@@ -1861,8 +1898,9 @@
 				; (disp consts-list "compile-const")
 				; (disp symbol-list "compile-symbol")
 				; (disp const-table "compile-const-table")
-				; (disp symbol-table "symbol-table")
-				; (display "=========================")
+				(disp symbol-table "symbol-table")
+				(display "=========================")
+				(display "\n")
 
 				(display 
 
