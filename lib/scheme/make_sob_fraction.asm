@@ -1,0 +1,15 @@
+/**/
+
+MAKE_SOB_FRACTION:
+  PUSH(FP);
+  MOV(FP, SP);
+  PUSH(IMM(4));
+  CALL(MALLOC);
+  DROP(1);
+  MOV(IND(R0), T_FRACTION);
+  MOV(INDD(R0, 1), FPARG(2));
+  MOV(INDD(R0, 2), FPARG(1));
+  MOV(INDD(R0, 3), FPARG(0));
+
+  POP(FP);
+  RETURN;

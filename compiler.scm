@@ -971,7 +971,13 @@
 (define lambda-var-loop (^make-label "L_VAR_LOOP"))
 (define lambda-var-loop-done (^make-label "L_VAR_LOOP_DONE"))
 
+
+;; === Helper Function
 (define newl (list->string (list #\newline)))
+
+(define number-sign
+ (lambda (number)
+      (if (< number 0) "0" "1")))
 
 (define rm-lst-dups
 	(lambda (lst)
@@ -1008,8 +1014,9 @@
 							;;body
 							; (disp curr "cgen-ct")
 							; (disp val "cgen-ct")
+							; (disp type "cgen-ct")
 							; (if (vector? val)
-							; 		(disp (vector->list val) "cgen-ct"))
+							; (disp (vector->list val) "cgen-ct"))
 
 							(string-append
 								(cond
@@ -1048,6 +1055,25 @@
 												"CALL(MAKE_SOB_INTEGER);"								newl
 												"DROP(1);"															newl newl
 												))
+									;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+									((eq? type 'T_FRACTION) 
+											(let 
+													;; ribs
+													((sign (number-sign val))
+														(numer (numerator val))
+														(denom (denominator val)))
+												;; body
+												; (disp numer "cgen-ct-fraction")
+												; (disp denom "cgen-ct-fraction")
+												; (disp val "cget-ct-fraction")	
+												(string-append
+												"PUSH(IMM(" sign "));" 										newl
+												"PUSH(IMM(" (number->string numer) "));"	newl
+												"PUSH(IMM(" (number->string denom) "));" 	newl
+												"CALL(MAKE_SOB_FRACTION);"								newl
+												"DROP(3);"																newl
+											))
+										)
 									;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 									((eq? type 'T_STRING) (let*
 													((chars (map char->integer (string->list val)))
@@ -1187,6 +1213,7 @@
 (define cgen-const
 	(lambda (pe)
 		; (disp pe "cgen-const")
+		; (disp (rational? pe) "cgen-const?")
 		(string-append "MOV(R0, IMM(" (number->string  (get-from-ct pe)) "));\n")
 	))
 
@@ -1225,6 +1252,32 @@
 			"MOV(R0, FPARG(" (number->string arg-position) "));" 	newl newl
 		))
 	))
+
+; (define cgen-pvar-set
+; 	(lambda pe value)
+; 		(let ((minor (caddr var)))
+; 			      (string-append 
+; 			        value
+; 			        "MOV(FPARG(" (number->string (+ 2 minor)) "), R0);"		newl
+; 			        "MOV(R0, IMM(1)) "))
+; 	)
+
+; (define cgen-bvar-set)
+
+; (define code-gen-set 
+; 	(lambda (pe value)
+; 			(if (equal? (car pe) 'pvar)
+; 					()			    																newl
+; 			    (let ((major (caddr var))											
+; 				  (minor (cadddr var)))
+; 				 (string-append
+; 				  value
+; 				  " MOV(R1,R0); \n"
+; 				  " MOV(R0,FPARG(0)); \n"
+; 				  " MOV(R0,INDD(R0,"(number->string major)")); \n" 
+; 				  " MOV(INDD(R0,"(number->string minor) "),R1); \n"
+; 				  " MOV(R0, IMM(1)); \n"
+; 				   )))))
 
 (define cgen-fvar 
 	(lambda (fvar)
@@ -1656,9 +1709,13 @@
 		(cond
 			((is-in-ct? const) (void))
 			;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-			((number? const)
+			((integer? const)
 				(begin 	(set! const-table `(,@const-table ,(list ct-next-index 'T_INTEGER const)))
 								(set! ct-next-index (+ ct-next-index 2))))
+			;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+			((rational? const)
+				(begin (set! const-table `(,@const-table ,(list ct-next-index 'T_FRACTION const)))
+							 (set! ct-next-index (+ ct-next-index 4))))
 			;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 			((boolean? const) 
 				(begin 	(set! const-table `(,@const-table ,(list ct-next-index 'T_BOOL const)))
@@ -1882,7 +1939,7 @@
 				(parsed-exprs (run-parsing input-exprs))
 				(consts-list (get-const-occur parsed-exprs))
 				(partial-symbol-list (rm-lst-dups (get-all-symbols parsed-exprs)))
-				; (symbol-list (rm-lst-dups (append primitive-symbols partial-symbol-list)))
+				(symbol-list (rm-lst-dups (append primitive-symbols partial-symbol-list)))
 				(out-pipe (open-output-file file-out)))
 
 				;; add consts to table
@@ -1965,7 +2022,7 @@
 				"/**************************************************/" newl
 				"/* Update primitive symbols */" newl
 				"/**************************************************/" newl newl
-				; (primitives-cg symbol-table)
+				(primitives-cg symbol-table)
 
 				newl
 				newl

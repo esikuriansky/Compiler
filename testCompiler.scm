@@ -172,8 +172,8 @@
     (cons "-10" "-10\n")
     
    ; ;  ;;Fractions
-   ; ;  (cons "2/4" "1/2\n")
-   ; ;  (cons "-3/5 " "-3/5\n")
+    (cons "2/4" "1/2\n")
+    (cons "-3/5 " "-3/5\n")
     
    ; ;  ;;Strings 
     (cons "\"123abc\"" "\"123abc\"\n")
@@ -182,32 +182,32 @@
     (cons "\"aA\"" "\"aA\"\n")
     (cons "\"\"" "\"\"\n")
     
-   ; ;  ;;Sybmols
+   ; ; ;  ;;Sybmols
     (cons "'a" "a\n")
-    (cons "'AsAF" "asaf\n")
+    ; (cons "'AsAF" "asaf\n")
     (cons "'this-is-a-symbol12345" "this-is-a-symbol12345\n")
     
-   ; ;  ;;Boolean
+   ; ; ;  ;;Boolean
     (cons "#t" "#t\n")
     (cons "#f" "#f\n")
     
-   ; ;  ;;Chars
+   ; ; ;  ;;Chars
     (cons "#\\a" "#\\a\n")
     (cons "#\\space" "#\\space\n")
     (cons "#\\newline" "#\\newline\n")
 
-   ;  ;;Lists
+   ; ;  ;;Lists
     (cons "'()" "()\n") 
     (cons "'(1 2 3)" "(1 . (2 . (3 . ())))\n")
     (cons "'(1 2 3 a)" "(1 . (2 . (3 . (a . ()))))\n")
     (cons "'(a)" "(a . ())\n")
     
-    ; ;;Vectors
+   ;  ; ;;Vectors
     (cons "'#()" "#0()\n") 
     (cons "'#(1 2 3)" "#3(1 2 3)\n")
     (cons "'#(1 2 3 a b c)" "#6(1 2 3 a b c)\n")
     (cons "'#(1 (1 2 3) #t #f)" "#4(1 (1 . (2 . (3 . ()))) #t #f)\n")
-    ; (cons "'#((1 2) 3 4 #t #f -8/17 #(5 6))" "#7((1 . (2 . ())) 3 4 #t #f -8/17 #2(5 6))\n")
+    (cons "'#((1 2) 3 4 #t #f -8/17 #(5 6))" "#7((1 . (2 . ())) 3 4 #t #f -8/17 #2(5 6))\n")
     (cons "'#(#(1))" "#1(#1(1))\n") 
     (cons "'#(#(5 6))" "#1(#2(5 6))\n")
 ))
@@ -241,431 +241,431 @@
 
 (define lambda-simple-tests
   (list
-    ; (cons "((lambda () 1))" "1\n")
-    ; (cons "((lambda () #t))" "#t\n")
-    ; (cons "((lambda () -1/2))" "-1/2\n")
-    ; (cons "((lambda () '(1 2 3 4 5 6)))" "(1 . (2 . (3 . (4 . (5 . (6 . ()))))))\n")
-    ; (cons "((lambda () '#(1 2 3)))" "#3(1 2 3)\n")
-    ; (cons "((lambda () \"abCdE123\"))" "\"abCdE123\"\n")
-    ; (cons "((lambda (x) x) 5)" "5\n")
-    ; (cons "((lambda (a) a) #t)" "#t\n")
-    ; (cons "((lambda (x y) x) 5 6)" "5\n")
-    ; (cons "((lambda (x y) y) 5 6)" "6\n")
-    ; (cons "((lambda (x y) '(4 5)) 5 6)" "(4 . (5 . ()))\n")
-    ; (cons "((lambda (x y z) z) 5 6 #t)" "#t\n")
-    ; (cons "((lambda (x y z) z) 5 6 #f)" "#f\n")
-    ; (cons "((lambda (x y z) x y z) 5 6 #f)" "#f\n")
-    ; (cons "((lambda (x y z) (if x y z)) 5 6 #f)" "6\n")
-    ; (cons "((lambda (x y z) (or x y z)) \"AbC1234567890\" 6 #f)" "\"AbC1234567890\"\n")
-    ; (cons "((lambda (x y z) (if x y z)) #f -8/17 '#((1 2) 3 4 #(5 6)))" "#4((1 . (2 . ())) 3 4 #2(5 6))\n")
+    (cons "((lambda () 1))" "1\n")
+    (cons "((lambda () #t))" "#t\n")
+    (cons "((lambda () -1/2))" "-1/2\n")
+    (cons "((lambda () '(1 2 3 4 5 6)))" "(1 . (2 . (3 . (4 . (5 . (6 . ()))))))\n")
+    (cons "((lambda () '#(1 2 3)))" "#3(1 2 3)\n")
+    (cons "((lambda () \"abCdE123\"))" "\"abCdE123\"\n")
+    (cons "((lambda (x) x) 5)" "5\n")
+    (cons "((lambda (a) a) #t)" "#t\n")
+    (cons "((lambda (x y) x) 5 6)" "5\n")
+    (cons "((lambda (x y) y) 5 6)" "6\n")
+    (cons "((lambda (x y) '(4 5)) 5 6)" "(4 . (5 . ()))\n")
+    (cons "((lambda (x y z) z) 5 6 #t)" "#t\n")
+    (cons "((lambda (x y z) z) 5 6 #f)" "#f\n")
+    (cons "((lambda (x y z) x y z) 5 6 #f)" "#f\n")
+    (cons "((lambda (x y z) (if x y z)) 5 6 #f)" "6\n")
+    (cons "((lambda (x y z) (or x y z)) \"AbC1234567890\" 6 #f)" "\"AbC1234567890\"\n")
+    (cons "((lambda (x y z) (if x y z)) #f -8/17 '#((1 2) 3 4 #(5 6)))" "#4((1 . (2 . ())) 3 4 #2(5 6))\n")
     
  ;    ;;Nested Lambdas
-    ; (cons "((lambda () ((lambda () 5))))" "5\n")
-    ; (cons "((lambda (x) ((lambda () x))) -24)" "-24\n")
-    ; (cons "((lambda (x y z) 
-	   ;    ((lambda () z))) 10 12 -24/36)" "-2/3\n")
- ;    ; (cons "((lambda (x y z) 
-	;    ;    ((lambda () x))) 10 12 -24/36)" "10\n")
- ;    ; (cons "((lambda (x y z) 
-	;    ;    ((lambda () y))) 10 '#(1 2) -24/36)" "#2(1 2)\n")
-    ; (cons "((lambda () 
-	   ;    ((lambda (a) a) #t)))" "#t\n")		      
- ;    ; (cons "((lambda (x y z) 
-	;    ;    ((lambda (a) a) #t)) 10 '#(1 2) -24/36)" "#t\n")	
- ;    ; (cons "((lambda (x y z) 
-	;    ;    ((lambda (y) y) #f)) 10 '#(1 2) -24/36)" "#f\n")
+    (cons "((lambda () ((lambda () 5))))" "5\n")
+    (cons "((lambda (x) ((lambda () x))) -24)" "-24\n")
+    (cons "((lambda (x y z) 
+	      ((lambda () z))) 10 12 -24/36)" "-2/3\n")
+    (cons "((lambda (x y z) 
+	      ((lambda () x))) 10 12 -24/36)" "10\n")
+    (cons "((lambda (x y z) 
+	      ((lambda () y))) 10 '#(1 2) -24/36)" "#2(1 2)\n")
+    (cons "((lambda () 
+	      ((lambda (a) a) #t)))" "#t\n")		      
+    (cons "((lambda (x y z) 
+	      ((lambda (a) a) #t)) 10 '#(1 2) -24/36)" "#t\n")	
+    (cons "((lambda (x y z) 
+	      ((lambda (y) y) #f)) 10 '#(1 2) -24/36)" "#f\n")
 
-  ;   (cons "((lambda (x y z) ((lambda (a) x) 5)) 1 2 3)" "1\n")	      
-  ;   (cons "((lambda (x y z) ((lambda (a) y) 5)) 1 2 3)" "2\n")
-  ;   (cons "((lambda (x y z) ((lambda (a) z) 5)) 1 2 3)" "3\n")    
+    (cons "((lambda (x y z) ((lambda (a) x) 5)) 1 2 3)" "1\n")	      
+    (cons "((lambda (x y z) ((lambda (a) y) 5)) 1 2 3)" "2\n")
+    (cons "((lambda (x y z) ((lambda (a) z) 5)) 1 2 3)" "3\n")    
 	      
   ;   ;; Parameters and Bound Variables	      
-  ;   (cons
-  ;     "((lambda (a b c d e f g) 
-	 ;      ((lambda (h i j k)
-		; ((lambda (l m n o p)
-		;   ((lambda (q r s t u)
-		;     ((lambda (v w x y z)
-		;       z) 1 2 3 4 5))
-		; 	6 7 8 9 0)) #t #f '() '#(1) #\\z))
-		; 	  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
-  ;     "5\n")
+    (cons
+      "((lambda (a b c d e f g) 
+	      ((lambda (h i j k)
+		((lambda (l m n o p)
+		  ((lambda (q r s t u)
+		    ((lambda (v w x y z)
+		      z) 1 2 3 4 5))
+			6 7 8 9 0)) #t #f '() '#(1) #\\z))
+			  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
+      "5\n")
     
     
-  ;   (cons
-  ;     "((lambda (a b c d e f g) 
-	 ;      ((lambda (h i j k)
-		; ((lambda (l m n o p)
-		;   ((lambda (q r s t u)
-		;     ((lambda (v w x y z)
-		;       y) 1 2 3 4 5))
-		; 	6 7 8 9 0)) #t #f '() '#(1) #\\z))
-		; 	  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
-  ;     "4\n") 
+    (cons
+      "((lambda (a b c d e f g) 
+	      ((lambda (h i j k)
+		((lambda (l m n o p)
+		  ((lambda (q r s t u)
+		    ((lambda (v w x y z)
+		      y) 1 2 3 4 5))
+			6 7 8 9 0)) #t #f '() '#(1) #\\z))
+			  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
+      "4\n") 
       
-  ;   (cons
-  ;     "((lambda (a b c d e f g) 
-	 ;      ((lambda (h i j k)
-		; ((lambda (l m n o p)
-		;   ((lambda (q r s t u)
-		;     ((lambda (v w x y z)
-		;       x) 1 2 3 4 5))
-		; 	6 7 8 9 0)) #t #f '() '#(1) #\\z))
-		; 	  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
-  ;     "3\n")       
+    (cons
+      "((lambda (a b c d e f g) 
+	      ((lambda (h i j k)
+		((lambda (l m n o p)
+		  ((lambda (q r s t u)
+		    ((lambda (v w x y z)
+		      x) 1 2 3 4 5))
+			6 7 8 9 0)) #t #f '() '#(1) #\\z))
+			  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
+      "3\n")       
 	
-  ;   (cons
-  ;     "((lambda (a b c d e f g) 
-	 ;      ((lambda (h i j k)
-		; ((lambda (l m n o p)
-		;   ((lambda (q r s t u)
-		;     ((lambda (v w x y z)
-		;       w) 1 2 3 4 5))
-		; 	6 7 8 9 0)) #t #f '() '#(1) #\\z))
-		; 	  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
-  ;     "2\n")  
+    (cons
+      "((lambda (a b c d e f g) 
+	      ((lambda (h i j k)
+		((lambda (l m n o p)
+		  ((lambda (q r s t u)
+		    ((lambda (v w x y z)
+		      w) 1 2 3 4 5))
+			6 7 8 9 0)) #t #f '() '#(1) #\\z))
+			  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
+      "2\n")  
       
-  ;   (cons
-  ;     "((lambda (a b c d e f g) 
-	 ;      ((lambda (h i j k)
-		; ((lambda (l m n o p)
-		;   ((lambda (q r s t u)
-		;     ((lambda (v w x y z)
-		;       v) 1 2 3 4 5))
-		; 	6 7 8 9 0)) #t #f '() '#(1) #\\z))
-		; 	  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
-  ;     "1\n") 
+    (cons
+      "((lambda (a b c d e f g) 
+	      ((lambda (h i j k)
+		((lambda (l m n o p)
+		  ((lambda (q r s t u)
+		    ((lambda (v w x y z)
+		      v) 1 2 3 4 5))
+			6 7 8 9 0)) #t #f '() '#(1) #\\z))
+			  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
+      "1\n") 
       
-  ;   (cons
-  ;     "((lambda (a b c d e f g) 
-	 ;      ((lambda (h i j k)
-		; ((lambda (l m n o p)
-		;   ((lambda (q r s t u)
-		;     ((lambda (v w x y z)
-		;       u) 1 2 3 4 5))
-		; 	6 7 8 9 0)) #t #f '() '#(1) #\\z))
-		; 	  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
-  ;     "0\n")      
+    (cons
+      "((lambda (a b c d e f g) 
+	      ((lambda (h i j k)
+		((lambda (l m n o p)
+		  ((lambda (q r s t u)
+		    ((lambda (v w x y z)
+		      u) 1 2 3 4 5))
+			6 7 8 9 0)) #t #f '() '#(1) #\\z))
+			  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
+      "0\n")      
 
-  ;   (cons
-  ;     "((lambda (a b c d e f g) 
-	 ;      ((lambda (h i j k)
-		; ((lambda (l m n o p)
-		;   ((lambda (q r s t u)
-		;     ((lambda (v w x y z)
-		;       t) 1 2 3 4 5))
-		; 	6 7 8 9 0)) #t #f '() '#(1) #\\z))
-		; 	  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
-  ;     "9\n")   
+    (cons
+      "((lambda (a b c d e f g) 
+	      ((lambda (h i j k)
+		((lambda (l m n o p)
+		  ((lambda (q r s t u)
+		    ((lambda (v w x y z)
+		      t) 1 2 3 4 5))
+			6 7 8 9 0)) #t #f '() '#(1) #\\z))
+			  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
+      "9\n")   
       
-  ;   (cons
-  ;     "((lambda (a b c d e f g) 
-	 ;      ((lambda (h i j k)
-		; ((lambda (l m n o p)
-		;   ((lambda (q r s t u)
-		;     ((lambda (v w x y z)
-		;       s) 1 2 3 4 5))
-		; 	6 7 8 9 0)) #t #f '() '#(1) #\\z))
-		; 	  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
-  ;     "8\n")  
+    (cons
+      "((lambda (a b c d e f g) 
+	      ((lambda (h i j k)
+		((lambda (l m n o p)
+		  ((lambda (q r s t u)
+		    ((lambda (v w x y z)
+		      s) 1 2 3 4 5))
+			6 7 8 9 0)) #t #f '() '#(1) #\\z))
+			  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
+      "8\n")  
       
-  ;   (cons
-  ;     "((lambda (a b c d e f g) 
-	 ;      ((lambda (h i j k)
-		; ((lambda (l m n o p)
-		;   ((lambda (q r s t u)
-		;     ((lambda (v w x y z)
-		;       r) 1 2 3 4 5))
-		; 	6 7 8 9 0)) #t #f '() '#(1) #\\z))
-		;   \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
-  ;     "7\n")  
+    (cons
+      "((lambda (a b c d e f g) 
+	      ((lambda (h i j k)
+		((lambda (l m n o p)
+		  ((lambda (q r s t u)
+		    ((lambda (v w x y z)
+		      r) 1 2 3 4 5))
+			6 7 8 9 0)) #t #f '() '#(1) #\\z))
+		  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
+      "7\n")  
 
-  ;   (cons
-  ;     "((lambda (a b c d e f g) 
-	 ;      ((lambda (h i j k)
-		; ((lambda (l m n o p)
-		;   ((lambda (q r s t u)
-		;     ((lambda (v w x y z)
-		;       q) 1 2 3 4 5))
-		; 	6 7 8 9 0)) #t #f '() '#(1) #\\z))
-		;   \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
-  ;     "6\n") 
+    (cons
+      "((lambda (a b c d e f g) 
+	      ((lambda (h i j k)
+		((lambda (l m n o p)
+		  ((lambda (q r s t u)
+		    ((lambda (v w x y z)
+		      q) 1 2 3 4 5))
+			6 7 8 9 0)) #t #f '() '#(1) #\\z))
+		  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
+      "6\n") 
       
-  ;   (cons
-  ;     "((lambda (a b c d e f g) 
-	 ;      ((lambda (h i j k)
-		; ((lambda (l m n o p)
-		;   ((lambda (q r s t u)
-		;     ((lambda (v w x y z)
-		;       p) 1 2 3 4 5))
-		; 	6 7 8 9 0)) #t #f '() '#(1) #\\z))
-		;   \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
-  ;     "#\\z\n")  
+    (cons
+      "((lambda (a b c d e f g) 
+	      ((lambda (h i j k)
+		((lambda (l m n o p)
+		  ((lambda (q r s t u)
+		    ((lambda (v w x y z)
+		      p) 1 2 3 4 5))
+			6 7 8 9 0)) #t #f '() '#(1) #\\z))
+		  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
+      "#\\z\n")  
       
-  ;   (cons
-  ;     "((lambda (a b c d e f g) 
-	 ;      ((lambda (h i j k)
-		; ((lambda (l m n o p)
-		;   ((lambda (q r s t u)
-		;     ((lambda (v w x y z)
-		;       o) 1 2 3 4 5))
-		; 	6 7 8 9 0)) #t #f '() '#(1) #\\z))
-		;   \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
-  ;     "#1(1)\n")  
+    (cons
+      "((lambda (a b c d e f g) 
+	      ((lambda (h i j k)
+		((lambda (l m n o p)
+		  ((lambda (q r s t u)
+		    ((lambda (v w x y z)
+		      o) 1 2 3 4 5))
+			6 7 8 9 0)) #t #f '() '#(1) #\\z))
+		  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
+      "#1(1)\n")  
       
-  ;   (cons
-  ;     "((lambda (a b c d e f g) 
-	 ;      ((lambda (h i j k)
-		; ((lambda (l m n o p)
-		;   ((lambda (q r s t u)
-		;     ((lambda (v w x y z)
-		;       n) 1 2 3 4 5))
-		; 	6 7 8 9 0)) #t #f '() '#(1) #\\z))
-		;   \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
-  ;     "()\n")          
+    (cons
+      "((lambda (a b c d e f g) 
+	      ((lambda (h i j k)
+		((lambda (l m n o p)
+		  ((lambda (q r s t u)
+		    ((lambda (v w x y z)
+		      n) 1 2 3 4 5))
+			6 7 8 9 0)) #t #f '() '#(1) #\\z))
+		  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
+      "()\n")          
       
-  ;   (cons
-  ;     "((lambda (a b c d e f g) 
-	 ;      ((lambda (h i j k)
-		; ((lambda (l m n o p)
-		;   ((lambda (q r s t u)
-		;     ((lambda (v w x y z)
-		;       m) 1 2 3 4 5))
-		; 	6 7 8 9 0)) #t #f '() '#(1) #\\z))
-		;   \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
-  ;     "#f\n")   
+    (cons
+      "((lambda (a b c d e f g) 
+	      ((lambda (h i j k)
+		((lambda (l m n o p)
+		  ((lambda (q r s t u)
+		    ((lambda (v w x y z)
+		      m) 1 2 3 4 5))
+			6 7 8 9 0)) #t #f '() '#(1) #\\z))
+		  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
+      "#f\n")   
       
-  ;   (cons
-  ;     "((lambda (a b c d e f g) 
-	 ;      ((lambda (h i j k)
-		; ((lambda (l m n o p)
-		;   ((lambda (q r s t u)
-		;     ((lambda (v w x y z)
-		;       l) 1 2 3 4 5))
-		; 	6 7 8 9 0)) #t #f '() '#(1) #\\z))
-		;   \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
-  ;     "#t\n")    
+    (cons
+      "((lambda (a b c d e f g) 
+	      ((lambda (h i j k)
+		((lambda (l m n o p)
+		  ((lambda (q r s t u)
+		    ((lambda (v w x y z)
+		      l) 1 2 3 4 5))
+			6 7 8 9 0)) #t #f '() '#(1) #\\z))
+		  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
+      "#t\n")    
       
-  ;   (cons
-  ;     "((lambda (a b c d e f g) 
-	 ;      ((lambda (h i j k)
-		; ((lambda (l m n o p)
-		;   ((lambda (q r s t u)
-		;     ((lambda (v w x y z)
-		;       k) 1 2 3 4 5))
-		; 	6 7 8 9 0)) #t #f '() '#(1) #\\z))
-		;   \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
-  ;     "\"Matata\"\n") 
+    (cons
+      "((lambda (a b c d e f g) 
+	      ((lambda (h i j k)
+		((lambda (l m n o p)
+		  ((lambda (q r s t u)
+		    ((lambda (v w x y z)
+		      k) 1 2 3 4 5))
+			6 7 8 9 0)) #t #f '() '#(1) #\\z))
+		  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
+      "\"Matata\"\n") 
       
-  ;   (cons
-  ;     "((lambda (a b c d e f g) 
-	 ;      ((lambda (h i j k)
-		; ((lambda (l m n o p)
-		;   ((lambda (q r s t u)
-		;     ((lambda (v w x y z)
-		;       j) 1 2 3 4 5))
-		; 	6 7 8 9 0)) #t #f '() '#(1) #\\z))
-		;   \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
-  ;     "\"Akuna\"\n") 
+    (cons
+      "((lambda (a b c d e f g) 
+	      ((lambda (h i j k)
+		((lambda (l m n o p)
+		  ((lambda (q r s t u)
+		    ((lambda (v w x y z)
+		      j) 1 2 3 4 5))
+			6 7 8 9 0)) #t #f '() '#(1) #\\z))
+		  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
+      "\"Akuna\"\n") 
       
-  ;   (cons
-  ;     "((lambda (a b c d e f g) 
-	 ;      ((lambda (h i j k)
-		; ((lambda (l m n o p)
-		;   ((lambda (q r s t u)
-		;     ((lambda (v w x y z)
-		;       i) 1 2 3 4 5))
-		; 	6 7 8 9 0)) #t #f '() '#(1) #\\z))
-		;   \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
-  ;     "\"BCD\"\n") 
+    (cons
+      "((lambda (a b c d e f g) 
+	      ((lambda (h i j k)
+		((lambda (l m n o p)
+		  ((lambda (q r s t u)
+		    ((lambda (v w x y z)
+		      i) 1 2 3 4 5))
+			6 7 8 9 0)) #t #f '() '#(1) #\\z))
+		  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
+      "\"BCD\"\n") 
       
-  ;   (cons
-  ;     "((lambda (a b c d e f g) 
-	 ;      ((lambda (h i j k)
-		; ((lambda (l m n o p)
-		;   ((lambda (q r s t u)
-		;     ((lambda (v w x y z)
-		;       h) 1 2 3 4 5))
-		; 	6 7 8 9 0)) #t #f '() '#(1) #\\z))
-		;   \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
-  ;     "\"A\"\n")   
+    (cons
+      "((lambda (a b c d e f g) 
+	      ((lambda (h i j k)
+		((lambda (l m n o p)
+		  ((lambda (q r s t u)
+		    ((lambda (v w x y z)
+		      h) 1 2 3 4 5))
+			6 7 8 9 0)) #t #f '() '#(1) #\\z))
+		  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
+      "\"A\"\n")   
       
-  ;   (cons
-  ;     "((lambda (a b c d e f g) 
-	 ;      ((lambda (h i j k)
-		; ((lambda (l m n o p)
-		;   ((lambda (q r s t u)
-		;     ((lambda (v w x y z)
-		;       g) 1 2 3 4 5))
-		; 	6 7 8 9 0)) #t #f '() '#(1) #\\z))
-		;   \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
-  ;     "#\\g\n")  
+    (cons
+      "((lambda (a b c d e f g) 
+	      ((lambda (h i j k)
+		((lambda (l m n o p)
+		  ((lambda (q r s t u)
+		    ((lambda (v w x y z)
+		      g) 1 2 3 4 5))
+			6 7 8 9 0)) #t #f '() '#(1) #\\z))
+		  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
+      "#\\g\n")  
       
-  ;   (cons
-  ;     "((lambda (a b c d e f g) 
-	 ;      ((lambda (h i j k)
-		; ((lambda (l m n o p)
-		;   ((lambda (q r s t u)
-		;     ((lambda (v w x y z)
-		;       f) 1 2 3 4 5))
-		; 	6 7 8 9 0)) #t #f '() '#(1) #\\z))
-		;   \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
-  ;     "#\\f\n")   
+    (cons
+      "((lambda (a b c d e f g) 
+	      ((lambda (h i j k)
+		((lambda (l m n o p)
+		  ((lambda (q r s t u)
+		    ((lambda (v w x y z)
+		      f) 1 2 3 4 5))
+			6 7 8 9 0)) #t #f '() '#(1) #\\z))
+		  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
+      "#\\f\n")   
       
-  ;   (cons
-  ;     "((lambda (a b c d e f g) 
-	 ;      ((lambda (h i j k)
-		; ((lambda (l m n o p)
-		;   ((lambda (q r s t u)
-		;     ((lambda (v w x y z)
-		;       e) 1 2 3 4 5))
-		; 	6 7 8 9 0)) #t #f '() '#(1) #\\z))
-		;   \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
-  ;     "#\\e\n") 
+    (cons
+      "((lambda (a b c d e f g) 
+	      ((lambda (h i j k)
+		((lambda (l m n o p)
+		  ((lambda (q r s t u)
+		    ((lambda (v w x y z)
+		      e) 1 2 3 4 5))
+			6 7 8 9 0)) #t #f '() '#(1) #\\z))
+		  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
+      "#\\e\n") 
       
-  ;   (cons
-  ;     "((lambda (a b c d e f g) 
-	 ;      ((lambda (h i j k)
-		; ((lambda (l m n o p)
-		;   ((lambda (q r s t u)
-		;     ((lambda (v w x y z)
-		;       d) 1 2 3 4 5))
-		; 	6 7 8 9 0)) #t #f '() '#(1) #\\z))
-		;   \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
-  ;     "#\\d\n")       
+    (cons
+      "((lambda (a b c d e f g) 
+	      ((lambda (h i j k)
+		((lambda (l m n o p)
+		  ((lambda (q r s t u)
+		    ((lambda (v w x y z)
+		      d) 1 2 3 4 5))
+			6 7 8 9 0)) #t #f '() '#(1) #\\z))
+		  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
+      "#\\d\n")       
       
-  ;   (cons
-  ;     "((lambda (a b c d e f g) 
-	 ;      ((lambda (h i j k)
-		; ((lambda (l m n o p)
-		;   ((lambda (q r s t u)
-		;     ((lambda (v w x y z)
-		;       c) 1 2 3 4 5))
-		; 	6 7 8 9 0)) #t #f '() '#(1) #\\z))
-		;   \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
-  ;     "#\\c\n")   
+    (cons
+      "((lambda (a b c d e f g) 
+	      ((lambda (h i j k)
+		((lambda (l m n o p)
+		  ((lambda (q r s t u)
+		    ((lambda (v w x y z)
+		      c) 1 2 3 4 5))
+			6 7 8 9 0)) #t #f '() '#(1) #\\z))
+		  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
+      "#\\c\n")   
       
-  ;   (cons
-  ;     "((lambda (a b c d e f g) 
-	 ;      ((lambda (h i j k)
-		; ((lambda (l m n o p)
-		;   ((lambda (q r s t u)
-		;     ((lambda (v w x y z)
-		;       b) 1 2 3 4 5))
-		; 	6 7 8 9 0)) #t #f '() '#(1) #\\z))
-		;   \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
-  ;     "#\\b\n") 
+    (cons
+      "((lambda (a b c d e f g) 
+	      ((lambda (h i j k)
+		((lambda (l m n o p)
+		  ((lambda (q r s t u)
+		    ((lambda (v w x y z)
+		      b) 1 2 3 4 5))
+			6 7 8 9 0)) #t #f '() '#(1) #\\z))
+		  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
+      "#\\b\n") 
       
-  ;   (cons
-  ;     "((lambda (a b c d e f g) 
-	 ;      ((lambda (h i j k)
-		; ((lambda (l m n o p)
-		;   ((lambda (q r s t u)
-		;     ((lambda (v w x y z)
-		;       a) 1 2 3 4 5))
-		; 	6 7 8 9 0)) #t #f '() '#(1) #\\z))
-		;   \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
-  ;     "#\\a\n") 
+    (cons
+      "((lambda (a b c d e f g) 
+	      ((lambda (h i j k)
+		((lambda (l m n o p)
+		  ((lambda (q r s t u)
+		    ((lambda (v w x y z)
+		      a) 1 2 3 4 5))
+			6 7 8 9 0)) #t #f '() '#(1) #\\z))
+		  \"A\" \"BCD\" \"Akuna\" \"Matata\")) #\\a #\\b #\\c #\\d #\\e #\\f #\\g)"
+      "#\\a\n") 
       
  ;      ;; Mayer Comp161 Lambda Simple Torture Test
-      (cons "(((((lambda (a)
-	(lambda (b)
-	  (((lambda (a) (lambda (b) ((a b) (lambda (x) (lambda (y) y)))))
-	    ((lambda (n)
-	      ((n (lambda (x) (lambda (x) (lambda (y) y))))
-		(lambda (x) (lambda (y) x))))
-	    (((lambda (a)
-		(lambda (b)
-		  ((b (lambda (n)
-			((lambda (p) (p (lambda (a) (lambda (b) b))))
-			  ((n (lambda (p)
-				(((lambda (a)
-				    (lambda (b) (lambda (c) ((c a) b))))
-				  ((lambda (n)
-				    (lambda (s)
-				      (lambda (z) (s ((n s) z)))))
-				  ((lambda (p)
-				      (p (lambda (a) (lambda (b) a))))
-				    p)))
-				((lambda (p)
-				    (p (lambda (a) (lambda (b) a))))
-				  p))))
-			  (((lambda (a)
-			      (lambda (b) (lambda (c) ((c a) b))))
-			    (lambda (x) (lambda (y) y)))
-			    (lambda (x) (lambda (y) y)))))))
-		    a)))
-	      a)
-	      b)))
-	  ((lambda (n)
-	      ((n (lambda (x) (lambda (x) (lambda (y) y))))
-	      (lambda (x) (lambda (y) x))))
-	    (((lambda (a)
-		(lambda (b)
-		  ((b (lambda (n)
-			((lambda (p) (p (lambda (a) (lambda (b) b))))
-			((n (lambda (p)
-			      (((lambda (a)
-				  (lambda (b) (lambda (c) ((c a) b))))
-				((lambda (n)
-				    (lambda (s)
-				      (lambda (z) (s ((n s) z)))))
-				  ((lambda (p)
-				    (p (lambda (a) (lambda (b) a))))
-				  p)))
-				((lambda (p)
-				  (p (lambda (a) (lambda (b) a))))
-				p))))
-			  (((lambda (a)
-			      (lambda (b) (lambda (c) ((c a) b))))
-			    (lambda (x) (lambda (y) y)))
-			  (lambda (x) (lambda (y) y)))))))
-		  a)))
-	      b)
-	    a)))))
-      ((lambda (n)
-	((lambda (p) (p (lambda (a) (lambda (b) b))))
-	  ((n (lambda (p)
-		(((lambda (a) (lambda (b) (lambda (c) ((c a) b))))
-		  ((lambda (n) (lambda (s) (lambda (z) (s ((n s) z)))))
-		  ((lambda (p) (p (lambda (a) (lambda (b) a)))) p)))
-		(((lambda (a)
-		    (lambda (b)
-		      ((b (a (lambda (a)
-				(lambda (b)
-				  ((a (lambda (n)
-					(lambda (s)
-					  (lambda (z) (s ((n s) z))))))
-				  b)))))
-			(lambda (x) (lambda (y) y)))))
-		  ((lambda (p) (p (lambda (a) (lambda (b) a)))) p))
-		  ((lambda (p) (p (lambda (a) (lambda (b) b)))) p)))))
-	  (((lambda (a) (lambda (b) (lambda (c) ((c a) b))))
-	    (lambda (x) x))
-	    (lambda (x) x)))))
-      (lambda (x) (lambda (y) (x (x (x (x (x y)))))))))
-    (((lambda (a)
-	(lambda (b)
-	  ((b (a (lambda (a)
-		    (lambda (b)
-		      ((a (lambda (n)
-			    (lambda (s) (lambda (z) (s ((n s) z))))))
-		      b)))))
-	    (lambda (x) (lambda (y) y)))))
-      (((lambda (a)
-	  (lambda (b)
-	    ((b (a (lambda (a)
-		      (lambda (b)
-			((a (lambda (n)
-			      (lambda (s) (lambda (z) (s ((n s) z))))))
-			b)))))
-	      (lambda (x) (lambda (y) y)))))
-	((lambda (x) (lambda (y) (x (x (x y)))))
-	  (lambda (x) (lambda (y) (x (x y))))))
-	(lambda (x) (lambda (y) (x (x (x y)))))))
-      (lambda (x) (lambda (y) (x (x (x (x (x y)))))))))
-    #t)
-  #f)" "#t\n")
+ ;      (cons "(((((lambda (a)
+	; (lambda (b)
+	;   (((lambda (a) (lambda (b) ((a b) (lambda (x) (lambda (y) y)))))
+	;     ((lambda (n)
+	;       ((n (lambda (x) (lambda (x) (lambda (y) y))))
+	; 	(lambda (x) (lambda (y) x))))
+	;     (((lambda (a)
+	; 	(lambda (b)
+	; 	  ((b (lambda (n)
+	; 		((lambda (p) (p (lambda (a) (lambda (b) b))))
+	; 		  ((n (lambda (p)
+	; 			(((lambda (a)
+	; 			    (lambda (b) (lambda (c) ((c a) b))))
+	; 			  ((lambda (n)
+	; 			    (lambda (s)
+	; 			      (lambda (z) (s ((n s) z)))))
+	; 			  ((lambda (p)
+	; 			      (p (lambda (a) (lambda (b) a))))
+	; 			    p)))
+	; 			((lambda (p)
+	; 			    (p (lambda (a) (lambda (b) a))))
+	; 			  p))))
+	; 		  (((lambda (a)
+	; 		      (lambda (b) (lambda (c) ((c a) b))))
+	; 		    (lambda (x) (lambda (y) y)))
+	; 		    (lambda (x) (lambda (y) y)))))))
+	; 	    a)))
+	;       a)
+	;       b)))
+	;   ((lambda (n)
+	;       ((n (lambda (x) (lambda (x) (lambda (y) y))))
+	;       (lambda (x) (lambda (y) x))))
+	;     (((lambda (a)
+	; 	(lambda (b)
+	; 	  ((b (lambda (n)
+	; 		((lambda (p) (p (lambda (a) (lambda (b) b))))
+	; 		((n (lambda (p)
+	; 		      (((lambda (a)
+	; 			  (lambda (b) (lambda (c) ((c a) b))))
+	; 			((lambda (n)
+	; 			    (lambda (s)
+	; 			      (lambda (z) (s ((n s) z)))))
+	; 			  ((lambda (p)
+	; 			    (p (lambda (a) (lambda (b) a))))
+	; 			  p)))
+	; 			((lambda (p)
+	; 			  (p (lambda (a) (lambda (b) a))))
+	; 			p))))
+	; 		  (((lambda (a)
+	; 		      (lambda (b) (lambda (c) ((c a) b))))
+	; 		    (lambda (x) (lambda (y) y)))
+	; 		  (lambda (x) (lambda (y) y)))))))
+	; 	  a)))
+	;       b)
+	;     a)))))
+ ;      ((lambda (n)
+	; ((lambda (p) (p (lambda (a) (lambda (b) b))))
+	;   ((n (lambda (p)
+	; 	(((lambda (a) (lambda (b) (lambda (c) ((c a) b))))
+	; 	  ((lambda (n) (lambda (s) (lambda (z) (s ((n s) z)))))
+	; 	  ((lambda (p) (p (lambda (a) (lambda (b) a)))) p)))
+	; 	(((lambda (a)
+	; 	    (lambda (b)
+	; 	      ((b (a (lambda (a)
+	; 			(lambda (b)
+	; 			  ((a (lambda (n)
+	; 				(lambda (s)
+	; 				  (lambda (z) (s ((n s) z))))))
+	; 			  b)))))
+	; 		(lambda (x) (lambda (y) y)))))
+	; 	  ((lambda (p) (p (lambda (a) (lambda (b) a)))) p))
+	; 	  ((lambda (p) (p (lambda (a) (lambda (b) b)))) p)))))
+	;   (((lambda (a) (lambda (b) (lambda (c) ((c a) b))))
+	;     (lambda (x) x))
+	;     (lambda (x) x)))))
+ ;      (lambda (x) (lambda (y) (x (x (x (x (x y)))))))))
+ ;    (((lambda (a)
+	; (lambda (b)
+	;   ((b (a (lambda (a)
+	; 	    (lambda (b)
+	; 	      ((a (lambda (n)
+	; 		    (lambda (s) (lambda (z) (s ((n s) z))))))
+	; 	      b)))))
+	;     (lambda (x) (lambda (y) y)))))
+ ;      (((lambda (a)
+	;   (lambda (b)
+	;     ((b (a (lambda (a)
+	; 	      (lambda (b)
+	; 		((a (lambda (n)
+	; 		      (lambda (s) (lambda (z) (s ((n s) z))))))
+	; 		b)))))
+	;       (lambda (x) (lambda (y) y)))))
+	; ((lambda (x) (lambda (y) (x (x (x y)))))
+	;   (lambda (x) (lambda (y) (x (x y))))))
+	; (lambda (x) (lambda (y) (x (x (x y)))))))
+ ;      (lambda (x) (lambda (y) (x (x (x (x (x y)))))))))
+ ;    #t)
+ ;  #f)" "#t\n")
 ))
 
 (define lambda-opt-tests
@@ -870,54 +870,54 @@
 (define primitive-functions-tests
   (list
     ; car, cdr and combinations
-    (cons "(car '(a b))" "a\n")
-    (cons "(cdr '(a b))" "(b . ())\n")
-    (cons "(caaaar '((((a))) b))" "a\n")
-    (cons "(cdadr '((((a))) (((b) c)) (((c))) (((d)))))" "()\n")
-    (cons "(cdaadr '((((a))) (((b e) c)) (((c))) (((d)))))" "(c . ())\n")
+    ; (cons "(car '(a b))" "a\n")
+    ; (cons "(cdr '(a b))" "(b . ())\n")
+    ; (cons "(caaaar '((((a))) b))" "a\n")
+    ; (cons "(cdadr '((((a))) (((b) c)) (((c))) (((d)))))" "()\n")
+    ; (cons "(cdaadr '((((a))) (((b e) c)) (((c))) (((d)))))" "(c . ())\n")
     
-    ;list
-    (cons "(list)" "()\n")
-    (cons "(list 1 2 3 #t 'a)" "(1 . (2 . (3 . (#t . (a . ())))))\n")
-    (cons "(list (if #f #f))" "(#<void> . ())\n")
-    (cons "(list 'a 1 'b (if #f #f))" "(a . (1 . (b . (#<void> . ()))))\n")
+   ;  ;list
+    ; (cons "(list)" "()\n")
+    ; (cons "(list 1 2 3 #t 'a)" "(1 . (2 . (3 . (#t . (a . ())))))\n")
+    ; (cons "(list (if #f #f))" "(#<void> . ())\n")
+    ; (cons "(list 'a 1 'b (if #f #f))" "(a . (1 . (b . (#<void> . ()))))\n")
     
-    ;not
-    (cons "(not 1)" "#f\n")
-    (cons "(not #f)" "#t\n")
+   ;  ;not
+    ; (cons "(not 1)" "#f\n")
+    ; (cons "(not #f)" "#t\n")
     
-    ;apply
-    (cons "(apply car '((a)))" "a\n")
-    (cons "(apply (lambda (x y z) (list x y z)) '(1 2 3))" "(1 . (2 . (3 . ())))\n")
+   ;  ;apply
+   ;  (cons "(apply car '((a)))" "a\n")
+   ;  (cons "(apply (lambda (x y z) (list x y z)) '(1 2 3))" "(1 . (2 . (3 . ())))\n")
     
-    ;cons
-    (cons "(cons 1 2)" "(1 . 2)\n")
-    (cons "(cons 1 (cons 2 (cons 3 '())))" "(1 . (2 . (3 . ())))\n")
+   ;  ;cons
+   ;  (cons "(cons 1 2)" "(1 . 2)\n")
+   ;  (cons "(cons 1 (cons 2 (cons 3 '())))" "(1 . (2 . (3 . ())))\n")
     
-    ;null?
-    (cons "(null? '())" "#t\n")
-    (cons "(null? (list))" "#t\n")
-    (cons "(null? (list 1))" "#f\n")
-    (cons "(null? '(1 2 3 a))" "#f\n")
+   ;  ;null?
+   ;  (cons "(null? '())" "#t\n")
+   ;  (cons "(null? (list))" "#t\n")
+   ;  (cons "(null? (list 1))" "#f\n")
+   ;  (cons "(null? '(1 2 3 a))" "#f\n")
 
-    ;map
-    (cons "(map (lambda (x) x) '(1 2 3))" "(1 . (2 . (3 . ())))\n")
-    (cons "(map car '((1) (2) (3)))" "(1 . (2 . (3 . ())))\n")
-    (cons "(map caar '(((1)) ((2)) ((3))))" "(1 . (2 . (3 . ())))\n")
-    (cons "(map cdr (list))" "()\n")
-    (cons "(map (lambda (x y) (cons x y)) '(1 2) '(3 4))" "((1 . 3) . ((2 . 4) . ()))\n")
-    (cons "(map list '(1 2) '(3 4) '(5 6) '(7 8) '(9 10))" "((1 . (3 . (5 . (7 . (9 . ()))))) . ((2 . (4 . (6 . (8 . (10 . ()))))) . ()))\n")
+   ;  ;map
+   ;  (cons "(map (lambda (x) x) '(1 2 3))" "(1 . (2 . (3 . ())))\n")
+   ;  (cons "(map car '((1) (2) (3)))" "(1 . (2 . (3 . ())))\n")
+   ;  (cons "(map caar '(((1)) ((2)) ((3))))" "(1 . (2 . (3 . ())))\n")
+   ;  (cons "(map cdr (list))" "()\n")
+   ;  (cons "(map (lambda (x y) (cons x y)) '(1 2) '(3 4))" "((1 . 3) . ((2 . 4) . ()))\n")
+   ;  (cons "(map list '(1 2) '(3 4) '(5 6) '(7 8) '(9 10))" "((1 . (3 . (5 . (7 . (9 . ()))))) . ((2 . (4 . (6 . (8 . (10 . ()))))) . ()))\n")
 
-    ;append
-    (cons "(append '(1 2) '(3 4 5))" "(1 . (2 . (3 . (4 . (5 . ())))))\n")
-    (cons "(append '(1 2) '())" "(1 . (2 . ()))\n")
-    (cons "(append '(1) '(2))" "(1 . (2 . ()))\n")
-    (cons "(append '() '(1 2))" "(1 . (2 . ()))\n")
-    (cons "(append)" "()\n")
-    (cons "(append '(1 2 3) '(4) '(5 6) '(#t a b c) '())" 
-	  "(1 . (2 . (3 . (4 . (5 . (6 . (#t . (a . (b . (c . ()))))))))))\n")
+   ;  ;append
+   ;  (cons "(append '(1 2) '(3 4 5))" "(1 . (2 . (3 . (4 . (5 . ())))))\n")
+   ;  (cons "(append '(1 2) '())" "(1 . (2 . ()))\n")
+   ;  (cons "(append '(1) '(2))" "(1 . (2 . ()))\n")
+   ;  (cons "(append '() '(1 2))" "(1 . (2 . ()))\n")
+   ;  (cons "(append)" "()\n")
+   ;  (cons "(append '(1 2 3) '(4) '(5 6) '(#t a b c) '())" 
+	  ; "(1 . (2 . (3 . (4 . (5 . (6 . (#t . (a . (b . (c . ()))))))))))\n")
 	
-    ;boolean?
+   ;  ;boolean?
     (cons "(boolean? #t)" "#t\n")
     (cons "(boolean? #f)" "#t\n")
     (cons "(boolean? #\\a)" "#f\n")
@@ -925,189 +925,189 @@
     (cons "(boolean? \"AbC\")" "#f\n")
     (cons "(boolean? '(#t))" "#f\n")
     
-    ;char?
-    (cons "(char? #t)" "#f\n")
-    (cons "(char? #f)" "#f\n")
-    (cons "(char? #\\a)" "#t\n")
-    (cons "(char? #\\B)" "#t\n")
-    (cons "(char? #\\space)" "#t\n")
-    (cons "(char? 1)" "#f\n")
-    (cons "(char? \"AbC\")" "#f\n")
-    (cons "(char? '(#t))" "#f\n")
+   ;  ;char?
+   ;  (cons "(char? #t)" "#f\n")
+   ;  (cons "(char? #f)" "#f\n")
+   ;  (cons "(char? #\\a)" "#t\n")
+   ;  (cons "(char? #\\B)" "#t\n")
+   ;  (cons "(char? #\\space)" "#t\n")
+   ;  (cons "(char? 1)" "#f\n")
+   ;  (cons "(char? \"AbC\")" "#f\n")
+   ;  (cons "(char? '(#t))" "#f\n")
     
-    ;integer?
-    (cons "(integer? #t)" "#f\n")
-    (cons "(integer? #f)" "#f\n")
-    (cons "(integer? #\\a)" "#f\n")
-    (cons "(integer? 1)" "#t\n")
-    (cons "(integer? -52)" "#t\n")
-    (cons "(integer? -48/36)" "#f\n")
-    (cons "(integer? 1/12)" "#f\n")
-    (cons "(integer? '(1/12))" "#f\n")
-    (cons "(integer? \"AbC\")" "#f\n")
-    (cons "(integer? '(#t))" "#f\n")
+   ;  ;integer?
+   ;  (cons "(integer? #t)" "#f\n")
+   ;  (cons "(integer? #f)" "#f\n")
+   ;  (cons "(integer? #\\a)" "#f\n")
+   ;  (cons "(integer? 1)" "#t\n")
+   ;  (cons "(integer? -52)" "#t\n")
+   ;  (cons "(integer? -48/36)" "#f\n")
+   ;  (cons "(integer? 1/12)" "#f\n")
+   ;  (cons "(integer? '(1/12))" "#f\n")
+   ;  (cons "(integer? \"AbC\")" "#f\n")
+   ;  (cons "(integer? '(#t))" "#f\n")
     
-    ;pair?
-    (cons "(pair? 1)" "#f\n")
-    (cons "(pair? (cons 1 2))" "#t\n")
-    (cons "(pair? '(1 2 3))" "#t\n")
-    (cons "(pair? (list 1 2))" "#t\n")
-    (cons "(pair? #t)" "#f\n")
+   ;  ;pair?
+   ;  (cons "(pair? 1)" "#f\n")
+   ;  (cons "(pair? (cons 1 2))" "#t\n")
+   ;  (cons "(pair? '(1 2 3))" "#t\n")
+   ;  (cons "(pair? (list 1 2))" "#t\n")
+   ;  (cons "(pair? #t)" "#f\n")
     
-    ;number?
-    (cons "(number? 1)" "#t\n")
-    (cons "(number? -58)" "#t\n")
-    (cons "(number? 2/12)" "#t\n")
-    (cons "(number? -3/14)" "#t\n")
-    (cons "(number? 'a)" "#f\n")
-    (cons "(number? #t)" "#f\n")
-    (cons "(number? '(1))" "#f\n")
-    (cons "(number? '#(1))" "#f\n")
+   ;  ;number?
+   ;  (cons "(number? 1)" "#t\n")
+   ;  (cons "(number? -58)" "#t\n")
+   ;  (cons "(number? 2/12)" "#t\n")
+   ;  (cons "(number? -3/14)" "#t\n")
+   ;  (cons "(number? 'a)" "#f\n")
+   ;  (cons "(number? #t)" "#f\n")
+   ;  (cons "(number? '(1))" "#f\n")
+   ;  (cons "(number? '#(1))" "#f\n")
 
-    ;rational?
-    (cons "(rational? 1)" "#t\n")
-    (cons "(rational? -58)" "#t\n")
-    (cons "(rational? 2/12)" "#t\n")
-    (cons "(rational? -3/14)" "#t\n")
-    (cons "(rational? 'a)" "#f\n")
-    (cons "(rational? #t)" "#f\n")
-    (cons "(rational? '(1))" "#f\n")
-    (cons "(rational? '#(1))" "#f\n") 
+   ;  ;rational?
+   ;  (cons "(rational? 1)" "#t\n")
+   ;  (cons "(rational? -58)" "#t\n")
+   ;  (cons "(rational? 2/12)" "#t\n")
+   ;  (cons "(rational? -3/14)" "#t\n")
+   ;  (cons "(rational? 'a)" "#f\n")
+   ;  (cons "(rational? #t)" "#f\n")
+   ;  (cons "(rational? '(1))" "#f\n")
+   ;  (cons "(rational? '#(1))" "#f\n") 
     
-    ;char->integer
-    (cons "(char->integer #\\a)" "97\n")
-    (cons "(char->integer #\\A)" "65\n")
-    (cons "(char->integer #\\space)" "32\n")
+   ;  ;char->integer
+   ;  (cons "(char->integer #\\a)" "97\n")
+   ;  (cons "(char->integer #\\A)" "65\n")
+   ;  (cons "(char->integer #\\space)" "32\n")
     
-    ;integer->char
-    (cons "(integer->char 97)" "#\\a\n")
-    (cons "(integer->char 65)" "#\\A\n")
-    (cons "(integer->char 32)" "#\\space\n")
+   ;  ;integer->char
+   ;  (cons "(integer->char 97)" "#\\a\n")
+   ;  (cons "(integer->char 65)" "#\\A\n")
+   ;  (cons "(integer->char 32)" "#\\space\n")
     
-    ;string-length
-    (cons "(string-length \"abcde123\")" "8\n")
-    (cons "(string-length \"this-is a STRING !\")" "18\n")
-    (cons "(string-length \"\")" "0\n")
+   ;  ;string-length
+   ;  (cons "(string-length \"abcde123\")" "8\n")
+   ;  (cons "(string-length \"this-is a STRING !\")" "18\n")
+   ;  (cons "(string-length \"\")" "0\n")
     
-    ;denominator
-    (cons "(denominator 1)" "1\n")
-    (cons "(denominator -54)" "1\n")
-    (cons "(denominator 1/2)" "2\n")
-    (cons "(denominator -1/45)" "45\n")
-    (cons "(denominator -12/2)" "1\n")
-    (cons "(denominator -15/10)" "2\n")
+   ;  ;denominator
+   ;  (cons "(denominator 1)" "1\n")
+   ;  (cons "(denominator -54)" "1\n")
+   ;  (cons "(denominator 1/2)" "2\n")
+   ;  (cons "(denominator -1/45)" "45\n")
+   ;  (cons "(denominator -12/2)" "1\n")
+   ;  (cons "(denominator -15/10)" "2\n")
     
-    ;numerator
-    (cons "(numerator 1)" "1\n")
-    (cons "(numerator -54)" "-54\n")
-    (cons "(numerator 1/2)" "1\n")
-    (cons "(numerator -1/45)" "-1\n")
-    (cons "(numerator -12/2)" "-6\n")
-    (cons "(numerator -15/10)" "-3\n")
+   ;  ;numerator
+   ;  (cons "(numerator 1)" "1\n")
+   ;  (cons "(numerator -54)" "-54\n")
+   ;  (cons "(numerator 1/2)" "1\n")
+   ;  (cons "(numerator -1/45)" "-1\n")
+   ;  (cons "(numerator -12/2)" "-6\n")
+   ;  (cons "(numerator -15/10)" "-3\n")
     
-    ;make-string
-    (cons "(make-string 1 #\\a)" "\"a\"\n")
-    (cons "(make-string 5 #\\A)" "\"AAAAA\"\n")
-    (cons "(make-string 0 #\\space)" "\"\"\n")
+   ;  ;make-string
+   ;  (cons "(make-string 1 #\\a)" "\"a\"\n")
+   ;  (cons "(make-string 5 #\\A)" "\"AAAAA\"\n")
+   ;  (cons "(make-string 0 #\\space)" "\"\"\n")
     
-    ;make-vector
-    (cons "(make-vector 1 #\\a)" "#1(#\\a)\n")
-    (cons "(make-vector 5 #\\A)" "#5(#\\A #\\A #\\A #\\A #\\A)\n")
-    (cons "(make-vector 0 #\\space)" "#0()\n") 
-    (cons "(make-vector 0 #\\Z)" "#0()\n") 
-    (cons "(make-vector 12 #t)" "#12(#t #t #t #t #t #t #t #t #t #t #t #t)\n")  
-    (cons "(make-vector 4 -6/8)" "#4(-3/4 -3/4 -3/4 -3/4)\n")  
+   ;  ;make-vector
+   ;  (cons "(make-vector 1 #\\a)" "#1(#\\a)\n")
+   ;  (cons "(make-vector 5 #\\A)" "#5(#\\A #\\A #\\A #\\A #\\A)\n")
+   ;  (cons "(make-vector 0 #\\space)" "#0()\n") 
+   ;  (cons "(make-vector 0 #\\Z)" "#0()\n") 
+   ;  (cons "(make-vector 12 #t)" "#12(#t #t #t #t #t #t #t #t #t #t #t #t)\n")  
+   ;  (cons "(make-vector 4 -6/8)" "#4(-3/4 -3/4 -3/4 -3/4)\n")  
     
-    ;procedure?
-    (cons "(procedure? 1)" "#f\n")
-    (cons "(procedure? 1)" "#f\n")
-    (cons "(procedure? (lambda (x) x))" "#t\n")
-    (cons "(define f (lambda x x)) (procedure? f)" "#t\n")
-    (cons "(define f (lambda (a b . c) c)) (procedure? f)" "#t\n")
+   ;  ;procedure?
+   ;  (cons "(procedure? 1)" "#f\n")
+   ;  (cons "(procedure? 1)" "#f\n")
+   ;  (cons "(procedure? (lambda (x) x))" "#t\n")
+   ;  (cons "(define f (lambda x x)) (procedure? f)" "#t\n")
+   ;  (cons "(define f (lambda (a b . c) c)) (procedure? f)" "#t\n")
     
-    ;vector-length
-    (cons "(vector-length '#())" "0\n")
-    (cons "(vector-length '#(1))" "1\n")
-    (cons "(vector-length '#(1 2 3))" "3\n")
-    (cons "(vector-length '#(1 2 3 #t #f 6/8))" "6\n")
-    (cons "(vector-length '#(1 2 3 #t #f 6/8 (#\\a #\\b #\\C \"StR\")))" "7\n")
+   ;  ;vector-length
+   ;  (cons "(vector-length '#())" "0\n")
+   ;  (cons "(vector-length '#(1))" "1\n")
+   ;  (cons "(vector-length '#(1 2 3))" "3\n")
+   ;  (cons "(vector-length '#(1 2 3 #t #f 6/8))" "6\n")
+   ;  (cons "(vector-length '#(1 2 3 #t #f 6/8 (#\\a #\\b #\\C \"StR\")))" "7\n")
     
-    ;string?
-    (cons "(string? 1)" "#f\n")
-    (cons "(string? \"\")" "#t\n")
-    (cons "(string? #\\a)" "#f\n")
-    (cons "(string? \"this is A STRING!\")" "#t\n")
-    (cons "(string? (make-string 20 #\\Y))" "#t\n")
+   ;  ;string?
+   ;  (cons "(string? 1)" "#f\n")
+   ;  (cons "(string? \"\")" "#t\n")
+   ;  (cons "(string? #\\a)" "#f\n")
+   ;  (cons "(string? \"this is A STRING!\")" "#t\n")
+   ;  (cons "(string? (make-string 20 #\\Y))" "#t\n")
     
-    ;symbol?
-    (cons "(symbol? 'a)" "#t\n")
-    (cons "(symbol? 'this-is-a-symbol)" "#t\n")
-    (cons "(symbol? #t)" "#f\n")
-    (cons "(symbol? \"Str\")" "#f\n")
-    (cons "(symbol? 1)" "#f\n")
-    (cons "(symbol? #\\c)" "#f\n")
+   ;  ;symbol?
+   ;  (cons "(symbol? 'a)" "#t\n")
+   ;  (cons "(symbol? 'this-is-a-symbol)" "#t\n")
+   ;  (cons "(symbol? #t)" "#f\n")
+   ;  (cons "(symbol? \"Str\")" "#f\n")
+   ;  (cons "(symbol? 1)" "#f\n")
+   ;  (cons "(symbol? #\\c)" "#f\n")
     
-    ;vector?
-    (cons "(vector? '#())" "#t\n")
-    (cons "(vector? '(1))" "#f\n")
-    (cons "(vector? #t)" "#f\n")
-    (cons "(vector? 'symbol1)" "#f\n")
-    (cons "(vector? (make-vector 1 2))" "#t\n")
-    (cons "(vector? (make-vector 100 #t))" "#t\n")
-    (cons "(vector? '#(1))" "#t\n")
-    (cons "(vector? '#(1 2 3))" "#t\n")
-    (cons "(vector? '#(1 2 3 #t #f 6/8))" "#t\n")
-    (cons "(vector? '#(1 2 3 #t #f 6/8 (#\\a #\\b #\\C \"StR\")))" "#t\n")
+   ;  ;vector?
+   ;  (cons "(vector? '#())" "#t\n")
+   ;  (cons "(vector? '(1))" "#f\n")
+   ;  (cons "(vector? #t)" "#f\n")
+   ;  (cons "(vector? 'symbol1)" "#f\n")
+   ;  (cons "(vector? (make-vector 1 2))" "#t\n")
+   ;  (cons "(vector? (make-vector 100 #t))" "#t\n")
+   ;  (cons "(vector? '#(1))" "#t\n")
+   ;  (cons "(vector? '#(1 2 3))" "#t\n")
+   ;  (cons "(vector? '#(1 2 3 #t #f 6/8))" "#t\n")
+   ;  (cons "(vector? '#(1 2 3 #t #f 6/8 (#\\a #\\b #\\C \"StR\")))" "#t\n")
     
-    ;zero?
-    (cons "(zero? 1)" "#f\n")
-    (cons "(zero? 0)" "#t\n")
-    (cons "(zero? 0/5)" "#t\n")
-    (cons "(zero? -0/12)" "#t\n")
-    (cons "(zero? 2/13)" "#f\n")
-    (cons "(zero? -0)" "#t\n")
+   ;  ;zero?
+   ;  (cons "(zero? 1)" "#f\n")
+   ;  (cons "(zero? 0)" "#t\n")
+   ;  (cons "(zero? 0/5)" "#t\n")
+   ;  (cons "(zero? -0/12)" "#t\n")
+   ;  (cons "(zero? 2/13)" "#f\n")
+   ;  (cons "(zero? -0)" "#t\n")
     
-    ;vector
-    (cons "(vector)" "#0()\n")
-    (cons "(vector 1)" "#1(1)\n")
-    (cons "(vector #\\a #\\A #\\space)" "#3(#\\a #\\A #\\space)\n")
-    (cons "(vector 1 2 3 #t #f -1/2 \"a\" #\\b)" "#8(1 2 3 #t #f -1/2 \"a\" #\\b)\n")
+   ;  ;vector
+   ;  (cons "(vector)" "#0()\n")
+   ;  (cons "(vector 1)" "#1(1)\n")
+   ;  (cons "(vector #\\a #\\A #\\space)" "#3(#\\a #\\A #\\space)\n")
+   ;  (cons "(vector 1 2 3 #t #f -1/2 \"a\" #\\b)" "#8(1 2 3 #t #f -1/2 \"a\" #\\b)\n")
   
-    ;string-ref
-    (cons "(string-ref \"ABcD1234\" 0)" "#\\A\n")
-    (cons "(string-ref \"ABcD1234\" 1)" "#\\B\n")
-    (cons "(string-ref \"ABcD1234\" 2)" "#\\c\n")
-    (cons "(string-ref \"ABcD1234\" 3)" "#\\D\n")
-    (cons "(string-ref \"ABcD1234\" 4)" "#\\1\n")
-    (cons "(string-ref \"ABcD1234\" 5)" "#\\2\n")
-    (cons "(string-ref \"ABcD1234\" 6)" "#\\3\n")
-    (cons "(string-ref \"ABcD1234\" 7)" "#\\4\n")
+   ;  ;string-ref
+   ;  (cons "(string-ref \"ABcD1234\" 0)" "#\\A\n")
+   ;  (cons "(string-ref \"ABcD1234\" 1)" "#\\B\n")
+   ;  (cons "(string-ref \"ABcD1234\" 2)" "#\\c\n")
+   ;  (cons "(string-ref \"ABcD1234\" 3)" "#\\D\n")
+   ;  (cons "(string-ref \"ABcD1234\" 4)" "#\\1\n")
+   ;  (cons "(string-ref \"ABcD1234\" 5)" "#\\2\n")
+   ;  (cons "(string-ref \"ABcD1234\" 6)" "#\\3\n")
+   ;  (cons "(string-ref \"ABcD1234\" 7)" "#\\4\n")
     
-    ;vector-ref
-    (cons "(vector-ref '#(\"ABC\" 1 #t 2 #f 3 (a)) 0)" "\"ABC\"\n")
-    (cons "(vector-ref '#(\"ABC\" 1 #t 2 #f 3 (a)) 1)" "1\n")
-    (cons "(vector-ref '#(\"ABC\" 1 #t 2 #f 3 (a)) 2)" "#t\n")
-    (cons "(vector-ref '#(\"ABC\" 1 #t 2 #f 3 (a)) 3)" "2\n")
-    (cons "(vector-ref '#(\"ABC\" 1 #t 2 #f 3 (a)) 4)" "#f\n")
-    (cons "(vector-ref '#(\"ABC\" 1 #t 2 #f 3 (a)) 5)" "3\n")
-    (cons "(vector-ref '#(\"ABC\" 1 #t 2 #f 3 (a)) 6)" "(a . ())\n")
+   ;  ;vector-ref
+   ;  (cons "(vector-ref '#(\"ABC\" 1 #t 2 #f 3 (a)) 0)" "\"ABC\"\n")
+   ;  (cons "(vector-ref '#(\"ABC\" 1 #t 2 #f 3 (a)) 1)" "1\n")
+   ;  (cons "(vector-ref '#(\"ABC\" 1 #t 2 #f 3 (a)) 2)" "#t\n")
+   ;  (cons "(vector-ref '#(\"ABC\" 1 #t 2 #f 3 (a)) 3)" "2\n")
+   ;  (cons "(vector-ref '#(\"ABC\" 1 #t 2 #f 3 (a)) 4)" "#f\n")
+   ;  (cons "(vector-ref '#(\"ABC\" 1 #t 2 #f 3 (a)) 5)" "3\n")
+   ;  (cons "(vector-ref '#(\"ABC\" 1 #t 2 #f 3 (a)) 6)" "(a . ())\n")
     
-    ;+
-    (cons "(+ 3/2 3/2)" "3\n")
-    (cons "(+ -3/2 -3/2)" "-3\n")    
-    (cons "(+ 1/2 2)" "5/2\n")
-    (cons "(+ 1 -1/2)" "1/2\n")
-    (cons "(+ 1 -1/2 -1/2)" "0\n")
-    (cons "(+ 11 12)" "23\n")
-    (cons "(+ 11 -12)" "-1\n")
-    (cons "(+ 10/10 -120/110)" "-1/11\n")
-    (cons "(+ 1 2 3 -1/2 -3/4 -5/6 -7/8 9 12/5)" "1733/120\n")
-    (cons "(+)" "0\n")
+   ;  ;+
+   ;  (cons "(+ 3/2 3/2)" "3\n")
+   ;  (cons "(+ -3/2 -3/2)" "-3\n")    
+   ;  (cons "(+ 1/2 2)" "5/2\n")
+   ;  (cons "(+ 1 -1/2)" "1/2\n")
+   ;  (cons "(+ 1 -1/2 -1/2)" "0\n")
+   ;  (cons "(+ 11 12)" "23\n")
+   ;  (cons "(+ 11 -12)" "-1\n")
+   ;  (cons "(+ 10/10 -120/110)" "-1/11\n")
+   ;  (cons "(+ 1 2 3 -1/2 -3/4 -5/6 -7/8 9 12/5)" "1733/120\n")
+   ;  (cons "(+)" "0\n")
     
-    ;-
-    (cons "(- 5)" "-5\n")
-    (cons "(- 5 6 7)" "-8\n")
-    (cons "(- 5/6 6/7 7/8 9)" "-1663/168\n")   
+   ;  ;-
+   ;  (cons "(- 5)" "-5\n")
+   ;  (cons "(- 5 6 7)" "-8\n")
+   ;  (cons "(- 5/6 6/7 7/8 9)" "-1663/168\n")   
     
 ))
 
@@ -1181,7 +1181,7 @@
 
 (runAllTests
   (list      
-      ; (cons "Constants Table" constants-table-tests)  
+      ; (cons " Constants Table" constants-table-tests)  
       ; (cons "Or, If and Begin" or-if-begin-tests)      
       ; (cons "Lambda-simple" lambda-simple-tests)
       ; (cons "Lambda-opt" lambda-opt-tests)
@@ -1189,10 +1189,10 @@
       ; (cons "tc-applic-tests" tc-applic-tests)
       ; (cons "Comp161 torture if test" comp161-torture-if-test)
       ; (cons "comp161 torture test for compiler unsorted" comp161-torture-test-for-compiler-unsorted)
-      ; (cons "Set" set-tests)
+      (cons "Set" set-tests)
       ; (cons "pvar-bvar" pvar-bvar-tests)
       ; (cons "Define" define-tests)
-      (cons "Primitive Functions" primitive-functions-tests)
+      ; (cons "Primitive Functions" primitive-functions-tests)
       ;(cons "Internal Helper Procedures" internal-helper-procedures-tests)
       ;(cons "Debugging" tests)  
       
