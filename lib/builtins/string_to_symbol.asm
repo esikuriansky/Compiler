@@ -10,7 +10,7 @@ STRING_TO_SYMBOL:
 	JUMP_NE(STRING_TO_SYMBOL_INVALID_ARGUMENTS);
 
 	/* Take pointer to head of list */
-	MOV(R2, IND(SOB_SYMBOL_LIST));
+	MOV(R2, IND(SOB_SYM_LIST));
 
 	/* Load user argument string */
 	MOV(R4, FPARG(2));		/* string */
@@ -90,11 +90,11 @@ STRING_TO_SYMBOL_NOT_FOUND:
 	MOV(R1, R0); /* save ptr*/
 
 	/* Allocate Link-Chain (3 items) */
-	PUSH(IND(SOB_SYMBOL_LIST));
+	PUSH(IND(SOB_SYM_LIST));
 	PUSH(R1);
 	CALL(MAKE_SOB_PAIR);
 	DROP(2);
-	MOV(IND(SOB_SYMBOL_LIST), R0);
+	MOV(IND(SOB_SYM_LIST), R0);
 	MOV(R0, R1);
 
 

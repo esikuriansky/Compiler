@@ -1,22 +1,129 @@
+  DIVIDE:
+  PUSH(FP);
+  MOV(FP, SP);
 
-PDIV:
-        PUSH(FP);
-        MOV(FP, SP);
+  PUSH(R1);
+  PUSH(R2);
+  PUSH(R3);
 
-        CMP(FPARG(1),IMM(2))     ; //checks num of args = 2
-        JUMP_NE(DIV_BAD_ARGS) ;
+  MOV(R2, FPARG(1));
+  MOV(R3, IMM(3));
+  MOV(R0,FPARG(2));
+  MOV(R0,INDD(R0,1));
 
-    	MOV(R0,INDD(FPARG(2),1));
-        DIV(R0,INDD(FPARG(3),1));
-        
-        PUSH(R0);
-        CALL(MAKE_SOB_INTEGER);
-        DROP(IMM(1));
-        
-        POP(FP);
-        RETURN;
+DIVIDE_LOOP:
+  CMP(R2, IMM(1));
+  JUMP_EQ(DIVIDE_END);
+  MOV(R1, FPARG(R3));
+  MOV(R1, INDD(R1,1));
+  DIV(R0,R1);
+  ADD(R3,IMM(1));
+  SUB(R2,IMM(1));
+  JUMP(DIVIDE_LOOP);
 
-DIV_BAD_ARGS:
-        SHOW("DIV: bad args number:", FPARG(1)) ;
-        STOP_MACHINE ;
-        return 1;
+DIVIDE_END:
+  PUSH(R0);
+  CALL(MAKE_SOB_INTEGER); 
+  DROP(1);  
+
+  POP(R3);
+  POP(R2);
+  POP(R1);
+  POP(FP);
+  RETURN; 
+
+//=======================
+/*
+DIVIDE:
+
+  PUSH(FP);
+  MOV(FP, SP);
+  PUSH(R1);
+  PUSH(R2);
+  PUSH(R3);
+  PUSH(R4);
+  PUSH(R5);
+  PUSH(R6);
+
+  MOV(R5, FPARG(1));
+  MOV(R3, 0);
+  MOV(R6, FPARG(R3 + 2));
+
+  CMP(IND(R6), T_FRACTION);
+  JUMP_EQ(ARG1_IS_FRACTION);
+
+  PUSH(1);
+  PUSH(INDD(R6, 1));
+  PUSH(1);
+  CALL(MAKE_SOB_FRACTION);
+  DROP(3);
+  MOV(R6, R0);
+
+ARG1_IS_FRACTION:
+
+  ADD(R3, 1);
+  CMP(R5, R3);
+  JUMP_EQ(ARGS_LENGTH_1);
+
+DIVIDE_LOOP:
+
+  CMP(R5, R3);
+  JUMP_EQ(DIVIDE_END);
+
+  MOV(R4, FPARG(R3));  // Next arg
+
+  CMP(INDD(R4, 0), T_FRACTION);
+  JUMP_EQ(CONTINUE_DIV);
+
+  PUSH(1);
+  PUSH(INDD(R4, 1));
+  PUSH(1);
+  CALL(MAKE_SOB_FRACTION);
+  DROP(3);
+  MOV(R4, R0);
+
+CONTINUE_DIV:
+
+  MOV(R7, INDD(R4, 2));
+  MOV(R8, INDD(R4, 3));
+  MOV(INDD(R4,2), R8);
+  MOV(INDD(R4,3), R7);
+
+  PUSH(R6);
+  PUSH(R4);
+  CALL(MUL_FRACS);
+  DROP(2);
+
+  MOV(R6, R0);
+  ADD(R3, 1);
+
+  JUMP(DIVIDE_LOOP);
+
+
+ARGS_LENGTH_1:
+  
+  PUSH(INDD(R6, 1))
+  PUSH(INDD(R6, 3));
+  PUSH(INDD(R6, 2));
+  CALL(MAKE_SOB_FRACTION);
+  DROP(3);
+  MOV(R6, R0);
+  
+DIVIDE_PRE_END:
+
+  MOV(R0, R6);
+  CMP(INDD(R0, 3), 1); 
+  JUMP_NE(DIVIDE_END);
+  PUSH(INDD(R0, 2));
+  CALL(MAKE_SOB_INTEGER);
+  DROP(1);  
+
+DIVIDE_END:
+  POP(R6);
+  POP(R5);
+  POP(R4);
+  POP(R3);
+  POP(R2);
+  POP(R1);
+  POP(FP);
+  RETURN; */

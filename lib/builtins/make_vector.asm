@@ -1,3 +1,7 @@
+/* 
+   FPARG[2] - the len number
+   FPARG[3) - fill if given
+*/
 
 
 MAKE_VECTOR:

@@ -3,7 +3,7 @@ VECTOR_LENGTH:
         PUSH(FP);
         MOV(FP, SP);
 
-        CMP(FPARG(1),IMM(1));  // arguments number
+        CMP(FPARG(1),IMM(1));  
         JUMP_NE(VECTOR_LENGTH_NOT_VALID_ARGS);
 
         CMP(INDD(FPARG(IMM(2)),IMM(0)),T_VECTOR); 
@@ -13,7 +13,6 @@ VECTOR_LENGTH:
         PUSH(INDD(FPARG(IMM(2)), IMM(1)));
         CALL(MAKE_SOB_INTEGER);
         DROP(IMM(1));
-
 
         POP(FP);
         RETURN;

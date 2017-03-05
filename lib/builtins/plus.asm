@@ -1,23 +1,74 @@
-
-
 PLUS:
-        PUSH(FP);
-        MOV(FP, SP);
 
-        CMP(FPARG(1),IMM(2))     ; //checks num of args = 2
-        JUMP_NE(PLUS_BAD_ARGS) ;
+  PUSH(FP);
+  MOV(FP, SP);
+  PUSH(R1);
+  PUSH(R2);
+  PUSH(R3);
+  PUSH(R4);
+  PUSH(R5);
 
-    	MOV(R0,INDD(FPARG(2),1));
-        ADD(R0,INDD(FPARG(3),1));
-        
-        PUSH(R0);
-        CALL(MAKE_SOB_INTEGER);
-        DROP(IMM(1));
-        
-        POP(FP);
-        RETURN;
+  PUSH(1);
+  PUSH(0);
+  PUSH(1);
+  CALL(MAKE_SOB_FRACTION);
+  DROP(3);
+  MOV(R1, R0);
 
-PLUS_BAD_ARGS:
-        SHOW("PLUS: bad args number:", FPARG(1)) ;
-        STOP_MACHINE ;
-        return 1;
+  MOV(R5, FPARG(1)); 
+  MOV(R3, 0); 
+
+PLUS_LOOP:
+
+  CMP(R5, R3);
+  
+  JUMP_EQ(PRE_PLUS_END);
+  MOV(R4, FPARG(R3 + 2)); 
+
+  CMP(IND(R4), T_FRACTION);
+  JUMP_EQ(PLUS_WITH_FRACTION);
+
+  MOV(R2, INDD(R4, 1));
+  PUSH(1);
+  PUSH(R2);
+  PUSH(1);
+  CALL(MAKE_SOB_FRACTION);
+  DROP(3);
+  MOV(R4, R0);
+
+PLUS_WITH_FRACTION:
+  PUSH(R1);
+  PUSH(R4);
+  CALL(PLUS_FRACS);
+  DROP(2);
+  MOV(R1, R0);
+  ADD(R3, 1);
+  JUMP(PLUS_LOOP);
+
+PRE_PLUS_END:
+
+  MOV(R0, R1);
+  CMP(INDD(R0, 3), 1); 
+  JUMP_NE(RETURN_FRACTION);
+
+  PUSH(INDD(R0, 2));
+  CALL(MAKE_SOB_INTEGER);
+  DROP(1); 
+  JUMP(PLUS_END);
+
+RETURN_FRACTION:
+
+  CMP(INDD(R0, 2), 0);
+  JUMP_NE(PLUS_END);
+  PUSH(0);
+  CALL(MAKE_SOB_INTEGER);
+  DROP(1);
+
+PLUS_END:
+  POP(R5);
+  POP(R4);
+  POP(R3);
+  POP(R2);
+  POP(R1);
+  POP(FP);
+  RETURN;

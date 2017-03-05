@@ -1,23 +1,33 @@
 
+MULTIPLY:
+  PUSH(FP);
+  MOV(FP, SP);
+  
+  PUSH(R1);
+  PUSH(R2);
+  PUSH(R3);
 
-PMUL:
-        PUSH(FP);
-        MOV(FP, SP);
+  MOV(R2, FPARG(1));
+  MOV(R3, IMM(2));
+  MOV(R0,IMM(1));
 
-        CMP(FPARG(1),IMM(2))     ; //checks num of args = 2
-        JUMP_NE(MUL_BAD_ARGS) ;
+MULTIPLY_LOOP:
+  CMP(R2, IMM(0));
+  JUMP_EQ(MULTIPLY_END);
+  MOV(R1, FPARG(R3));
+  MOV(R1, INDD(R1,1));
+  MUL(R0,R1);
+  SUB(R2,IMM(1));
+  ADD(R3,IMM(1));
+  JUMP(MULTIPLY_LOOP);
+  
+MULTIPLY_END:
+  PUSH(R0);
+  CALL(MAKE_SOB_INTEGER); 
+  DROP(1);  
 
-    	MOV(R0,INDD(FPARG(2),1));
-        MUL(R0,INDD(FPARG(3),1));
-        
-        PUSH(R0);
-        CALL(MAKE_SOB_INTEGER);
-        DROP(IMM(1));
-        
-        POP(FP);
-        RETURN;
-
-MUL_BAD_ARGS:
-        SHOW("MUL: bad args number:", FPARG(1)) ;
-        STOP_MACHINE ;
-        return 1;
+  POP(R3);
+  POP(R2);
+  POP(R1);
+  POP(FP);
+  RETURN;

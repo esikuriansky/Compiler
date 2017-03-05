@@ -3,9 +3,6 @@ REMAINDER:
         PUSH(FP);
         MOV(FP, SP);
 
-        CMP(FPARG(1),IMM(2))     ; //checks num of args = 2
-        JUMP_NE(REMAINDER_BAD_ARGS) ;
-
     	MOV(R0,INDD(FPARG(2),1));
         REM(R0,INDD(FPARG(3),1));
         
@@ -16,7 +13,3 @@ REMAINDER:
         POP(FP);
         RETURN;
 
-REMAINDER_BAD_ARGS:
-        SHOW("REMAINDER: bad args number:", FPARG(1)) ;
-        STOP_MACHINE ;
-        return 1;

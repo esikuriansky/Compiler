@@ -941,6 +941,10 @@
 (define (define-pe? exp) (^eq? exp 'def))
 (define (seq-pe? exp) (^eq? exp 'seq))
 (define (or-pe? exp) (^eq? exp 'or))
+(define (set-pe? exp) (^eq? exp 'set))
+(define (box-pe? exp) (^eq? exp 'box))
+(define (box-set-pe? exp) (^eq? exp 'box-set))
+(define (box-get-pe? exp) (^eq? exp 'box-get))
 
 (define ^make-label
 	(lambda (label-name)
@@ -1005,18 +1009,13 @@
 				(if (null? tbl) 
 						"" 
 						(let* 
-							;; ribsW
+							;; ribs
 							((curr (car tbl))
 							 (addr (car curr))
 							 (type (cadr curr))
 							 (val  (caddr curr)))
 
 							;;body
-							; (disp curr "cgen-ct")
-							; (disp val "cgen-ct")
-							; (disp type "cgen-ct")
-							; (if (vector? val)
-							; (disp (vector->list val) "cgen-ct"))
 
 							(string-append
 								(cond
@@ -1048,7 +1047,6 @@
 												)))
 									;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 									((eq? type 'T_INTEGER) 
-												; (disp type "T_INTEGER")
 												(string-append 
 												"// Making INT object"									newl
 		    								"PUSH(IMM("(number->string val)"));"		newl
@@ -1063,9 +1061,6 @@
 														(numer (numerator val))
 														(denom (denominator val)))
 												;; body
-												; (disp numer "cgen-ct-fraction")
-												; (disp denom "cgen-ct-fraction")
-												; (disp val "cget-ct-fraction")	
 												(string-append
 												"PUSH(IMM(" sign "));" 										newl
 												"PUSH(IMM(" (number->string numer) "));"	newl
@@ -1093,7 +1088,6 @@
 
 									;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 									((eq? type 'T_SYMBOL) 
-												; (disp type "T_SYMBOL")
 												(let* 
 												((string-addr (get-from-ct (symbol->string val))))
 												(string-append
@@ -1113,9 +1107,7 @@
 
 									;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 									((eq? type 'T_PAIR) 
-												; (disp val "cgen-TPAIR:")
-												; (disp (get-from-ct (car val)) "cgen-TPAIR:")
-												; (disp (car val) )
+		
 												(string-append
 												"// Makeing PAIR object"																				newl
 												"PUSH(IMM(" (number->string (get-from-ct (cdr val))) "));"			newl
@@ -1212,8 +1204,6 @@
 
 (define cgen-const
 	(lambda (pe)
-		; (disp pe "cgen-const")
-		; (disp (rational? pe) "cgen-const?")
 		(string-append "MOV(R0, IMM(" (number->string  (get-from-ct pe)) "));\n")
 	))
 
@@ -1253,31 +1243,141 @@
 		))
 	))
 
-; (define cgen-pvar-set
-; 	(lambda pe value)
-; 		(let ((minor (caddr var)))
-; 			      (string-append 
-; 			        value
-; 			        "MOV(FPARG(" (number->string (+ 2 minor)) "), R0);"		newl
-; 			        "MOV(R0, IMM(1)) "))
-; 	)
+(define cgen-fvar-set
+	(lambda (fvar set-val-code env-len params-len)
+		; (disp fvar "cgen-fvar-set")
+		(let* 
+			;; ribs
+			((generated-val (cgen set-val-code env-len params-len))
+			(exists-resolve (find-symbol (cadr fvar)))
+			(address (number->string (car exists-resolve))))
+		;; body
+		(string-append
+			generated-val 
+			" MOV(IND(" address "),R0);"	newl
+			" MOV(R0,IMM(1));"						newl
+		))
+	))
 
-; (define cgen-bvar-set)
+(define cgen-pvar-set
+	(lambda (pvar set-val-code env-len params-len)
+		; (disp pvar "cgen-pvar-set")
+		; (disp (caddr pvar) "cgen-pvar-set-minor")
+		(let
+			;; ribs 
+			((minor (caddr pvar))
+			(generated-val (cgen set-val-code env-len params-len)))
+		;;body
+    (string-append 
+     generated-val
+     "MOV(FPARG(" (number->string (+ 2 minor)) "), R0);"		newl
+     "MOV(R0, IMM(1))"																			newl
+    ))
+	))
 
-; (define code-gen-set 
-; 	(lambda (pe value)
-; 			(if (equal? (car pe) 'pvar)
-; 					()			    																newl
-; 			    (let ((major (caddr var))											
-; 				  (minor (cadddr var)))
-; 				 (string-append
-; 				  value
-; 				  " MOV(R1,R0); \n"
-; 				  " MOV(R0,FPARG(0)); \n"
-; 				  " MOV(R0,INDD(R0,"(number->string major)")); \n" 
-; 				  " MOV(INDD(R0,"(number->string minor) "),R1); \n"
-; 				  " MOV(R0, IMM(1)); \n"
-; 				   )))))
+(define cgen-bvar-set
+	(lambda (bvar set-val-code env-len params-len)
+		; (disp bvar "cgen-bvar-set")
+		; (disp (caddr bvar) "bvar-major")
+		; (disp (cadddr bvar) "bvar-minor")
+		; (disp set-val-code "bvar-val-vode")
+		(let 
+			;; ribs
+			((major (caddr bvar))											
+			 (minor (cadddr bvar))
+			 (generated-val (cgen set-val-code env-len params-len)))
+		;; body
+	  (string-append
+	  	generated-val
+	  	"MOV(R1,R0);"																	newl
+	  	"MOV(R0,FPARG(0));"														newl
+	  	"MOV(R0,INDD(R0,"(number->string major)"));" 	newl
+	  	"MOV(INDD(R0,"(number->string minor) "),R1);"	newl
+	  	"MOV(R0, IMM(1));"														newl
+	   ))
+	))
+
+(define cgen-set 
+	(lambda (pe env-len params-len)
+			; (disp pe "code-gen-set")
+			(let 
+				;; ribs
+				((var (car pe))
+				 (set-val-code (cadr pe)))
+			;; body
+			(cond 
+				((equal? (car var) 'pvar) (cgen-pvar-set var set-val-code env-len params-len))	
+				((equal? (car var) 'bvar) (cgen-bvar-set var set-val-code env-len params-len))
+				((equal? (car var) 'fvar) (cgen-fvar-set var set-val-code env-len params-len))
+			))
+	))
+
+; (define code-gen-box
+;   (lambda (setvar envLevel paramsLevel)
+;     (if (equal? (caar setvar) 'pvar)
+; 		    (let ((mindex (caddar setvar)))
+; 		    (string-append
+; 		      "/* box-pvar */" nl
+; 		      "MOV(R10, IMM("(number->string mindex)"));" nl
+; 		      "ADD(R10,IMM(2));" nl
+; 		      (malloc 1) nl
+; 		      "MOV(IND(R0),FPARG(R10));" nl
+; 		      ;
+; 		      ))
+; 		    (let (
+; 		          (mjrdex (caddar setvar))
+; 		          (mindex (car (cdddar setvar))))
+; 		    (string-append
+; 		      "/* box-bvar */" nl
+; 		      "MOV(R1, FPARG(IMM(0)));" nl
+; 		      "ADD(R1,INDD(R1,IMM("(number->string mjrdex)")));" nl
+; 		      (malloc 1) nl
+; 		      "MOV(IND(R0),INDD(R1,IMM("(number->string mindex)")));" nl
+; 		      ))
+;     )))
+
+(define cgen-box 
+	(lambda (var env-len params-len)
+			(disp var "lala")
+			(let ((minor (caddr var)))
+			  (string-append
+			      " MOV(R2, FPARG("(number->string (+ 2 minor))"));"	newl
+			      " PUSH(IMM(1));"			newl
+			      " CALL(MALLOC);"			newl
+			      " DROP(1);"						newl
+			      " MOV(IND(R0), R2);"	newl
+			  )
+	)))
+			      
+(define cgen-box-get 
+	(lambda (pe env-len params-len)
+		; (disp pe "cgen-box-set")
+		(let
+			;; ribs
+			((generated-get-code (cgen pe env-len params-len)))
+		;; body
+	  (string-append
+      generated-get-code
+      " MOV(R0,IND(R0));" newl
+	  ))
+	))
+		  
+(define cgen-box-set 
+	(lambda (pe env-len params-len)
+		; (disp (car pe) "cgen-box-set")
+		; (disp (cadr pe) "cgen-box-set")
+		(let
+			;; ribs
+			((to-set-code (cgen (car pe) env-len params-len))
+			(set-with-code (cgen (cadr pe) env-len params-len)))
+		;; body
+	 	(string-append
+      to-set-code
+      " MOV(R1,R0);"			newl
+      set-with-code
+      " MOV(IND(R0),R1);"	newl
+	  ))
+	))	
 
 (define cgen-fvar 
 	(lambda (fvar)
@@ -1621,6 +1721,11 @@
 			((bvar-pe? pe) (cgen-bvar (cdr pe)))
 			((pvar-pe? pe) (cgen-pvar (cdr pe)))
 			((fvar-pe? pe) (cgen-fvar (cdr pe)))
+			((set-pe? pe) (cgen-set (cdr pe) env-len params-len))
+			((box-pe? pe) (cgen-box (cadr pe) env-len params-len))
+			((box-set-pe? pe) (cgen-box-set (cdr pe) env-len params-len))
+			((box-get-pe? pe) (cgen-box-get (cadr pe) env-len params-len))
+
 			(else (compilation-error "Unsupported symbol" pe))
 		)))
 
@@ -1666,6 +1771,7 @@
 		(3 T_NIL ())
 		(4 T_BOOL #t)
 		(6 T_BOOL #f)
+		(8 T_INTEGER 0)
 	 )
 )
 
@@ -1673,7 +1779,7 @@
 	(lambda ()
 		display const-table))
 
-(define ct-next-index 8)
+(define ct-next-index 10)
 
 (define is-in-ct?
 	(lambda (const)
@@ -1710,10 +1816,12 @@
 			((is-in-ct? const) (void))
 			;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 			((integer? const)
+				; (disp const "In integer?")
 				(begin 	(set! const-table `(,@const-table ,(list ct-next-index 'T_INTEGER const)))
 								(set! ct-next-index (+ ct-next-index 2))))
 			;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 			((rational? const)
+				; (disp const "In rational?")
 				(begin (set! const-table `(,@const-table ,(list ct-next-index 'T_FRACTION const)))
 							 (set! ct-next-index (+ ct-next-index 4))))
 			;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1766,7 +1874,7 @@
 	null? pair? number? procedure? remainder set-car! set-cdr!
 	string-length string-ref string-set! string->symbol string?
 	symbol? symbol->string vector-length vector-ref
-	vector-set! vector? zero? bin+ bin- bin* bin/ bin=? bin<? void?))
+	vector-set! vector? zero? + - * / = < void?))
 
 (define symbol-table '())
 
@@ -1823,64 +1931,57 @@
 		)
 ))
 
-; (define (symbols-find symbol)
-; 	(letrec ((sfind (lambda (symbol lst)
-; 		(cond 
-; 			((or (null? lst) (not (pair? lst))) #f)
-; 	    	((eq? symbol (cdar lst)) (car lst))
-; 	    	(else (sfind symbol (cdr lst)))
-; 	    )	
-; 	)))
-; 	(sfind symbol symbols-table)
-; 	)
-; )
-
 
 ;; ==================================================
 ;;   Primitives
 ;; ==================================================
 
 (define (get-primitive-label name)
-	(cond 
-		((equal? name "bin+") "PLUS")
-		((equal? name "bin/") "PDIV")
-		((equal? name "bin=?") "BIN_EQ")
-		((equal? name "bin<?") "BIN_LT")
-		((equal? name "bin-") "MINUS")
-		((equal? name "bin*") "PMUL")
-		((equal? name "car") "CAR")
-		((equal? name "cdr") "CDR")
-		((equal? name "char->integer") "CHAR_TO_INTEGER")
-		((equal? name "integer->char") "INTEGER_TO_CHAR")
-		((equal? name "cons") "CONS")
-		((equal? name "eq?") "IS_EQ")
-		((equal? name "apply") "PAPPLY")
-		((equal? name "string?") "IS_STRING")
-		((equal? name "integer?") "IS_INTEGER")
-		((equal? name "number?") "IS_INTEGER")
-		((equal? name "boolean?") "IS_BOOL")
-		((equal? name "char?") "IS_CHAR")
-		((equal? name "null?") "IS_NILL")
-		((equal? name "void?") "IS_VOID")
-		((equal? name "pair?") "IS_PAIR")
-		((equal? name "vector?") "IS_VECTOR")
-		((equal? name "symbol?") "IS_SYMBOL")
-		((equal? name "procedure?") "IS_CLOSURE")
-		((equal? name "zero?") "ZERO")
-		((equal? name "string?") "ZERO")
-		((equal? name "make-string") "MAKE_STRING")
-		((equal? name "make-vector") "MAKE_VECTOR")
-		((equal? name "remainder") "REMAINDER")
-		((equal? name "set-car!") "SET_CAR")
-		((equal? name "set-cdr!") "SET_CDR")
-		((equal? name "string-length") "STRING_LENGTH")
-		((equal? name "string-ref") "STRING_REF")
-		((equal? name "string-set!") "STRING_SET")
-		((equal? name "string->symbol") "STRING_TO_SYMBOL")
-		((equal? name "symbol->string") "SYMBOL_TO_STRING")
-		((equal? name "vector-length") "VECTOR_LENGTH")
-		((equal? name "vector-ref") "VECTOR_REF")
-		((equal? name "vector-set!") "VECTOR_SET")
+	(cond  
+		((equal? name "apply") "PAPPLY") ; apply 
+		((equal? name "+") "PLUS") ; + variadic
+		; < variadic
+		; > variadic
+		((equal? name "-") "MINUS") ; - not yet variadic
+		((equal? name "=") "EQUAL_MATH") ; = variadic
+		((equal? name "/") "DIVIDE"); / not yet variadic
+		((equal? name "*") "MULTIPLY"); * not yet variadic
+		((equal? name "boolean?") "IS_BOOL") ; boolean?
+		((equal? name "car") "CAR") ; car 
+		((equal? name "cdr") "CDR") ; cdr
+		((equal? name "char?") "IS_CHAR") ; char?
+		((equal? name "cons") "CONS") ; cons
+		((equal? name "denominator") "DENOMINATOR") ; denominator
+		((equal? name "eq?") "IS_EQ") ; eq?
+		((equal? name "integer?") "IS_INTEGER") ; integer?
+		((equal? name "char->integer") "CHAR_TO_INTEGER") ; char->integer
+		((equal? name "integer->char") "INTEGER_TO_CHAR") ; integer->char
+		((equal? name "list") "LIST") ; list variadic
+		((equal? name "make-string") "MAKE_STRING") ; make-string
+		((equal? name "make-vector") "MAKE_VECTOR") ; make-vector
+		; map
+		((equal? name "not") "NOT"); not
+		((equal? name "null?") "IS_NILL") ; null?
+		((equal? name "number?") "IS_NUMBER") ; number?
+		((equal? name "numerator") "NUMERATOR"); numerator
+		((equal? name "pair?") "IS_PAIR") ; pair?
+		((equal? name "procedure?") "IS_CLOSURE") ; procedure?
+		((equal? name "rational?") "IS_RATIONAL") ; rational?
+		((equal? name "remainder") "REMAINDER") ; remainder
+		((equal? name "set-car!") "SET_CAR") ; set-car!
+		((equal? name "set-cdr!") "SET_CDR") ; set-cdr!
+		((equal? name "string-length") "STRING_LENGTH") ; string-length
+		((equal? name "string-ref") "STRING_REF") ; string-ref
+		((equal? name "string-set!") "STRING_SET") ; string-set!
+		((equal? name "string->symbol") "STRING_TO_SYMBOL"); string->symbol
+		((equal? name "string?") "IS_A_STRING") ; string?
+		((equal? name "symbol?") "IS_SYMBOL") ; symbol?
+		((equal? name "symbol->string") "SYMBOL_TO_STRING") ; symbol->string
+		((equal? name "vector-length") "VECTOR_LENGTH") ; vector-length
+		((equal? name "vector-ref") "VECTOR_REF") ; vector-ref
+		((equal? name "vector-set!") "VECTOR_SET") ; vector-set!
+		((equal? name "vector?") "IS_VECTOR") ; vector?
+		((equal? name "zero?") "ZERO") ; zero?
 	  (else #f)
 	)
 )
@@ -1935,7 +2036,10 @@
 		;(system (string-append  "rm -f " file-out))
 		(let* 
 				;; ribs
-				((input-exprs (read-input-file file-in))
+				(
+				; (helper-code (read-input-file "helper-functions.scm"))
+				(input-exprs (read-input-file file-in))
+				; (exprs (append helper-code input-exprs))
 				(parsed-exprs (run-parsing input-exprs))
 				(consts-list (get-const-occur parsed-exprs))
 				(partial-symbol-list (rm-lst-dups (get-all-symbols parsed-exprs)))
@@ -1955,9 +2059,9 @@
 				; (disp consts-list "compile-const")
 				; (disp symbol-list "compile-symbol")
 				; (disp const-table "compile-const-table")
-				(disp symbol-table "symbol-table")
-				(display "=========================")
-				(display "\n")
+				; (disp symbol-table "symbol-table")
+				; (display "=========================")
+				; (display "\n")
 
 				(display 
 
@@ -1969,7 +2073,6 @@
 
 				"#include \"cisc.h\"" 									newl newl
 				
-				"#define DO_SHOW 1"											newl newl				
 
 				"int main()" 														newl
 				"{" 																		newl 
@@ -1977,20 +2080,22 @@
 				"START_MACHINE;" 												newl newl
 				"JUMP(CONTINUE);"												newl 
 
+				"#define DO_SHOW 1"											newl newl			
 				"int i,j;"															newl newl
 
 				"#define SOB_SYM_LIST 1"								newl
 				"#define SOB_VOID  2"										newl							
 				"#define SOB_NIL   3"										newl
 				"#define SOB_BOOL_TRUE 4"								newl
-				"#define SOB_BOOL_FALSE 6"							newl newl
+				"#define SOB_BOOL_FALSE 6"							newl
+				"#define SOB_ZERO 8"   									newl newl
 
 				"#include \"char.lib\""									newl	
 				"#include \"io.lib\""										newl
 				"#include \"math.lib\""									newl
 				"#include \"string.lib\""								newl
 				"#include \"system.lib\""								newl
-				"#include \"scheme.lib\""								newl newl
+				"#include \"scheme.lib\""								newl
 				"#include \"builtins.lib\""							newl newl
 
 				"CONTINUE:"															newl newl
@@ -2048,7 +2153,7 @@
 				"	return 0;"														newl newl
 
 				"L_RUNTIME_ERROR:"											newl
-				"	printf(\"Runtime error!\\n\");"				newl newl
+				"	printf(\"Error :( !\\n\");"				newl newl
 
 				"STOP_MACHINE;"													newl newl
 

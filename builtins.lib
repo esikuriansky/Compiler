@@ -3,46 +3,52 @@
 #include "lib/builtins/car.asm"
 #include "lib/builtins/cdr.asm"
 #include "lib/builtins/make-list.asm"
-
-/*#include "lib/builtins/plus.asm"
-#include "lib/builtins/minus.asm"
-#include "lib/builtins/div.asm"
-#include "lib/builtins/reminder.asm"
-#include "lib/builtins/mul.asm"
-#include "lib/builtins/eq.asm"
-#include "lib/builtins/lt.asm"
-#include "lib/builtins/zero.asm"
-#include "lib/builtins/is_eq.asm"
-#include "lib/builtins/string_length.asm"
-#include "lib/builtins/vector_length.asm"
-#include "lib/builtins/is_sob_string.asm"
 #include "lib/builtins/is_sob_symbol.asm"
 #include "lib/builtins/is_sob_vector.asm"
-#include "lib/builtins/set_car.asm"
-#include "lib/builtins/set_cdr.asm"
-#include "lib/builtins/string_set.asm"
-#include "lib/builtins/vector_set.asm"
-#include "lib/builtins/string_ref.asm"
-#include "lib/builtins/vector_ref.asm"
+#include "lib/builtins/is_sob_string.asm"
+#include "lib/builtins/is_functions.asm"
 #include "lib/builtins/cons.asm"
 #include "lib/builtins/char_to_integer.asm"
 #include "lib/builtins/integer_to_char.asm"
-#include "lib/builtins/symbol_to_string.asm"
-#include "lib/builtins/is_functions.asm"
-#include "lib/builtins/make_vector.asm"
+#include "lib/builtins/vector_length.asm"
+#include "lib/builtins/string_length.asm"
+#include "lib/builtins/minus.asm"
+#include "lib/builtins/div.asm"
+#include "lib/builtins/plus.asm"
+#include "lib/builtins/fraction_bin_math.asm"
+#include "lib/builtins/mul.asm"
+#include "lib/builtins/not.asm"
+#include "lib/builtins/numerator.asm"
+#include "lib/builtins/denominator.asm"
 #include "lib/builtins/make-string.asm"
-#include "lib/builtins/stackcpy.asm"
+#include "lib/builtins/make_vector.asm"
+#include "lib/builtins/zero.asm"
+#include "lib/builtins/string_to_symbol.asm"
+#include "lib/builtins/is_eq.asm"
+#include "lib/builtins/vector_set.asm"
+#include "lib/builtins/vector_ref.asm"
+#include "lib/builtins/string_ref.asm"
+#include "lib/builtins/string_set.asm"
+#include "lib/builtins/set_car.asm"
+#include "lib/builtins/set_cdr.asm"
+#include "lib/builtins/list.asm"
+#include "lib/builtins/symbol_to_string.asm"
+#include "lib/builtins/equal_mathimatical.asm"
 #include "lib/builtins/apply.asm"
-#include "lib/builtins/string_to_symbol.asm"*/
+#include "lib/builtins/remainder.asm"
+
+/*
+
+#include "lib/builtins/eq.asm"
+#include "lib/builtins/lt.asm"
+#include "lib/builtins/stackcpy.asm"*/
 
 
 /*
  append (variadic), 
- denominator,
  map,
   not,
 number?
- numerator,
   procedure?, 
   rational?, 
 */

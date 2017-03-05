@@ -1,22 +1,33 @@
-
 MINUS:
-        PUSH(FP);
-        MOV(FP, SP);
+  PUSH(FP);
+  MOV(FP, SP);
 
-        CMP(FPARG(1),IMM(2))     ; //checks num of args = 2
-        JUMP_NE(MINUS_BAD_ARGS) ;
+  PUSH(R1);
+  PUSH(R2);
+  PUSH(R3);
 
-        MOV(R0,INDD(FPARG(2),1));
-        SUB(R0,INDD(FPARG(3),1));
-        
-        PUSH(R0);
-        CALL(MAKE_SOB_INTEGER);
-        DROP(IMM(1));
-        
-        POP(FP);
-        RETURN;
+  MOV(R2, FPARG(1));
+  MOV(R3, IMM(3));
+  MOV(R0,FPARG(2));
+  MOV(R0,INDD(R0,1));
 
-MINUS_BAD_ARGS:
-        SHOW("MINUS: bad args number:", FPARG(1)) ;
-        STOP_MACHINE ;
-        return 1;
+MINUS_LOOP:
+  CMP(R2, IMM(1));
+  JUMP_EQ(MINUS_END);
+  MOV(R1, FPARG(R3));
+  MOV(R1, INDD(R1,1));
+  SUB(R0,R1);
+  ADD(R3,IMM(1));
+  SUB(R2,IMM(1));
+  JUMP(MINUS_LOOP);
+
+MINUS_END:
+  PUSH(R0);
+  CALL(MAKE_SOB_INTEGER); 
+  DROP(1);  
+
+  POP(R3);
+  POP(R2);
+  POP(R1);
+  POP(FP);
+  RETURN;
