@@ -4,6 +4,9 @@
 WRITE_SOB_FRACTION:
   PUSH(FP);
   MOV(FP, SP);
+
+  PUSH(R1);
+
   MOV(R0, FPARG(0));
   MOV(R0, INDD(R0, 1));
   CMP(R0, IMM(0));
@@ -37,5 +40,6 @@ WRITE_SOB_FRACTION:
   CALL(WRITE_INTEGER);
   DROP(1);
   
+  POP(R1);
   POP(FP);
   RETURN;

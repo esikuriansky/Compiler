@@ -145,14 +145,16 @@ extern Machine *machine;
 
 /* for debugging only, use SHOW("<some message>, <arg> */
 #if DO_SHOW==2
-#define SHOW(msg, x) { \
+#define SHOW0(msg, x) { \
   printf("%s %s = %ld\n", (msg), (#x), (x)); \
   getchar(); }
 #elif DO_SHOW==1
-#define SHOW(msg, x) { printf("%s %s = %ld\n", (msg), (#x), (x)); }
+#define SHOW1(msg, x) { printf("%s %s = %ld\n", (msg), (#x), (x)); }
 #else
-#define SHOW(msg, x) {}
+#define SHOW2(msg, x) {}
 #endif
+
+#define SHOW(msg, x) { printf("%s %s = %ld\n", (msg), (#x), (x)); }
 
 /* debug_macros.h
  * GDB-Like information for debugging the compiler.

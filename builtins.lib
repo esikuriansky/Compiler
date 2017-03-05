@@ -1,5 +1,4 @@
 #include "lib/builtins/utils.asm"
-
 #include "lib/builtins/car.asm"
 #include "lib/builtins/cdr.asm"
 #include "lib/builtins/make-list.asm"
@@ -7,6 +6,7 @@
 #include "lib/builtins/is_sob_vector.asm"
 #include "lib/builtins/is_sob_string.asm"
 #include "lib/builtins/is_functions.asm"
+#include "lib/builtins/gcd.asm"
 #include "lib/builtins/cons.asm"
 #include "lib/builtins/char_to_integer.asm"
 #include "lib/builtins/integer_to_char.asm"

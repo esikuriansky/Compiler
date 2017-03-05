@@ -1944,8 +1944,8 @@
 		; > variadic
 		((equal? name "-") "MINUS") ; - not yet variadic
 		((equal? name "=") "EQUAL_MATH") ; = variadic
-		((equal? name "/") "DIVIDE"); / not yet variadic
-		((equal? name "*") "MULTIPLY"); * not yet variadic
+		((equal? name "/") "DIVIDE"); / variadic
+		((equal? name "*") "MULTIPLY"); * variadic
 		((equal? name "boolean?") "IS_BOOL") ; boolean?
 		((equal? name "car") "CAR") ; car 
 		((equal? name "cdr") "CDR") ; cdr

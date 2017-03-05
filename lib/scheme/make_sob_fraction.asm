@@ -3,6 +3,7 @@
 MAKE_SOB_FRACTION:
   PUSH(FP);
   MOV(FP, SP);
+  
   PUSH(IMM(4));
   CALL(MALLOC);
   DROP(1);
