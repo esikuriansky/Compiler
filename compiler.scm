@@ -976,6 +976,9 @@
 (define lambda-var-loop-done (^make-label "L_VAR_LOOP_DONE"))
 
 
+(define cgen-no-output (^make-label "L_DONT_PRINT"))
+
+
 ;; === Helper Function
 (define newl (list->string (list #\newline)))
 
@@ -1016,7 +1019,6 @@
 							 (val  (caddr curr)))
 
 							;;body
-
 							(string-append
 								(cond
 									;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1107,7 +1109,6 @@
 
 									;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 									((eq? type 'T_PAIR) 
-		
 												(string-append
 												"// Makeing PAIR object"																				newl
 												"PUSH(IMM(" (number->string (get-from-ct (cdr val))) "));"			newl
@@ -1245,7 +1246,6 @@
 
 (define cgen-fvar-set
 	(lambda (fvar set-val-code env-len params-len)
-		; (disp fvar "cgen-fvar-set")
 		(let* 
 			;; ribs
 			((generated-val (cgen set-val-code env-len params-len))
@@ -1255,7 +1255,7 @@
 		(string-append
 			generated-val 
 			" MOV(IND(" address "),R0);"	newl
-			" MOV(R0,IMM(1));"						newl
+			"MOV(R0, IMM(1))"			newl
 		))
 	))
 
@@ -1270,17 +1270,13 @@
 		;;body
     (string-append 
      generated-val
-     "MOV(FPARG(" (number->string (+ 2 minor)) "), R0);"		newl
-     "MOV(R0, IMM(1))"																			newl
+     "MOV(FPARG(" (number->string (+ 2 minor)) "), R0);"	newl
+     "MOV(R0, IMM(1))"															newl newl
     ))
 	))
 
 (define cgen-bvar-set
 	(lambda (bvar set-val-code env-len params-len)
-		; (disp bvar "cgen-bvar-set")
-		; (disp (caddr bvar) "bvar-major")
-		; (disp (cadddr bvar) "bvar-minor")
-		; (disp set-val-code "bvar-val-vode")
 		(let 
 			;; ribs
 			((major (caddr bvar))											
@@ -1293,7 +1289,7 @@
 	  	"MOV(R0,FPARG(0));"														newl
 	  	"MOV(R0,INDD(R0,"(number->string major)"));" 	newl
 	  	"MOV(INDD(R0,"(number->string minor) "),R1);"	newl
-	  	"MOV(R0, IMM(1));"														newl
+	  	"MOV(R0, IMM(1))"											newl
 	   ))
 	))
 
@@ -1312,46 +1308,21 @@
 			))
 	))
 
-; (define code-gen-box
-;   (lambda (setvar envLevel paramsLevel)
-;     (if (equal? (caar setvar) 'pvar)
-; 		    (let ((mindex (caddar setvar)))
-; 		    (string-append
-; 		      "/* box-pvar */" nl
-; 		      "MOV(R10, IMM("(number->string mindex)"));" nl
-; 		      "ADD(R10,IMM(2));" nl
-; 		      (malloc 1) nl
-; 		      "MOV(IND(R0),FPARG(R10));" nl
-; 		      ;
-; 		      ))
-; 		    (let (
-; 		          (mjrdex (caddar setvar))
-; 		          (mindex (car (cdddar setvar))))
-; 		    (string-append
-; 		      "/* box-bvar */" nl
-; 		      "MOV(R1, FPARG(IMM(0)));" nl
-; 		      "ADD(R1,INDD(R1,IMM("(number->string mjrdex)")));" nl
-; 		      (malloc 1) nl
-; 		      "MOV(IND(R0),INDD(R1,IMM("(number->string mindex)")));" nl
-; 		      ))
-;     )))
-
 (define cgen-box 
 	(lambda (var env-len params-len)
-			(disp var "lala")
+			; (disp var "lala")
 			(let ((minor (caddr var)))
 			  (string-append
-			      " MOV(R2, FPARG("(number->string (+ 2 minor))"));"	newl
+			      " MOV(R11, FPARG("(number->string (+ 2 minor))"));"	newl
 			      " PUSH(IMM(1));"			newl
 			      " CALL(MALLOC);"			newl
 			      " DROP(1);"						newl
-			      " MOV(IND(R0), R2);"	newl
+			      " MOV(IND(R0), R11);"	newl
 			  )
 	)))
 			      
 (define cgen-box-get 
 	(lambda (pe env-len params-len)
-		; (disp pe "cgen-box-set")
 		(let
 			;; ribs
 			((generated-get-code (cgen pe env-len params-len)))
@@ -1364,19 +1335,36 @@
 		  
 (define cgen-box-set 
 	(lambda (pe env-len params-len)
-		; (disp (car pe) "cgen-box-set")
-		; (disp (cadr pe) "cgen-box-set")
 		(let
 			;; ribs
-			((to-set-code (cgen (car pe) env-len params-len))
+			((to-set (car pe))
 			(set-with-code (cgen (cadr pe) env-len params-len)))
 		;; body
-	 	(string-append
-      to-set-code
-      " MOV(R1,R0);"			newl
-      set-with-code
-      " MOV(IND(R0),R1);"	newl
-	  ))
+		(if (equal? (car to-set) 'pvar)
+				;;;; PVAR CASE
+				(let 
+					;; ribs
+					((minor  (caddr to-set)))
+					;; body
+					(string-append
+					"MOV(R1, FPARG("(number->string (+ 2 minor))"));" 	newl
+					set-with-code																				newl
+					"MOV(IND(R1), R0);"																	newl																		
+				))
+				;;;; BVAR CASE
+				(let
+					;; ribs
+					((major (number->string (caddr to-set)))											
+			 		(minor (number->string (cadddr to-set))))
+					;; body
+					(string-append
+					"MOV(R1, FPARG(0))"							newl
+					"MOV(R1, INDD(R1," major "));"	newl
+					"MOV(R1, INDD(R1," minor "));"	newl
+      		set-with-code
+      		"MOV(IND(R1),R0);"							newl
+	  		))
+		))
 	))	
 
 (define cgen-fvar 
@@ -1388,7 +1376,6 @@
 			(address (number->string (car exists-resolve))))
 		;; body
 		; (disp address "cgen-fvar")
-		; (if (not exists-resolve) (compilation-error "[!] FVAR: symbol does not exist." fvar))
 		(string-append 
 																			newl 
 			"// ---fvar---"									newl
@@ -1398,7 +1385,6 @@
 
 (define cgen-define 
 	(lambda (pe env-len params-len)
-		; (disp pe "cgen-define")
 		(let* 
 			;; ribs
 			((fvar (cadar pe))
@@ -1412,6 +1398,7 @@
 			"// ---define--- "  						newl
 			(cgen expr env-len params-len) 	newl
 			"MOV(IND(" address "), R0);" 		newl
+			"MOV(R0, SOB_VOID);" 						newl
 		))
 	))
 
@@ -1734,10 +1721,25 @@
 		; (disp pexprs "code-gen-lst")
 		(if (null? pexprs) 
 				""
-				(string-append 
+				(let
+
+					((no-output-label (cgen-no-output)))
+					(string-append 
 					(cgen (car pexprs) 0 0)
-					(cgen-lst (cdr pexprs))
-		))))
+
+					"/* Display result on STDOUT */"			  newl
+					"CMP(R0, SOB_VOID);"										newl
+					"JUMP_EQ(" no-output-label ");"					newl
+					"PUSH(R0);"															newl
+					"CALL(WRITE_SOB);"											newl
+					"DROP(1);"															newl 
+					"OUT(2,10);"														newl 
+					no-output-label		":" 									newl
+
+					(cgen-lst (cdr pexprs)) 						newl
+					))
+		)))
+
 
 (define get-const-occur
 	(lambda (pe)
@@ -1874,7 +1876,7 @@
 	null? pair? number? procedure? remainder set-car! set-cdr!
 	string-length string-ref string-set! string->symbol string?
 	symbol? symbol->string vector-length vector-ref
-	vector-set! vector? zero? + - * / = < void?))
+	vector-set! vector? zero? + - * / = > < void?))
 
 (define symbol-table '())
 
@@ -1917,7 +1919,6 @@
 
 (define find-symbol
 	(lambda (sym)
-		; (disp sym "find-symbol")
 		(letrec 
 			((helper 
 				(lambda (symbol lst)
@@ -1938,10 +1939,11 @@
 
 (define (get-primitive-label name)
 	(cond  
-		((equal? name "apply") "PAPPLY") ; apply 
+		((equal? name "apply") "L_APPLY") ; apply 
+		; ((equal? name "append") "L_APPEND") ; append 
 		((equal? name "+") "PLUS") ; + variadic
-		; < variadic
-		; > variadic
+		((equal? name "<") "LOWER");; < variadic
+		((equal? name ">") "GREATER"); > variadic
 		((equal? name "-") "MINUS") ; - not yet variadic
 		((equal? name "=") "EQUAL_MATH") ; = variadic
 		((equal? name "/") "DIVIDE"); / variadic
@@ -1989,14 +1991,15 @@
 (define (primitives-cg symbol-table)
 	(cond
 		((or (null? symbol-table) (not (pair? symbol-table))) "")
-		((get-primitive-label (symbol->string (cdar symbol-table))) (string-append
+		((get-primitive-label (symbol->string (cdar symbol-table)))
+			(string-append
 			"PUSH(LABEL(" (get-primitive-label (symbol->string (cdar symbol-table))) "));" newl
 			"PUSH(IMM(SOB_NIL));" newl
 			"CALL(MAKE_SOB_CLOSURE);" newl
 			"DROP(2);" newl
 			"MOV(IND(" (number->string (caar symbol-table)) "), R0);" newl newl
 			(primitives-cg (cdr symbol-table))
-		))
+			))
 	    (else
 	    	(primitives-cg (cdr symbol-table))
 	    )
@@ -2143,11 +2146,11 @@
 				"/*==============================*/"		newl
 
 
-				"/* Display result on STDOUT */"			  newl
-				"PUSH(R0);"															newl
-				"CALL(WRITE_SOB);"											newl
-				"DROP(1);"															newl newl
-				"OUT(2,10);"														newl
+				; "/* Display result on STDOUT */"			  newl
+				; "PUSH(R0);"															newl
+				; "CALL(WRITE_SOB);"											newl
+				; "DROP(1);"															newl newl
+				; "OUT(2,10);"														newl
 
 				"STOP_MACHINE;"													newl
 				"	return 0;"														newl newl

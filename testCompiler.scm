@@ -86,7 +86,7 @@
     (let ((result (tests-file->string "outResult")))
       (system "rm -f outResult")
       (system "rm -f outFile")
-      (system "rm -f outFile.c")
+      ; (system "rm -f outFile.c")
       (system "rm -f outFile.scm")
       result)
 ))
@@ -805,7 +805,7 @@
 (define set-tests
   (list
     ;; set pvar
-    (cons "((lambda (x) (set! x 1)) 4)" "")
+    (cons "((lambda (x) (set! x 1)))" "")
     (cons "((lambda (x) (set! x 12) x) 5)" "12\n")
     (cons "((lambda (x y . z) (set! z #t) z) 5 9 34)" "#t\n")
     (cons "((lambda (x y . z) (set! y '(1 2 3 4 5)) y) 5 9)" 
@@ -813,19 +813,19 @@
     (cons "((lambda x (set! x '#(1 2 3)) x) 5 6 7)" "#3(1 2 3)\n")
     (cons "((lambda (x . y) ((lambda (x) y x (set! x #f) x) 58)) 34)" "#f\n")
     
-    ;; set bvar
+    ; set bvar
     (cons "((lambda (x) ((lambda (y) (set! x 12)) 3)) 5)" "")
     (cons "((lambda (x) ((lambda (y) (set! x 12) x) 3)) 5)" "12\n")
     (cons "((lambda (x) ((lambda (y) ((lambda (z) (set! x '(1 2 3)) x) 3)) 85)) 5)"
 	  "(1 . (2 . (3 . ())))\n")
 	  
-    ;;set fvar
+    ; set fvar
     (cons "(set! x 5) x" "5\n")
     (cons "(begin (set! x 5) (set! y x) y)" "5\n")
     (cons "(begin (set! x 5) (set! y -12/35) y)" "-12/35\n")
     (cons "(begin (set! x 5) (set! x -12/35) x)" "-12/35\n")
     
-    ;;;; box-set box-get box test
+    ;;; box-set box-get box test
     (cons "((lambda (x) ((lambda (y) (set! x 12) 2) 3) x) 5)" "12\n")
 ))
 
@@ -861,9 +861,9 @@
 
 (define primitive-functions-tests
   (list
-;     ; car, cdr and combinations
+    ; car, cdr and combinations
 ;     (cons "(car '(a b))" "a\n")
-;     (cons "(car '(a))" "a\n")
+    	; (cons "(car '(a))" "a\n")
 ;     (cons "(car '(a b c))" "a\n")
 ;     (cons "(car (cons 3 4))" "3\n")
     
@@ -1007,137 +1007,8 @@
 ; 	 "(a . (b . (#t . (#f . (1 . (2 . (3 . (4 . (5 . (6 . (7 . (8 . (9 . (-1/2 . (5 . ())))))))))))))))
 ; (a . (b . (#t . (#f . (1 . (2 . (3 . (4 . (5 . (6 . (7 . (8 . (9 . (-1/2 . (#t . ())))))))))))))))\n")    
 	
-;     ;boolean?
-;     (cons "(boolean? #t)" "#t\n")
-;     (cons "(boolean? #f)" "#t\n")
-;     (cons "(boolean? #\\a)" "#f\n")
-;     (cons "(boolean? 1)" "#f\n")
-;     (cons "(boolean? \"AbC\")" "#f\n")
-;     (cons "(boolean? '(#t))" "#f\n")
-;     (cons "(boolean? 't)" "#f\n")
-;     (cons "(boolean? '())" "#f\n")    
-    
-;     ;char?
-;     (cons "(char? #t)" "#f\n")
-;     (cons "(char? #f)" "#f\n")
-;     (cons "(char? #\\a)" "#t\n")
-;     (cons "(char? #\\B)" "#t\n")
-;     (cons "(char? #\\space)" "#t\n")
-;     (cons "(char? 1)" "#f\n")
-;     (cons "(char? \"AbC\")" "#f\n")
-;     (cons "(char? '(#t))" "#f\n")
-;     (cons "(char? 'a)" "#f\n")
-;     (cons "(char? 97)" "#f\n")
-;     (cons "(char? \"a\")" "#f\n")
-;     (cons "(char? (string-ref (make-string 1) 0))" "#t\n")    
-    
-;     ;integer?
-;     (cons "(integer? #t)" "#f\n")
-;     (cons "(integer? #f)" "#f\n")
-;     (cons "(integer? #\\a)" "#f\n")
-;     (cons "(integer? 1)" "#t\n")
-;     (cons "(integer? -52)" "#t\n")
-;     (cons "(integer? -48/36)" "#f\n")
-;     (cons "(integer? 1/12)" "#f\n")
-;     (cons "(integer? '(1/12))" "#f\n")
-;     (cons "(integer? \"AbC\")" "#f\n")
-;     (cons "(integer? '(#t))" "#f\n")
-;     (cons "(integer? 1901)" "#t\n")
-;     (cons "(integer? -2/3)" "#f\n")
-;     (cons "(integer? 'a)" "#f\n")    
-    
-;     ;pair?
-;     (cons "(pair? 1)" "#f\n")
-;     (cons "(pair? (cons 1 2))" "#t\n")
-;     (cons "(pair? '(1 2 3))" "#t\n")
-;     (cons "(pair? (list 1 2))" "#t\n")
-;     (cons "(pair? #t)" "#f\n")
-;     (cons "(pair? '(a b c))" "#t\n")
-;     (cons "(pair? '(3 . 4))" "#t\n")
-;     (cons "(pair? '())" "#f\n")
-;     (cons "(pair? '#(a b))" "#f\n")
-;     (cons "(pair? 3)" "#f\n")    
-    
-;     ;number?
-;     (cons "(number? 1)" "#t\n")
-;     (cons "(number? -58)" "#t\n")
-;     (cons "(number? 2/12)" "#t\n")
-;     (cons "(number? -3/14)" "#t\n")
-;     (cons "(number? 'a)" "#f\n")
-;     (cons "(number? #t)" "#f\n")
-;     (cons "(number? '(1))" "#f\n")
-;     (cons "(number? '#(1))" "#f\n")
-;     (cons "(number? 1901)" "#t\n")
-;     (cons "(number? -2/3)" "#t\n")
-;     (cons "(number? #\\a)" "#f\n")    
 
-;     ;rational?
-;     (cons "(rational? 1)" "#t\n")
-;     (cons "(rational? -58)" "#t\n")
-;     (cons "(rational? 2/12)" "#t\n")
-;     (cons "(rational? -3/14)" "#t\n")
-;     (cons "(rational? 'a)" "#f\n")
-;     (cons "(rational? #t)" "#f\n")
-;     (cons "(rational? '(1))" "#f\n")
-;     (cons "(rational? '#(1))" "#f\n")
-;     (cons "(rational? 1901)" "#t\n")
-;     (cons "(rational? -2/3)" "#t\n")
-;     (cons "(rational? '(a b c))" "#f\n")    
-    
-;     ;char->integer
-;     (cons "(char->integer #\\a)" "97\n")
-;     (cons "(char->integer #\\A)" "65\n")
-;     (cons "(char->integer #\\space)" "32\n")
-;     (cons "(char->integer #\\h)" "104\n")
-;     (cons "(char->integer #\\newline)" "10\n")    
-    
-;     ;integer->char
-;     (cons "(integer->char 97)" "#\\a\n")
-;     (cons "(integer->char 65)" "#\\A\n")
-;     (cons "(integer->char 32)" "#\\space\n")
-;     (cons "(integer->char 2)" "#\\002\n")
-;     (cons "(integer->char 48)" "#\\0\n")
-;     (cons "(integer->char 101)" "#\\e\n")    
-    
-;     ;string-length
-;     (cons "(string-length \"abcde123\")" "8\n")
-;     (cons "(string-length \"this-is a STRING !\")" "18\n")
-;     (cons "(string-length \"\")" "0\n")
-;     (cons "(string-length \"abc\")" "3\n")
-;     (cons "(string-length \"hi there\")" "8\n")
-;     (cons "(string-length (make-string 1000000))" "1000000\n")    
-    
-;     ;denominator
-;     (cons "(denominator 1)" "1\n")
-;     (cons "(denominator -54)" "1\n")
-;     (cons "(denominator 1/2)" "2\n")
-;     (cons "(denominator -1/45)" "45\n")
-;     (cons "(denominator -12/2)" "1\n")
-;     (cons "(denominator -15/10)" "2\n")
-;     (cons "(denominator 9)" "1\n")
-;     (cons "(denominator 2/3)" "3\n")
-;     (cons "(denominator -9/4)" "4\n")    
-    
-;     ;numerator
-;     (cons "(numerator 1)" "1\n")
-;     (cons "(numerator -54)" "-54\n")
-;     (cons "(numerator 1/2)" "1\n")
-;     (cons "(numerator -1/45)" "-1\n")
-;     (cons "(numerator -12/2)" "-6\n")
-;     (cons "(numerator -15/10)" "-3\n")
-;     (cons "(numerator 9)" "9\n")
-;     (cons "(numerator 2/3)" "2\n")
-;     (cons "(numerator -9/4)" "-9\n")    
-    
-;     ;make-string
-    ; (cons "(make-string 1)" "\"\\000\"\n")
-    ; (cons "(make-string 3)" "\"\\000\\000\\000\"\n")    
-    ; (cons "(make-string 1 #\\a)" "\"a\"\n")
-    ; (cons "(make-string 5 #\\A)" "\"AAAAA\"\n")
-    ; (cons "(make-string 0 #\\space)" "\"\"\n")
-    ; (cons "(make-string 0)" "\"\"\n")
-    ; (cons "(make-string 0 #\\x)" "\"\"\n")
-    ; (cons "(make-string 5 #\\x)" "\"xxxxx\"\n")    
+  
     
 ;     ;make-vector
 ;     (cons "(make-vector 1 #\\a)" "#1(#\\a)\n")
@@ -1182,20 +1053,7 @@
 ;     (cons "(string? \"hi\")" "#t\n")
 ;     (cons "(string? 'hi)" "#f\n")
 ;     (cons "(string? #\\h)" "#f\n")    
-    
-;     ;symbol?
-;     (cons "(symbol? 'a)" "#t\n")
-;     (cons "(symbol? 'this-is-a-symbol)" "#t\n")
-;     (cons "(symbol? #t)" "#f\n")
-;     (cons "(symbol? \"Str\")" "#f\n")
-;     (cons "(symbol? 1)" "#f\n")
-;     (cons "(symbol? #\\c)" "#f\n")
-;     (cons "(symbol? 't)" "#t\n")
-;     (cons "(symbol? \"t\")" "#f\n")
-;     (cons "(symbol? '(t))" "#f\n")
-;     (cons "(symbol? #\\t)" "#f\n")
-;     (cons "(symbol? 3)" "#f\n")
-;     (cons "(symbol? #t)" "#f\n")    
+   
     
 ;     ;vector?
 ;     (cons "(vector? '#())" "#t\n")
@@ -1230,153 +1088,36 @@
 ;     (cons "(vector #\\a #\\A #\\space)" "#3(#\\a #\\A #\\space)\n")
 ;     (cons "(vector 1 2 3 #t #f -1/2 \"a\" #\\b)" "#8(1 2 3 #t #f -1/2 \"a\" #\\b)\n")
 ;     (cons "(vector 'a 'b 'c)" "#3(a b c)\n")
-  
-;     ;string-ref
-;     (cons "(string-ref \"ABcD1234\" 0)" "#\\A\n")
-;     (cons "(string-ref \"ABcD1234\" 1)" "#\\B\n")
-;     (cons "(string-ref \"ABcD1234\" 2)" "#\\c\n")
-;     (cons "(string-ref \"ABcD1234\" 3)" "#\\D\n")
-;     (cons "(string-ref \"ABcD1234\" 4)" "#\\1\n")
-;     (cons "(string-ref \"ABcD1234\" 5)" "#\\2\n")
-;     (cons "(string-ref \"ABcD1234\" 6)" "#\\3\n")
-;     (cons "(string-ref \"ABcD1234\" 7)" "#\\4\n") 
-;     (cons "(string-ref \"hi there\" 0)" "#\\h\n")
-;     (cons "(string-ref \"hi there\" 5)" "#\\e\n")    
-    
-;     ;vector-ref
-;     (cons "(vector-ref '#(\"ABC\" 1 #t 2 #f 3 (a)) 0)" "\"ABC\"\n")
-;     (cons "(vector-ref '#(\"ABC\" 1 #t 2 #f 3 (a)) 1)" "1\n")
-;     (cons "(vector-ref '#(\"ABC\" 1 #t 2 #f 3 (a)) 2)" "#t\n")
-;     (cons "(vector-ref '#(\"ABC\" 1 #t 2 #f 3 (a)) 3)" "2\n")
-;     (cons "(vector-ref '#(\"ABC\" 1 #t 2 #f 3 (a)) 4)" "#f\n")
-;     (cons "(vector-ref '#(\"ABC\" 1 #t 2 #f 3 (a)) 5)" "3\n")
-;     (cons "(vector-ref '#(\"ABC\" 1 #t 2 #f 3 (a)) 6)" "(a . ())\n")
-;     (cons "(vector-ref '#(a b c) 0)" "a\n")
-;     (cons "(vector-ref '#(a b c) 1)" "b\n")
-;     (cons "(vector-ref '#(x y z w) 3)" "w\n")
-    
-;     ;+
-    ; (cons "(+ 3/2 3/2)" "3\n")
-    ; (cons "(+ -3/2 -3/2)" "-3\n")
-    ; (cons "(+ 3/2 -3/2)" "0\n")
-    ; (cons "(+ 1/2 2)" "5/2\n")
-    ; (cons "(+ 1 -1/2)" "1/2\n")
-    ; (cons "(+ 1 -1/2 -1/2)" "0\n")
-    ; (cons "(+ 11 12)" "23\n")
-    ; (cons "(+ 11 -12)" "-1\n")
-    ; (cons "(+ 10/10 -120/110)" "-1/11\n")
-    ; (cons "(+ 1 2 3 -1/2 -3/4 -5/6 -7/8 9 12/5)" "1733/120\n")
-    ; (cons "(+ (+ 1 2 3) (+ -1/2 -3/4) (+ -5/6 -7/8 9) 12/5)" "1733/120\n")    
-    ; (cons "(+)" "0\n")
-    ; (cons "(+ -5/6)" "-5/6\n")
-    ; (cons "(+ (+ 1 2) 1/3)" "10/3\n")
-    ; (cons "(+ 1 2)" "3\n")
-    ; (cons "(+ 1/2 2/3)" "7/6\n")
-    ; (cons "(+ 3 4 5)" "12\n")
-    ; (cons "(apply + '(1 2 3 4 5))" "15\n")
-    
-;     ;-
-;     (cons "(- 5)" "-5\n")
-;     (cons "(- 5 6 7)" "-8\n")
-;     (cons "(- 5/6 6/7 7/8 9)" "-1663/168\n")
-;     (cons "(- (- 5/6 6/7) (- 7/8 9))" "1361/168\n")
-;     (cons "(- 3)" "-3\n")
-;     (cons "(- 0 3)" "-3\n")
-;     (cons "(- -2/3)" "2/3\n")
-;     (cons "(- 4 3)" "1\n")
-;     (cons "(- 4 3 2 1)" "-2\n")
-;     (cons "(apply - '(-1 -2 -3 -4 -5))" "13\n")    
-    
-;     ;*
-    (cons "(*)" "1\n")
-    (cons "(* -2/3)" "-2/3\n")
-    (cons "(* -2/3 5/6 1 2 3)" "-10/3\n")
-    (cons "(* -2/3 5/6 1 2 3 0)" "0\n")
-    (cons "(* 3/4)" "3/4\n")
-    (cons "(* 1 1/2)" "1/2\n")
-    (cons "(* 3 4 11/2)" "66\n")
-    (cons "(* 3 (* 4 11/2))" "66\n")
-    (cons "(* 3 (* 4 -11/2))" "-66\n")
-    (cons "(apply * '(1 2 3 4 5))" "120\n")    
-    
-    ;/
-    ; (cons "(/ 2)" "1/2\n")
-    ; (cons "(/ -2)" "-1/2\n")
-    ; (cons "(/ -2/3)" "-3/2\n")
-    ; (cons "(/ -2/4)" "-2\n")
-    ; (cons "(/ 1 2 3)" "1/6\n")
-    ; (cons "(/ -2/3 4/5 1 2 12/13)" "-65/144\n")
-    ; (cons "(/ 15/7)" "7/15\n")
-    ; (cons "(/ -2/3 4/5 1 2 -12/13)" "65/144\n")
-    ; (cons "(/ 1/2 1/4)" "2\n")
-    ; (cons "(/ 1/2 -1/4)" "-2\n")
-    ; (cons "(/ -1/2 1/4)" "-2\n")
-    ; (cons "(/ -1/2 -1/4)" "2\n")
-    ; (cons "(/ -17)" "-1/17\n")
-    ; (cons "(/ 1/2)" "2\n")
-    ; (cons "(/ 3 4)" "3/4\n")   
-    ; (cons "(/ 60/50)" "5/6\n") 
-    ; (cons "(/ 60 5 4 3 2)" "1/2\n")
-    ; (cons "(apply / '(60 5 4 3 2))" "1/2\n")
-    
- ;    ;>
- ;    (cons "(> 0)" "#t\n")
- ;    (cons "(> 100)" "#t\n")
- ;    (cons "(> 2/3)" "#t\n")
- ;    (cons "(> 2 -1)" "#t\n")
- ;    (cons "(> 2 -1 -1/2)" "#f\n")
- ;    (cons "(> 2 -1 1/2)" "#f\n")
- ;    (cons "(> 5 4 2 3)" "#f\n")
- ;    (cons "(> 5 4 3 2 5/4 1 1/2 0 -1/2 -1)" "#t\n")
- ;    (cons "(> 3/4 1/2)" "#t\n")
- ;    (cons "(> 5/4 1)" "#t\n")
- ;    (cons "(> 1 5/4)" "#f\n")
- ;    (cons "(> 2 5/4)" "#t\n")
- ;    (cons "(> 1 2 2 3 3 4)" "#f\n")
- ;    (cons "(apply > '(4 3 3 2))" "#f\n")
-    
- ;    ;<
- ;    (cons "(< -1/2)" "#t\n")
- ;    (cons "(< 1 -1/2)" "#f\n")
- ;    (cons "(< -1 -1/2)" "#t\n")
- ;    (cons "(< -1 -1/2 -2)" "#f\n")
- ;    (cons "(< 1/2 3/4)" "#t\n")
- ;    (cons "(< 3/4 1/2)" "#f\n")
- ;    (cons "(< -1 -1/2 0 1 3/2 2 5/2 3 7/2 4 100)" "#t\n")
- ;    (cons "(< -5 -4 -3/2 0 1 2 3 4 9/2 10/2 11/2 12/2 13/2 12)" "#t\n")
- ;    (cons "(< -5 -4 -3/2 0 1 2 3 4 9/2 10/2 11/2 12/2 13/2 -1/2 12)" "#f\n")
- ;    (cons "(< -1 -1/2 0 1 3/2 2 5/2 3 7/2 -5 100)" "#f\n")
- ;    (cons "(< 1 -1/2 0 1 3/2 2 5/2 3 7/2 -5 100)" "#f\n")
- ;    (cons "(< 1/2 2/3 3/4)" "#t\n")
- ;    (cons "(apply < '(1 2 3 4))" "#t\n")
+
+
     
  ;    ;=
- ;    (cons "(= 1/2)" "#t\n")
- ;    (cons "(= 1 1 1 1 1 1 1 2/2 4/4 1 1)" "#t\n")
- ;    (cons "(= 1 1 1 1 1 1 1 2/2 -4/4 1 1)" "#f\n")
- ;    (cons "(= 2/4 1/2 1/2 1/2)" "#t\n")
- ;    (cons "(= -2/4 -1/2 -1/2 -1/2)" "#t\n")
- ;    (cons "(= -2/4 1/2 -1/2 -1/2)" "#f\n")
- ;    (cons "(= 1 2 3 4 5 6)" "#f\n")
- ;    (cons "(= 7 7)" "#t\n")
- ;    (cons "(= 7 9)" "#f\n") 
- ;    (cons "(apply = (list 1 1 1 1 1 1 1 2/2 -4/4 1 1))" "#f\n")
+    ; (cons "(= 1/2)" "#t\n")
+    ; (cons "(= 1 1 1 1 1 1 1 2/2 4/4 1 1)" "#t\n")
+    ; (cons "(= 1 1 1 1 1 1 1 2/2 -4/4 1 1)" "#f\n")
+    ; (cons "(= 2/4 1/2 1/2 1/2)" "#t\n")
+    ; (cons "(= -2/4 -1/2 -1/2 -1/2)" "#t\n")
+    ; (cons "(= -2/4 1/2 -1/2 -1/2)" "#f\n")
+    ; (cons "(= 1 2 3 4 5 6)" "#f\n")
+    ; (cons "(= 7 7)" "#t\n")
+    ; (cons "(= 7 9)" "#f\n") 
+    ; (cons "(apply = (list 1 1 1 1 1 1 1 2/2 -4/4 1 1))" "#f\n")
     
  ;    ;remainder
- ;    (cons "(remainder 2 1)" "0\n")
- ;    (cons "(remainder 2 10)" "2\n")
- ;    (cons "(remainder 10 2)" "0\n")
- ;    (cons "(remainder 10 3)" "1\n")
- ;    (cons "(remainder -10 3)" "-1\n")
- ;    (cons "(remainder -10 -3)" "-1\n")
- ;    (cons "(remainder 0 10)" "0\n")
- ;    (cons "(remainder -4 10)" "-4\n")
- ;    (cons "(remainder -4 -10)" "-4\n")
- ;    (cons "(remainder 16 4)" "0\n")
- ;    (cons "(remainder 5 2)" "1\n")
- ;    (cons "(remainder -45 7)" "-3\n")
- ;    (cons "(remainder 10 -3)" "1\n")
- ;    (cons "(remainder -17 -9)" "-8\n")
+    ; (cons "(remainder 2 1)" "0\n")
+    ; (cons "(remainder 2 10)" "2\n")
+    ; (cons "(remainder 10 2)" "0\n")
+    ; (cons "(remainder 10 3)" "1\n")
+    ; (cons "(remainder -10 3)" "-1\n")
+    ; (cons "(remainder -10 -3)" "-1\n")
+    ; (cons "(remainder 0 10)" "0\n")
+    ; (cons "(remainder -4 10)" "-4\n")
+    ; (cons "(remainder -4 -10)" "-4\n")
+    ; (cons "(remainder 16 4)" "0\n")
+    ; (cons "(remainder 5 2)" "1\n")
+    ; (cons "(remainder -45 7)" "-3\n")
+    ; (cons "(remainder 10 -3)" "1\n")
+    ; (cons "(remainder -17 -9)" "-8\n")
     
  ;    ;string-set!
  ;    (cons "(string-set! \"ABC\" 0 #\\E)" "")
@@ -1394,27 +1135,27 @@
 	; 	(string-set! str 6 #\\r)
 	; 	str)" "\"hi there\"\n")	      
 	
- ;    ;vector-set!
+ ; ;    ;vector-set!
  ;    (cons "(define x '#(1 2 3 4 a)) (vector-set! x 0 \"String\") x" 
 	;   "#5(\"String\" 2 3 4 a)\n")
- ;    (cons "(define x '#(1 2 3 4 a)) (vector-set! x 1 #t) x" 
-	;   "#5(1 #t 3 4 a)\n")	  
- ;    (cons "(define x '#(1 2 3 4 a)) (vector-set! x 2 #\\2) x" 
-	;   "#5(1 2 #\\2 4 a)\n")
- ;    (cons "(define x '#(1 2 3 4 a)) (vector-set! x 3 '(1)) x" 
-	;   "#5(1 2 3 (1 . ()) a)\n")
- ;    (cons "(define x '#(1 2 3 4 a)) (vector-set! x 4 '#(\"Akuna Matata\")) x" 
-	;   "#5(1 2 3 4 #1(\"Akuna Matata\"))\n")
- ;    (cons 
- ;      "(let ((x (make-vector 3 'a)))
-	;     (vector-set! x 0 1)
-	;     (vector-set! x 1 -3/4)
-	;     (vector-set! x 1 '(-5/6 12/36))
-	;     (vector-set! x 2 -3/4)
-	;     x)" "#3(1 (-5/6 . (1/3 . ())) -3/4)\n")
- ;    (cons "(let ((v (vector 'a 'b 'c 'd 'e)))
- ;      (vector-set! v 2 'x)
- ;      v)" "#5(a b x d e)\n")	    
+    (cons "(define x '#(1 2 3 4 a)) (vector-set! x 1 #t) x" 
+	  "#5(1 #t 3 4 a)\n")	  
+   ;  (cons "(define x '#(1 2 3 4 a)) (vector-set! x 2 #\\2) x" 
+	  ; "#5(1 2 #\\2 4 a)\n")
+   ;  (cons "(define x '#(1 2 3 4 a)) (vector-set! x 3 '(1)) x" 
+	  ; "#5(1 2 3 (1 . ()) a)\n")
+   ;  (cons "(define x '#(1 2 3 4 a)) (vector-set! x 4 '#(\"Akuna Matata\")) x" 
+	  ; "#5(1 2 3 4 #1(\"Akuna Matata\"))\n")
+   ;  (cons 
+   ;    "(let ((x (make-vector 3 'a)))
+	  ;   (vector-set! x 0 1)
+	  ;   (vector-set! x 1 -3/4)
+	  ;   (vector-set! x 1 '(-5/6 12/36))
+	  ;   (vector-set! x 2 -3/4)
+	  ;   x)" "#3(1 (-5/6 . (1/3 . ())) -3/4)\n")
+   ;  (cons "(let ((v (vector 'a 'b 'c 'd 'e)))
+   ;    (vector-set! v 2 'x)
+   ;    v)" "#5(a b x d e)\n")	    
 	
  ;    ;set-car!
  ;    (cons "(define x '(a b)) (set-car! x 1) x" "(1 . (b . ()))\n")

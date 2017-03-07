@@ -37,8 +37,7 @@ STACKCPY_DONE:
         RETURN;
 
 
-
-
+/*
 PRINT_HEAP:
   PUSH(FP);
   MOV(FP, SP);
@@ -104,4 +103,5 @@ L_STACK_EXIT:
   printf("FP=%ld ", FP);
   printf("\n");
   RETURN;
+  */
  

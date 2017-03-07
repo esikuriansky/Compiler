@@ -5,6 +5,7 @@
  */
 
  MAKE_SOB_VOID:
+ 
   PUSH(IMM(1));
   CALL(MALLOC);
   DROP(1);

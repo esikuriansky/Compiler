@@ -36,19 +36,18 @@
 #include "lib/builtins/equal_mathimatical.asm"
 #include "lib/builtins/apply.asm"
 #include "lib/builtins/remainder.asm"
+#include "lib/builtins/greater_then.asm"
+#include "lib/builtins/lower_then.asm"
+
 
 /*
-
 #include "lib/builtins/eq.asm"
 #include "lib/builtins/lt.asm"
-#include "lib/builtins/stackcpy.asm"*/
-
-
-/*
- append (variadic), 
- map,
-  not,
+#include "lib/builtins/stackcpy.asm"
+append (variadic), 
+map,
+not,
 number?
-  procedure?, 
-  rational?, 
+procedure?, 
+rational?, 
 */

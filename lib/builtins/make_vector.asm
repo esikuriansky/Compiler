@@ -27,7 +27,6 @@ MAKE_VECTOR_NO_DEFAULT_VALUE:
 
         MOV(R1, SOB_ZERO);
 
-
 MAKE_VECTOR_BODY:
         MOV(R0,INDD(FPARG(2),1)); /* actual length of list */
 
