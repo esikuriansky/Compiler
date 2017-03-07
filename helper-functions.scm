@@ -22,6 +22,9 @@
 (define caadr 
 	(lambda (x) (car (car (cdr x))))) 
 
+(define cdaar 
+	(lambda (x) (cdr (car (car x))))) 
+
 (define cdddr 
 	(lambda (x) (cdr (cdr (cdr x))))) 
 
@@ -68,16 +71,21 @@
 	(f (lambda (y z)
 	     ((x x) y z))))))))
 
+(define last-pair
+
+
+(define append-helper2
+	  (lambda (x y)
+	      (if (null? x) y
+		  (cons (car x)
+		   (append-helper2 (cdr x) y)))))
+
+(define append-helper1
+	(lambda (x y)
+	      (if (null? y) x
+		  (append-helper2 x (append-helper1 (car y) (cdr y))))))
+
 (define append
-  (letrec ((app2
-	    (lambda (s1 s2)
-	      (if (null? s1) s2
-		  (cons (car s1)
-		   (app2 (cdr s1) s2)))))
-	   (appl
-	    (lambda (s1 s)
-	      (if (null? s) s1
-		  (app2 s1 (appl (car s) (cdr s)))))))
-    (lambda s
-      (if (null? s) '()
-	  (appl (car s) (cdr s))))))
+    (lambda x
+      (if (null? x) '()
+	  (append-helper1 (car x) (cdr x))))))

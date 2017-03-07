@@ -66,7 +66,7 @@
     (system "rm -f outFile.c")
     (system "rm -f outFile.scm")
     (tests-string->file input "outFile.scm")
-    (compile "outFile.scm" "outFile.c")
+    (compile-scheme-file "outFile.scm" "outFile.c")
     (system "gcc -o outFile outFile.c")
     (system "./outFile > outResult")
     (let ((result (tests-file->string "outResult")))
@@ -80,7 +80,7 @@
     (system "rm -f outFile.c")
     (system "rm -f outFile.scm")
     (tests-string->file input "outFile.scm")
-    (compile "outFile.scm" "outFile.c")
+    (compile-scheme-file "outFile.scm" "outFile.c")
     (system "gcc -o outFile outFile.c")
     (system "./outFile > outResult")
     (let ((result (tests-file->string "outResult")))
@@ -869,10 +869,10 @@
     
         
 
-    
+    	; (cons "(define tail_test (lambda (n1) ((lambda (n2 n3) (+ n1 n3)) 10 15)))" "17\n")
 
 ;     ;map
-   ;  	(cons "(map (lambda (x) x) '(1 2 3))" "(1 . (2 . (3 . ())))\n")
+    	; (cons "(map (lambda (x) x) '(1 2 3))" "(1 . (2 . (3 . ())))\n")
    ;  (cons "(map car '((1) (2) (3)))" "(1 . (2 . (3 . ())))\n")
    ;  (cons "(map caar '(((1)) ((2)) ((3))))" "(1 . (2 . (3 . ())))\n")
    ;  (cons "(map cdr (list))" "()\n")
@@ -884,61 +884,61 @@
    
 
 ;     ;append
-    ; (cons "(append '(a b c) '())" "(a . (b . (c . ())))\n")
-;     (cons "(append '() '(a b c))" "(a . (b . (c . ())))\n")
-;     (cons "(append '(a b) '(c d))" "(a . (b . (c . (d . ()))))\n")
-;     (cons "(append '(a b) 'c)"  "(a . (b . c))\n")
-;     (cons "(let ((x (list 'b)))
-; 	    (eq? x (cdr (append '(a) x))))" "#t\n")
-;     (cons "(append #t)" "#t\n")    
-;     (cons "(append '(1 2) '(3 4 5))" "(1 . (2 . (3 . (4 . (5 . ())))))\n")
-;     (cons "(append '(1 2) '())" "(1 . (2 . ()))\n")
-;     (cons "(append '(1) '(2))" "(1 . (2 . ()))\n")
-;     (cons "(append '() '(1 2))" "(1 . (2 . ()))\n")
-;     (cons "(append)" "()\n")
-;     (cons "(append '(1 2 3) '(4) '(5 6) '(#t a b c) '())" 
-; 	  "(1 . (2 . (3 . (4 . (5 . (6 . (#t . (a . (b . (c . ()))))))))))\n")
-;     (cons
-;       "(define x '(1 2))
-;        (define y '(3 4))
-;        (define z '(5 6))
-;        (define f (append x y z))
-;        f" "(1 . (2 . (3 . (4 . (5 . (6 . ()))))))\n")
-;     (cons
-;       "(define x '(1 2))
-;        (define y '(3 4))
-;        (define z '(5 6))
-;        (define f (append x y z))
-;        (set-car! x 'a)
-;        f" "(1 . (2 . (3 . (4 . (5 . (6 . ()))))))\n") 
-;     (cons
-;       "(define x '(1 2))
-;        (define y '(3 4))
-;        (define z '(5 6))
-;        (define f (append x y z))
-;        (set-car! x 'a)
-;        (set-car! y 'b)
-;        f" "(1 . (2 . (3 . (4 . (5 . (6 . ()))))))\n") 
-;     (cons
-;       "(define x '(1 2))
-;        (define y '(3 4))
-;        (define z '(5 6))
-;        (define f (append x y z))
-;        (set-car! x 'a)
-;        (set-car! y 'b)
-;        (set-car! z 'c)
-;        f" "(1 . (2 . (3 . (4 . (c . (6 . ()))))))\n")     
-;     (cons "(append '(a b) 'c)" "(a . (b . c))\n")
-;     (cons "(append '(1 2) '(3 4))" "(1 . (2 . (3 . (4 . ()))))\n")
-;     (cons "(append '(1 2) 3)" "(1 . (2 . 3))\n")
-;     (cons "(append '(a b) '(#t #f) 'e)" "(a . (b . (#t . (#f . e))))\n")
-;     (cons "(define x '(5)) 
-; 	   (define y (append '(a b) '(#t #f) '(1 2 3 4) '(5 6 7) '(8 9 -1/2) x))
-; 	   y
-; 	   (set-car! x #t)
-; 	   y" 
-; 	 "(a . (b . (#t . (#f . (1 . (2 . (3 . (4 . (5 . (6 . (7 . (8 . (9 . (-1/2 . (5 . ())))))))))))))))
-; (a . (b . (#t . (#f . (1 . (2 . (3 . (4 . (5 . (6 . (7 . (8 . (9 . (-1/2 . (#t . ())))))))))))))))\n")    
+    (cons "(append '(a b c) '())" "(a . (b . (c . ())))\n")
+    ; (cons "(append '() '(a b c))" "(a . (b . (c . ())))\n")
+    (cons "(append '(a b) '(c d))" "(a . (b . (c . (d . ()))))\n")
+    (cons "(append '(a b) 'c)"  "(a . (b . c))\n")
+    (cons "(let ((x (list 'b)))
+	    (eq? x (cdr (append '(a) x))))" "#t\n")
+    (cons "(append #t)" "#t\n")    
+    (cons "(append '(1 2) '(3 4 5))" "(1 . (2 . (3 . (4 . (5 . ())))))\n")
+    (cons "(append '(1 2) '())" "(1 . (2 . ()))\n")
+    (cons "(append '(1) '(2))" "(1 . (2 . ()))\n")
+    (cons "(append '() '(1 2))" "(1 . (2 . ()))\n")
+    (cons "(append)" "()\n")
+    (cons "(append '(1 2 3) '(4) '(5 6) '(#t a b c) '())" 
+	  "(1 . (2 . (3 . (4 . (5 . (6 . (#t . (a . (b . (c . ()))))))))))\n")
+    (cons
+      "(define x '(1 2))
+       (define y '(3 4))
+       (define z '(5 6))
+       (define f (append x y z))
+       f" "(1 . (2 . (3 . (4 . (5 . (6 . ()))))))\n")
+    (cons
+      "(define x '(1 2))
+       (define y '(3 4))
+       (define z '(5 6))
+       (define f (append x y z))
+       (set-car! x 'a)
+       f" "(1 . (2 . (3 . (4 . (5 . (6 . ()))))))\n") 
+    (cons
+      "(define x '(1 2))
+       (define y '(3 4))
+       (define z '(5 6))
+       (define f (append x y z))
+       (set-car! x 'a)
+       (set-car! y 'b)
+       f" "(1 . (2 . (3 . (4 . (5 . (6 . ()))))))\n") 
+    (cons
+      "(define x '(1 2))
+       (define y '(3 4))
+       (define z '(5 6))
+       (define f (append x y z))
+       (set-car! x 'a)
+       (set-car! y 'b)
+       (set-car! z 'c)
+       f" "(1 . (2 . (3 . (4 . (c . (6 . ()))))))\n")     
+    (cons "(append '(a b) 'c)" "(a . (b . c))\n")
+    (cons "(append '(1 2) '(3 4))" "(1 . (2 . (3 . (4 . ()))))\n")
+    (cons "(append '(1 2) 3)" "(1 . (2 . 3))\n")
+    (cons "(append '(a b) '(#t #f) 'e)" "(a . (b . (#t . (#f . e))))\n")
+    (cons "(define x '(5)) 
+	   (define y (append '(a b) '(#t #f) '(1 2 3 4) '(5 6 7) '(8 9 -1/2) x))
+	   y
+	   (set-car! x #t)
+	   y" 
+	 "(a . (b . (#t . (#f . (1 . (2 . (3 . (4 . (5 . (6 . (7 . (8 . (9 . (-1/2 . (5 . ())))))))))))))))
+(a . (b . (#t . (#f . (1 . (2 . (3 . (4 . (5 . (6 . (7 . (8 . (9 . (-1/2 . (#t . ())))))))))))))))\n")    
 	
 
   
@@ -1129,7 +1129,7 @@
       ; (cons "Set" set-tests)	; + DONE
       ; (cons "pvar-bvar" pvar-bvar-tests)	; + DONE
       ; (cons "Define" define-tests)
-      ; (cons "Primitive Functions" primitive-functions-tests)
+      (cons "Primitive Functions" primitive-functions-tests)
       ; (cons "eq?" eq-tests) 
       ; (cons "Internal Helper cProcedures" internal-helper-procedures-tests)
       ;(cons "Debugging" tests)  

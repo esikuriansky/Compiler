@@ -1393,6 +1393,8 @@
 			(address (number->string (car exists-resolve))))
 		;; body
 		; (if (not exists-resolve) (compilation-error "[!] FVAR: symbol does not exist." fvar))
+		(if (equal? fvar 'append)
+				(disp address "append-cgen-define"))
 		(string-append 
 																			newl 
 			"// ---define--- "  						newl
@@ -1426,6 +1428,7 @@
 			generated-code 									newl
 		
 			"// check valid closuse" 				newl
+			; "SHOW(\"IN APPLIC\", INDD(R0,0));"	newl
 			"CMP(INDD(R0,0), T_CLOSURE);" 	newl
 			"JUMP_NE(L_RUNTIME_ERROR);" 		newl
 
@@ -1460,8 +1463,9 @@
 
 			; ----- Get function -----
 			generated-proc 																				newl
-			
+			; "SHOW(\"IN POOOOOOP\", INDD(R0,0));"	newl
 			"// validate closure" 																newl
+			; "SHOW(\"IN TC_APPLIC\", INDD(R0,0));"	newl
 			"CMP(INDD(R0,0), T_CLOSURE);" 												newl
 			"JUMP_NE(L_RUNTIME_ERROR);" 													newl
 
@@ -1579,6 +1583,7 @@
 			(label-new-args-done (lambda-opt-new-args-done))
 			(generated-body (cgen body (+ 1 env-len) params-len)))
 		;; body
+
 		(cgen-lambda-code pe (string-append
 
 				"// ---lambda-opt--- " 	newl
@@ -1693,7 +1698,6 @@
 
 (define cgen
 	(lambda (pe env-len params-len) 
-		; (disp pe "cgen")
 		(cond 
 			((const-pe? pe) (cgen-const (cadr pe)))
 			((seq-pe? pe) (cgen-seq (cadr pe) env-len params-len))
@@ -1872,7 +1876,7 @@
 ;; ======================================================================================================================
 
 (define primitive-symbols
-  '(apply append map boolean? car cdr char->integer char? cons eq? integer? integer->char make-string make-vector
+  '(apply boolean? car cdr char->integer char? cons eq? integer? integer->char make-string make-vector
 	null? pair? number? procedure? remainder set-car! set-cdr!
 	string-length string-ref string-set! string->symbol string?
 	symbol? symbol->string vector-length vector-ref
