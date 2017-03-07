@@ -1118,28 +1118,13 @@
     ; (cons "(remainder -45 7)" "-3\n")
     ; (cons "(remainder 10 -3)" "1\n")
     ; (cons "(remainder -17 -9)" "-8\n")
-    
- ;    ;string-set!
- ;    (cons "(string-set! \"ABC\" 0 #\\E)" "")
- ;    (cons "(define x \"ABC\") (string-set! x 0 #\\E) x" "\"EBC\"\n")
- ;    (cons "(define x \"ABC\") (string-set! x 1 #\\e) x" "\"AeC\"\n")
- ;    (cons "(define x \"ABC\") (string-set! x 2 #\\1) x" "\"AB1\"\n")
- ;    (cons 
-	; "(let ((x \"A1bC2345cdefGh\"))
-	;       (string-set! x 0 #\\Z)
-	;       (string-set! x 5 #\\m)
-	;       (string-set! x 10 #\\2)
-	;       x)" "\"Z1bC2m45cd2fGh\"\n")
- ;    (cons "(let ((str \"hi three\"))
-	; 	(string-set! str 5 #\\e)
-	; 	(string-set! str 6 #\\r)
-	; 	str)" "\"hi there\"\n")	      
+       
 	
  ; ;    ;vector-set!
- ;    (cons "(define x '#(1 2 3 4 a)) (vector-set! x 0 \"String\") x" 
-	;   "#5(\"String\" 2 3 4 a)\n")
-    (cons "(define x '#(1 2 3 4 a)) (vector-set! x 1 #t) x" 
-	  "#5(1 #t 3 4 a)\n")	  
+   ;  (cons "(define x '#(1 2 3 4 a)) (vector-set! x 0 \"String\") x" 
+	  ; "#5(\"String\" 2 3 4 a)\n")
+   ;  (cons "(define x '#(1 2 3 4 a)) (vector-set! x 1 #t) x" 
+	  ; "#5(1 #t 3 4 a)\n")	  
    ;  (cons "(define x '#(1 2 3 4 a)) (vector-set! x 2 #\\2) x" 
 	  ; "#5(1 2 #\\2 4 a)\n")
    ;  (cons "(define x '#(1 2 3 4 a)) (vector-set! x 3 '(1)) x" 
@@ -1153,53 +1138,11 @@
 	  ;   (vector-set! x 1 '(-5/6 12/36))
 	  ;   (vector-set! x 2 -3/4)
 	  ;   x)" "#3(1 (-5/6 . (1/3 . ())) -3/4)\n")
-   ;  (cons "(let ((v (vector 'a 'b 'c 'd 'e)))
-   ;    (vector-set! v 2 'x)
-   ;    v)" "#5(a b x d e)\n")	    
+    (cons "(let ((v (vector 'a 'b 'c 'd 'e)))
+      (vector-set! v 2 'x)
+      v)" "#5(a b x d e)\n")	    
 	
- ;    ;set-car!
- ;    (cons "(define x '(a b)) (set-car! x 1) x" "(1 . (b . ()))\n")
- ;    (cons "(define x '(a . b)) (set-car! x 1) x" "(1 . b)\n")
- ;    (cons 
- ;      "(let ((x (cons #\\a 2)))
-	;       (set-car! x -1/2)
-	;       (set-car! x #f)
-	;       x)" "(#f . 2)\n")
- ;    (cons "(let ((x '(a b c)))
- ;      (set-car! x 1)
- ;      x)" "(1 . (b . (c . ())))\n")	      
 
- ;    ;set-cdr!
- ;    (cons "(define x '(a . b)) (set-cdr! x 'c) x" "(a . c)\n")
- ;    (cons "(define x '(a #t #f 1 2 3)) (set-cdr! x \"ABC\") x" "(a . \"ABC\")\n")
- ;    (cons "(define x '(a #t #f 1 2 3)) (set-cdr! (cdr x) \"ABC\") x" "(a . (#t . \"ABC\"))\n")	
- ;    (cons "(let ((x '(a b c)))
-	;   (set-cdr! x 1)
-	;   x)" "(a . 1)\n")
-    
- ;    ;symbol->string
- ;    (cons "(symbol->string 'AbC)" "\"abc\"\n")
- ;    (cons "(symbol->string 'abcdefghijkl123456)" "\"abcdefghijkl123456\"\n")
- ;    (cons "(symbol->string 'xyz)" "\"xyz\"\n")
- ;    (cons "(symbol->string (string->symbol \"Hi\"))" "\"Hi\"\n")
- ;    (cons "(symbol->string (string->symbol \"()\"))" "\"()\"\n")    
-    
- ;    ;string->symbol
- ;    (cons "(begin 'a 'b 'c 'd 'e 'f 'g 'g234 'abc (string->symbol \"a\"))" "a\n")
- ;    (cons "(begin 'a 'b 'c 'd 'e 'f 'g 'g234 'abc (string->symbol \"b\"))" "b\n")
- ;    (cons "(begin 'a 'b 'c 'd 'e 'f 'g 'g234 'abc (string->symbol \"c\"))" "c\n")
- ;    (cons "(begin 'a 'b 'c 'D 'e 'f 'g 'g234 'abc (string->symbol \"D\"))" "D\n")
- ;    (cons "(begin 'a 'b 'c 'D 'e 'f 'g 'g234 'abc (string->symbol \"e\"))" "e\n")
- ;    (cons "(begin 'a 'b 'c 'D 'e 'f 'g 'g234 'abc (string->symbol \"f\"))" "f\n")
- ;    (cons "(begin 'a 'b 'c 'D 'e 'f 'g 'g234 'abc (string->symbol \"g\"))" "g\n")
- ;    (cons "(begin 'a 'b 'c 'D 'e 'f 'g 'g234 'abc (string->symbol \"g234\"))" "g234\n")
- ;    (cons "(begin 'a 'b 'c 'd 'e 'f 'g 'g234 'abc (string->symbol \"abc\"))" "abc\n")
- ;    (cons "(begin 'a 'b 'c 'd 'D 'e 'f 'g 'g234 'abc (string->symbol \"D\"))" "D\n")
- ;    (cons "(string->symbol (make-string 1 #\\d))" "d\n")
- ;    (cons "(begin 'a 'b 'c 'd 'D 'e 'f 'g 'g234 'abc (string->symbol (make-string 1 #\\d)))" "d\n")
- ;    (cons "(string->symbol \"abc\")" "abc\n")
- ;    (cons "(string->symbol \"aBc\")" "aBc\n")
- ;    (cons "(begin 'aBc (string->symbol \"aBc\"))" "aBc\n")
 ))
 
 (define eq-tests
