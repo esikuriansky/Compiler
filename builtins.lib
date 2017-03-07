@@ -25,6 +25,7 @@
 #include "lib/builtins/zero.asm"
 #include "lib/builtins/string_to_symbol.asm"
 #include "lib/builtins/is_eq.asm"
+#include "lib/builtins/vector.asm"
 #include "lib/builtins/vector_set.asm"
 #include "lib/builtins/vector_ref.asm"
 #include "lib/builtins/string_ref.asm"
@@ -46,7 +47,6 @@
 #include "lib/builtins/stackcpy.asm"
 append (variadic), 
 map,
-not,
 number?
 procedure?, 
 rational?, 

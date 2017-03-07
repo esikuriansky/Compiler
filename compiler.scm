@@ -343,8 +343,8 @@
 							 (const-f (map (lambda (_) #f) ribs)))
 
 							;; let-body
-							(display const-f)
-							(display "\n")
+							; (display const-f)
+							; (display "\n")
 							(parse `((lambda ,params ,@sets ((lambda () ,@exprs) ,@(list)))  ,@const-f))
 
 						)))
@@ -1872,7 +1872,7 @@
 ;; ======================================================================================================================
 
 (define primitive-symbols
-  '(apply boolean? car cdr char->integer char? cons eq? integer? integer->char make-string make-vector
+  '(apply append map boolean? car cdr char->integer char? cons eq? integer? integer->char make-string make-vector
 	null? pair? number? procedure? remainder set-car! set-cdr!
 	string-length string-ref string-set! string->symbol string?
 	symbol? symbol->string vector-length vector-ref
@@ -1940,7 +1940,6 @@
 (define (get-primitive-label name)
 	(cond  
 		((equal? name "apply") "L_APPLY") ; apply 
-		; ((equal? name "append") "L_APPEND") ; append 
 		((equal? name "+") "PLUS") ; + variadic
 		((equal? name "<") "LOWER");; < variadic
 		((equal? name ">") "GREATER"); > variadic
@@ -1961,7 +1960,6 @@
 		((equal? name "list") "LIST") ; list variadic
 		((equal? name "make-string") "MAKE_STRING") ; make-string
 		((equal? name "make-vector") "MAKE_VECTOR") ; make-vector
-		; map
 		((equal? name "not") "NOT"); not
 		((equal? name "null?") "IS_NILL") ; null?
 		((equal? name "number?") "IS_NUMBER") ; number?
@@ -1979,6 +1977,7 @@
 		((equal? name "string?") "IS_A_STRING") ; string?
 		((equal? name "symbol?") "IS_SYMBOL") ; symbol?
 		((equal? name "symbol->string") "SYMBOL_TO_STRING") ; symbol->string
+		((equal? name "vector") "VECTOR") ; vector
 		((equal? name "vector-length") "VECTOR_LENGTH") ; vector-length
 		((equal? name "vector-ref") "VECTOR_REF") ; vector-ref
 		((equal? name "vector-set!") "VECTOR_SET") ; vector-set!
@@ -2034,16 +2033,15 @@
 			list-of-exprs)))
 
 ;; Compile scheme file to CISC
-(define compile
+(define compile-scheme-file
 	(lambda (file-in file-out)
-		;(system (string-append  "rm -f " file-out))
 		(let* 
 				;; ribs
 				(
-				; (helper-code (read-input-file "helper-functions.scm"))
+				(helper-code (read-input-file "helper-functions.scm"))
 				(input-exprs (read-input-file file-in))
-				; (exprs (append helper-code input-exprs))
-				(parsed-exprs (run-parsing input-exprs))
+				(exprs (append helper-code input-exprs))
+				(parsed-exprs (run-parsing exprs))
 				(consts-list (get-const-occur parsed-exprs))
 				(partial-symbol-list (rm-lst-dups (get-all-symbols parsed-exprs)))
 				(symbol-list (rm-lst-dups (append primitive-symbols partial-symbol-list)))
@@ -2156,7 +2154,7 @@
 				"	return 0;"														newl newl
 
 				"L_RUNTIME_ERROR:"											newl
-				"	printf(\"Error :( !\\n\");"				newl newl
+				"	printf(\"Error :( !\\n\");"						newl newl
 
 				"STOP_MACHINE;"													newl newl
 

@@ -7,7 +7,7 @@ for f in $(ls -v AllTests/*/tests/*.scm); do
   fi
   echo "Doing test $f:"
   echo "--------------------------------"
-  echo "(load \"compiler.scm\") (compile \"$f\" \"out_test.c\")" | scheme -q
+  echo "(load \"compiler.scm\") (compile-scheme-file \"$f\" \"out_test.c\")" | scheme -q
   gcc -o out_test out_test.c
   our=`./out_test`
   total_tests=$((total_tests+1))

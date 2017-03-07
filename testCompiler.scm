@@ -861,97 +861,30 @@
 
 (define primitive-functions-tests
   (list
-    ; car, cdr and combinations
-;     (cons "(car '(a b))" "a\n")
-    	; (cons "(car '(a))" "a\n")
-;     (cons "(car '(a b c))" "a\n")
-;     (cons "(car (cons 3 4))" "3\n")
     
-;     (cons "(cdr '(a b))" "(b . ())\n")
-;     (cons "(cdr '(a))" "()\n")
-;     (cons "(cdr '(a b c))" "(b . (c . ()))\n")
-;     (cons "(cdr (cons 3 4))" "4\n")
-;     ;(cons "(caaaar '((((a))) b))" "a\n")
-;     ;(cons "(cdadr '((((a))) (((b) c)) (((c))) (((d)))))" "()\n")
-;     ;(cons "(cdaadr '((((a))) (((b e) c)) (((c))) (((d)))))" "(c . ())\n")
-    
-;     ;list
-;     (cons "(list)" "()\n")
-;     (cons "(list 1 2 3 #t 'a)" "(1 . (2 . (3 . (#t . (a . ())))))\n")
-;     (cons "(list (if #f #f))" "(#<void> . ())\n")
-;     (cons "(list 'a 1 'b (if #f #f))" "(a . (1 . (b . (#<void> . ()))))\n")
-;     (cons "(list 1 2 3)" "(1 . (2 . (3 . ())))\n")
-;     (cons "(list 3 2 1)" "(3 . (2 . (1 . ())))\n")
-    
-;     ;not
-;     (cons "(not 1)" "#f\n")
-;     (cons "(not #f)" "#t\n")
-;     (cons "(not #t)" "#f\n")
-;     (cons "(not '())" "#f\n")
-;     (cons "(not (< 4 5))" "#f\n")    
-    
-;     ;apply
-;     (cons "(apply car '((a)))" "a\n")
-;     (cons "(apply (lambda (x y z) (list x y z)) '(1 2 3))" "(1 . (2 . (3 . ())))\n")
-;     (cons "((lambda x ((lambda (y) (apply car x)) 5)) '(1 2 3 4))" "1\n")
-;     (cons "(apply + '(4 5))" "9\n") 
-;     (cons "(define min 
-; 		(lambda lst
-; 		  (if (null? (cdr lst)) (car lst)
-; 		    (if (< (car lst) (apply min (cdr lst)))
-; 			  (car lst)
-; 			  (apply min (cdr lst))))))
-; 	    (apply min '(6 8 3 2 5))" "2\n") 
+    ; list
+    ; (cons "(list (if #f #f))" "(#<void> . ())\n")
+    ; (cons "(list 'a 1 'b (if #f #f))" "(a . (1 . (b . (#<void> . ()))))\n")
 
-;     (cons "(apply vector '(a b c d e))" "#5(a b c d e)\n")
-
-;     (cons "(define first
-;       (lambda (l)
-; 	(apply (lambda (x . y) x)
-; 		l)))
-;     (define rest
-;       (lambda (l)
-; 	(apply (lambda (x . y) y) l)))
-;     (first '(a b c d))" "a\n")
-
-;     (cons "(define first
-;       (lambda (l)
-; 	(apply (lambda (x . y) x)
-; 		l)))
-;     (define rest
-;       (lambda (l)
-; 	(apply (lambda (x . y) y) l)))
-;     (rest '(a b c d))" "(b . (c . (d . ())))\n")    
     
-;     ;cons
-;     (cons "(cons 1 2)" "(1 . 2)\n")
-;     (cons "(cons 1 (cons 2 (cons 3 '())))" "(1 . (2 . (3 . ())))\n")
-;     (cons "(cons 'a '())" "(a . ())\n")
-;     (cons "(cons 'a '(b c))" "(a . (b . (c . ())))\n")
-;     (cons "(cons 3 4)" "(3 . 4)\n")    
+        
+
     
-;     ;null?
-;     (cons "(null? '())" "#t\n")
-;     (cons "(null? (list))" "#t\n")
-;     (cons "(null? (list 1))" "#f\n")
-;     (cons "(null? '(1 2 3 a))" "#f\n")
-;     (cons "(null? '(a))" "#f\n")
-;     (cons "(null? (cdr '(a)))" "#t\n")
-;     (cons "(null? 3)" "#f\n")
-;     (cons "(null? #f)" "#f\n")    
 
 ;     ;map
-;     (cons "(map (lambda (x) x) '(1 2 3))" "(1 . (2 . (3 . ())))\n")
-;     (cons "(map car '((1) (2) (3)))" "(1 . (2 . (3 . ())))\n")
-;     ;(cons "(map caar '(((1)) ((2)) ((3))))" "(1 . (2 . (3 . ())))\n")
-;     (cons "(map cdr (list))" "()\n")
-;     (cons "(define abs (lambda (x) (if (< x 0) (- x) x)))
-; 	  (map abs '(1 -2 3 -4 5 -6))" "(1 . (2 . (3 . (4 . (5 . (6 . ()))))))\n")    
-;     ;(cons "(map (lambda (x y) (cons x y)) '(1 2) '(3 4))" "((1 . 3) . ((2 . 4) . ()))\n")
-;     ;(cons "(map list '(1 2) '(3 4) '(5 6) '(7 8) '(9 10))" "((1 . (3 . (5 . (7 . (9 . ()))))) . ((2 . (4 . (6 . (8 . (10 . ()))))) . ()))\n")
+   ;  	(cons "(map (lambda (x) x) '(1 2 3))" "(1 . (2 . (3 . ())))\n")
+   ;  (cons "(map car '((1) (2) (3)))" "(1 . (2 . (3 . ())))\n")
+   ;  (cons "(map caar '(((1)) ((2)) ((3))))" "(1 . (2 . (3 . ())))\n")
+   ;  (cons "(map cdr (list))" "()\n")
+   ;  (cons "(define abs (lambda (x) (if (< x 0) (- x) x)))
+	  ; (map abs '(1 -2 3 -4 5 -6))" "(1 . (2 . (3 . (4 . (5 . (6 . ()))))))\n")    
+   ;  (cons "(map (lambda (x y) (cons x y)) '(1 2) '(3 4))" "((1 . 3) . ((2 . 4) . ()))\n")
+   ;  (cons "(map list '(1 2) '(3 4) '(5 6) '(7 8) '(9 10))" "((1 . (3 . (5 . (7 . (9 . ()))))) . ((2 . (4 . (6 . (8 . (10 . ()))))) . ()))\n")
+   
+   
 
 ;     ;append
-;     (cons "(append '(a b c) '())" "(a . (b . (c . ())))\n")
+    ; (cons "(append '(a b c) '())" "(a . (b . (c . ())))\n")
 ;     (cons "(append '() '(a b c))" "(a . (b . (c . ())))\n")
 ;     (cons "(append '(a b) '(c d))" "(a . (b . (c . (d . ()))))\n")
 ;     (cons "(append '(a b) 'c)"  "(a . (b . c))\n")
@@ -1009,138 +942,14 @@
 	
 
   
+
+
+     
     
-;     ;make-vector
-;     (cons "(make-vector 1 #\\a)" "#1(#\\a)\n")
-;     (cons "(make-vector 5 #\\A)" "#5(#\\A #\\A #\\A #\\A #\\A)\n")
-;     (cons "(make-vector 0 #\\space)" "#0()\n") 
-;     (cons "(make-vector 0 #\\Z)" "#0()\n") 
-;     (cons "(make-vector 12 #t)" "#12(#t #t #t #t #t #t #t #t #t #t #t #t)\n")  
-;     (cons "(make-vector 4 -6/8)" "#4(-3/4 -3/4 -3/4 -3/4)\n")  
-;     (cons "(make-vector 1)" "#1(0)\n")
-;     (cons "(make-vector 3)" "#3(0 0 0)\n")
-;     (cons "(make-vector 0)" "#0()\n")
-;     (cons "(make-vector 0 'a)" "#0()\n")
-;     (cons "(make-vector 5 'a)" "#5(a a a a a)\n")
-    
-;     ;procedure?
-;     (cons "(procedure? 1)" "#f\n")
-;     (cons "(procedure? 1)" "#f\n")
-;     (cons "(procedure? (lambda (x) x))" "#t\n")
-;     (cons "(define f (lambda x x)) (procedure? f)" "#t\n")
-;     (cons "(define f (lambda (a b . c) c)) (procedure? f)" "#t\n")
-;     (cons "(procedure? car)" "#t\n")
-;     (cons "(procedure? 'car)" "#f\n")
-;     (cons "(procedure? (lambda (x) x))" "#t\n")
-;     (cons "(procedure? '(lambda (x) x))" "#f\n")
-    
-;     ;vector-length
-;     (cons "(vector-length '#())" "0\n")
-;     (cons "(vector-length '#(1))" "1\n")
-;     (cons "(vector-length '#(1 2 3))" "3\n")
-;     (cons "(vector-length '#(1 2 3 #t #f 6/8))" "6\n")
-;     (cons "(vector-length '#(1 2 3 #t #f 6/8 (#\\a #\\b #\\C \"StR\")))" "7\n")
-;     (cons "(vector-length '#(a b c))" "3\n")
-;     (cons "(vector-length (vector 1 2 3 4))" "4\n")
-;     (cons "(vector-length (make-vector 300))" "300\n")    
-    
-;     ;string?
-;     (cons "(string? 1)" "#f\n")
-;     (cons "(string? \"\")" "#t\n")
-;     (cons "(string? #\\a)" "#f\n")
-;     (cons "(string? \"this is A STRING!\")" "#t\n")
-;     (cons "(string? (make-string 20 #\\Y))" "#t\n")
-;     (cons "(string? \"hi\")" "#t\n")
-;     (cons "(string? 'hi)" "#f\n")
-;     (cons "(string? #\\h)" "#f\n")    
+
+
+
    
-    
-;     ;vector?
-;     (cons "(vector? '#())" "#t\n")
-;     (cons "(vector? '(1))" "#f\n")
-;     (cons "(vector? #t)" "#f\n")
-;     (cons "(vector? 'symbol1)" "#f\n")
-;     (cons "(vector? (make-vector 1 2))" "#t\n")
-;     (cons "(vector? (make-vector 100 #t))" "#t\n")
-;     (cons "(vector? '#(1))" "#t\n")
-;     (cons "(vector? '#(1 2 3))" "#t\n")
-;     (cons "(vector? '#(1 2 3 #t #f 6/8))" "#t\n")
-;     (cons "(vector? '#(1 2 3 #t #f 6/8 (#\\a #\\b #\\C \"StR\")))" "#t\n")
-;     (cons "(vector? '#(a b c))" "#t\n")
-;     (cons "(vector? (vector 'a 'b 'c))" "#t\n")
-;     (cons "(vector? '())" "#f\n")
-;     (cons "(vector? '(a b c))" "#f\n")
-;     (cons "(vector? \"abc\")" "#f\n")    
-    
-;     ;zero?
-;     (cons "(zero? 1)" "#f\n")
-;     (cons "(zero? 0)" "#t\n")
-;     (cons "(zero? 0/5)" "#t\n")
-;     (cons "(zero? -0/12)" "#t\n")
-;     (cons "(zero? 2/13)" "#f\n")
-;     (cons "(zero? -0)" "#t\n")
-;     (cons "(zero? (- 3 3))" "#t\n")
-;     (cons "(zero? (+ 1/2 1/2))" "#f\n")    
-    
-;     ;vector
-;     (cons "(vector)" "#0()\n")
-;     (cons "(vector 1)" "#1(1)\n")
-;     (cons "(vector #\\a #\\A #\\space)" "#3(#\\a #\\A #\\space)\n")
-;     (cons "(vector 1 2 3 #t #f -1/2 \"a\" #\\b)" "#8(1 2 3 #t #f -1/2 \"a\" #\\b)\n")
-;     (cons "(vector 'a 'b 'c)" "#3(a b c)\n")
-
-
-    
- ;    ;=
-    ; (cons "(= 1/2)" "#t\n")
-    ; (cons "(= 1 1 1 1 1 1 1 2/2 4/4 1 1)" "#t\n")
-    ; (cons "(= 1 1 1 1 1 1 1 2/2 -4/4 1 1)" "#f\n")
-    ; (cons "(= 2/4 1/2 1/2 1/2)" "#t\n")
-    ; (cons "(= -2/4 -1/2 -1/2 -1/2)" "#t\n")
-    ; (cons "(= -2/4 1/2 -1/2 -1/2)" "#f\n")
-    ; (cons "(= 1 2 3 4 5 6)" "#f\n")
-    ; (cons "(= 7 7)" "#t\n")
-    ; (cons "(= 7 9)" "#f\n") 
-    ; (cons "(apply = (list 1 1 1 1 1 1 1 2/2 -4/4 1 1))" "#f\n")
-    
- ;    ;remainder
-    ; (cons "(remainder 2 1)" "0\n")
-    ; (cons "(remainder 2 10)" "2\n")
-    ; (cons "(remainder 10 2)" "0\n")
-    ; (cons "(remainder 10 3)" "1\n")
-    ; (cons "(remainder -10 3)" "-1\n")
-    ; (cons "(remainder -10 -3)" "-1\n")
-    ; (cons "(remainder 0 10)" "0\n")
-    ; (cons "(remainder -4 10)" "-4\n")
-    ; (cons "(remainder -4 -10)" "-4\n")
-    ; (cons "(remainder 16 4)" "0\n")
-    ; (cons "(remainder 5 2)" "1\n")
-    ; (cons "(remainder -45 7)" "-3\n")
-    ; (cons "(remainder 10 -3)" "1\n")
-    ; (cons "(remainder -17 -9)" "-8\n")
-       
-	
- ; ;    ;vector-set!
-   ;  (cons "(define x '#(1 2 3 4 a)) (vector-set! x 0 \"String\") x" 
-	  ; "#5(\"String\" 2 3 4 a)\n")
-   ;  (cons "(define x '#(1 2 3 4 a)) (vector-set! x 1 #t) x" 
-	  ; "#5(1 #t 3 4 a)\n")	  
-   ;  (cons "(define x '#(1 2 3 4 a)) (vector-set! x 2 #\\2) x" 
-	  ; "#5(1 2 #\\2 4 a)\n")
-   ;  (cons "(define x '#(1 2 3 4 a)) (vector-set! x 3 '(1)) x" 
-	  ; "#5(1 2 3 (1 . ()) a)\n")
-   ;  (cons "(define x '#(1 2 3 4 a)) (vector-set! x 4 '#(\"Akuna Matata\")) x" 
-	  ; "#5(1 2 3 4 #1(\"Akuna Matata\"))\n")
-   ;  (cons 
-   ;    "(let ((x (make-vector 3 'a)))
-	  ;   (vector-set! x 0 1)
-	  ;   (vector-set! x 1 -3/4)
-	  ;   (vector-set! x 1 '(-5/6 12/36))
-	  ;   (vector-set! x 2 -3/4)
-	  ;   x)" "#3(1 (-5/6 . (1/3 . ())) -3/4)\n")
-    (cons "(let ((v (vector 'a 'b 'c 'd 'e)))
-      (vector-set! v 2 'x)
-      v)" "#5(a b x d e)\n")	    
 	
 
 ))
@@ -1310,19 +1119,19 @@
 
 (runAllTests
   (list      
-      ; (cons "Constants Table" constants-table-tests)  
-      ; (cons "Or, If and Begin" or-if-begin-tests)      
-      ; (cons "Lambda-simple" lambda-simple-tests)
-      ; (cons "Lambda-opt" lambda-opt-tests)
-      ; (cons "Lambda-var" lambda-var-tests)
-      ; (cons "tc-applic-tests" tc-applic-tests)
-      ; (cons "comp161 torture test for compiler unsorted" comp161-torture-test-for-compiler-unsorted)
-      ; (cons "Set" set-tests)
-      ; (cons "pvar-bvar" pvar-bvar-tests)
+      ; (cons "Constants Table" constants-table-tests) ; + DONE
+      ; (cons "Or, If and Begin" or-if-begin-tests)     ; + DONE 
+      ; (cons "Lambda-simple" lambda-simple-tests)	; + DONE
+      ; (cons "Lambda-opt" lambda-opt-tests)	; + DONE
+      ; (cons "Lambda-var" lambda-var-tests) ; + DONE
+      ; (cons "tc-applic-tests" tc-applic-tests) ; + DONE
+      ; (cons "comp161 torture test for compiler unsorted" comp161-torture-test-for-compiler-unsorted) 	; + DONE
+      ; (cons "Set" set-tests)	; + DONE
+      ; (cons "pvar-bvar" pvar-bvar-tests)	; + DONE
       ; (cons "Define" define-tests)
-      (cons "Primitive Functions" primitive-functions-tests)
+      ; (cons "Primitive Functions" primitive-functions-tests)
       ; (cons "eq?" eq-tests) 
-      ;(cons "Internal Helper Procedures" internal-helper-procedures-tests)
+      ; (cons "Internal Helper cProcedures" internal-helper-procedures-tests)
       ;(cons "Debugging" tests)  
       
 ))
