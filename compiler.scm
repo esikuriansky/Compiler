@@ -1420,15 +1420,14 @@
 		(string-append 
 													newl 
 			"//---applic---" 		newl
+
 			;; arguments
 			all-args
 			;; num of argments
 			"PUSH(IMM(" (number->string num-of-args) "));" 	newl
 
 			generated-code 									newl
-		
 			"// check valid closuse" 				newl
-			; "SHOW(\"IN APPLIC\", INDD(R0,0));"	newl
 			"CMP(INDD(R0,0), T_CLOSURE);" 	newl
 			"JUMP_NE(L_RUNTIME_ERROR);" 		newl
 
@@ -1460,12 +1459,11 @@
 			all-args
 
 			"PUSH(IMM("(number->string num-of-args) "));"					newl
+			
 
 			; ----- Get function -----
 			generated-proc 																				newl
-			; "SHOW(\"IN POOOOOOP\", INDD(R0,0));"	newl
 			"// validate closure" 																newl
-			; "SHOW(\"IN TC_APPLIC\", INDD(R0,0));"	newl
 			"CMP(INDD(R0,0), T_CLOSURE);" 												newl
 			"JUMP_NE(L_RUNTIME_ERROR);" 													newl
 

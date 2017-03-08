@@ -1,0 +1,49 @@
+GCD:
+	PUSH(FP);
+  MOV(FP, SP);
+  PUSH(R1);
+  PUSH(R2);
+  PUSH(R3);
+
+  MOV(R1, FPARG(0));
+  MOV(R2, FPARG(1));
+
+  CMP(R1, IMM(0));
+  JUMP_GT(CHECK_R2);
+  MUL(R1, IMM(-1));
+
+CHECK_R2:
+
+	CMP(R2, 0);
+	JUMP_GT(CONITNUE_GCD);
+	MUL(R2, IMM(-1));
+
+CONITNUE_GCD:
+
+  CMP(R1, R2);
+  JUMP_GE(LOL);
+
+  // SWAP
+  MOV(R3, R2);
+  MOV(R2, R1);
+  MOV(R1, R3);
+
+LOL:
+	MOV(R3, R1);
+	REM(R3, R2);
+
+	CMP(R3, 0);
+	JUMP_EQ(GCD_END);
+
+	MOV(R1, R2);
+	MOV(R2, R3);
+	JUMP(LOL);
+
+GCD_END:
+	MOV(R0, R2);
+
+	POP(R3);
+	POP(R2);
+	POP(R1);
+	POP(FP);
+	RETURN;

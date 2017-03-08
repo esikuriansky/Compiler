@@ -1,0 +1,153 @@
+  /* DIVIDE */
+
+  DIVIDE:
+
+	  PUSH(FP);
+	  MOV(FP, SP);
+	  PUSH(R1);
+	  PUSH(R2);
+	  PUSH(R3);
+	  PUSH(R4);
+	  PUSH(R10);
+	  PUSH(R11);
+	  PUSH(R12);
+	  PUSH(R13);
+
+	  MOV(R1, FPARG(1)); // Num of args
+	  MOV(R2, 0);
+	  MOV(R3, FPARG(R2 + 2)); // R3 Holds current element
+
+	  CMP(INDD(R3, 0), T_FRACTION);
+	  JUMP_EQ(ONE_ARG_CHECK);
+
+	  // TRANSFORM ARG TO FRACTION
+	  PUSH(1);
+	  MOV(R10, INDD(R3, 1));
+	  PUSH(R10);
+	  PUSH(1);
+	  CALL(MAKE_SOB_FRACTION);
+	  DROP(3);
+	  MOV(R3, R0);
+
+	ONE_ARG_CHECK:
+		ADD(R2, 1);
+		CMP(R2, R1);
+		JUMP_EQ(WAS_ONLY_ONE_ARG);
+
+	DIVIDE_LOOP:
+
+		MOV(R4, FPARG(R2 + 2));
+		CMP(INDD(R4, 0), T_FRACTION);
+		JUMP_EQ(DIVIDE_LOOP_IS_FRAC);
+
+		// Transform to fraction
+
+		MOV(R10, INDD(R4, 1));
+		PUSH(1);
+		PUSH(R10);
+		PUSH(1);
+		CALL(MAKE_SOB_FRACTION);
+		DROP(3);
+		MOV(R4, R0);
+
+
+	DIVIDE_LOOP_IS_FRAC:
+
+		// MULTIPLY R3 with 1/R4
+
+		MOV(R11, INDD(R4, 2));
+		MOV(INDD(R4, 2), INDD(R4, 3));
+		MOV(INDD(R4, 3), R11);
+
+	  PUSH(R3);
+	  PUSH(R4);
+	  CALL(MUL_FRACS);
+	  DROP(2);
+	  MOV(R3, R0);
+
+	  ADD(R2, 1);
+	  CMP(R2, R1);
+		JUMP_EQ(PRE_DIVIDE_END);
+		JUMP(DIVIDE_LOOP);
+
+	WAS_ONLY_ONE_ARG:
+		MOV(R10, INDD(R3, 1));
+		PUSH(R10);
+		MOV(R10, INDD(R3, 3));
+	  PUSH(R10);
+	  MOV(R10, INDD(R3, 2));
+	  PUSH(R10);
+	  CALL(MAKE_SOB_FRACTION);
+	  DROP(3);
+	  MOV(R3, R0);
+
+	PRE_DIVIDE_END:
+		MOV(R0, R3);
+	  CMP(INDD(R0, 3), 1); 
+	  JUMP_NE(DIVIDE_END_FRAC);
+	  MOV(R10, INDD(R0, 2))
+	  PUSH(R10);
+	  CALL(MAKE_SOB_INTEGER);
+	  DROP(1); 
+	  JUMP(DIVIDE_END);
+
+	DIVIDE_END_FRAC:
+		// TRY TO FIX SIGN
+		CMP(INDD(R0, 3), 0);
+		JUMP_GT(DENOM_POSITIVE);
+
+		// DENOM IS NEGATIVE
+		MOV(R12, INDD(R0, 3));
+		MUL(R12, IMM(-1));
+		MOV(INDD(R0, 3), R12);
+
+		MOV(R12, INDD(R0, 2));
+		MUL(R12, IMM(-1));
+		MOV(INDD(R0, 2), R12);
+
+	DENOM_POSITIVE:
+		// TRY TO REDUCE
+		MOV(R12, INDD(R0,2));
+		MOV(R13, INDD(R0,3));
+		REM(R12, R13);
+		CMP(R12, 0);
+		JUMP_NE(DIV_TRY_TO_REDUCE);
+		MOV(R12, INDD(R0,2));
+		DIV(R12, R13);
+		MOV(R0, R12);
+		PUSH(R0);
+		CALL(MAKE_SOB_INTEGER);
+		DROP(1);
+		JUMP(DIVIDE_END);
+
+	DIV_TRY_TO_REDUCE:
+		
+		MOV(R10, R0);
+		PUSH(INDD(R0, 2));
+		PUSH(INDD(R0, 3));
+		CALL(GCD);
+		DROP(2);
+		
+		MOV(R11, INDD(R10, 2));
+		MOV(R12, INDD(R10, 3));
+		DIV(R11, R0);
+		DIV(R12, R0);
+
+		PUSH(1);
+		PUSH(R11);
+		PUSH(R12);
+		CALL(MAKE_SOB_FRACTION);
+		DROP(3);
+
+
+	DIVIDE_END:
+		POP(R13);
+		POP(R12);
+		POP(R11);
+		POP(R10);
+		POP(R4);
+		POP(R3);
+		POP(R2);
+		POP(R1);
+		POP(FP);
+	  RETURN;

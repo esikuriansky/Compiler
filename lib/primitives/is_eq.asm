@@ -1,0 +1,33 @@
+
+IS_EQ:
+        PUSH(FP);
+        MOV(FP, SP);
+
+        CMP(IND(FPARG(2)),IND(FPARG(3)));
+        JUMP_NE(IS_EQ_DONE_FALSE);
+        CMP(IND(FPARG(2)),T_INTEGER);
+        JUMP_EQ(IS_EQ_REGULAR);
+        CMP(IND(FPARG(2)),T_CHAR);
+        JUMP_EQ(IS_EQ_REGULAR);
+        CMP(IND(FPARG(2)),T_SYMBOL);
+        JUMP_NE(IS_EQ_SPECIAL);
+
+IS_EQ_REGULAR:
+        CMP(INDD(FPARG(2),1),INDD(FPARG(3),1)); 
+        JUMP_NE(IS_EQ_DONE_FALSE);
+        JUMP(IS_EQ_DONE_TRUE);
+
+IS_EQ_SPECIAL:
+        CMP(FPARG(2),FPARG(3)); 
+        JUMP_EQ(IS_EQ_DONE_TRUE);
+
+IS_EQ_DONE_FALSE:
+        MOV(R0,IMM(SOB_BOOL_FALSE));
+        POP(FP);
+        RETURN;
+
+IS_EQ_DONE_TRUE:
+        MOV(R0,IMM(SOB_BOOL_TRUE));
+        POP(FP);
+        RETURN;
+

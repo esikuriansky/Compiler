@@ -21,7 +21,8 @@ typedef struct Machine {
   long mem[RAM_SIZE];
   long stack[STACK_SIZE];
   long r0, r1, r2, r3, r4, r5, r6, r7, 
-       r8, r9, r10, r11, r12, r13, r14, r15;
+       r8, r9, r10, r11, r12, r13, r14, r15,
+       r16, r17, r18, r19, r20;
   long sp, fp;
   long test_result;
 } Machine;
@@ -50,6 +51,11 @@ extern Machine *machine;
 #define R13 (M(r13))
 #define R14 (M(r14))
 #define R15 (M(r15))
+#define R16 (M(r16))
+#define R17 (M(r17))
+#define R18 (M(r18))
+#define R19 (M(r19))
+#define R20 (M(r20))
 #define SP (M(sp))
 #define FP (M(fp))
 

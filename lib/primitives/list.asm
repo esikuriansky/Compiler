@@ -1,0 +1,30 @@
+ /* List */
+
+ LIST:
+  PUSH(FP);
+  MOV(FP, SP);
+  PUSH(R10);
+  PUSH(R11);
+
+
+  MOV(R10, FPARG(1));
+  MOV(R11,IMM(3));
+  ADD(R10,IMM(1));
+
+LIST_LOOP:
+  CMP(R10,IMM(1));
+  JUMP_EQ(LIST_END);
+  PUSH(R11);
+  PUSH(FPARG(R10));
+  CALL(MAKE_SOB_PAIR);
+  DROP(2);
+  MOV(R11,R0);
+  SUB(R10,IMM(1));
+  JUMP(LIST_LOOP);
+  
+LIST_END:
+  MOV(R0,R11);
+  POP(R11);
+  POP(R10);
+  POP(FP);
+  RETURN;
