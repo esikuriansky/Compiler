@@ -1,7 +1,3 @@
-/* 
-   FPARG[2] - the len number
-   FPARG[3) - fill if given
-*/
 
 
 MAKE_VECTOR:
@@ -9,46 +5,30 @@ MAKE_VECTOR:
         MOV(FP, SP);
         PUSH(R1);
 
-        /* ====== FIND DEFAULT VALUE =====*/
-        /* If single argumetn - no default value */
-        CMP(FPARG(1), IMM(2)); //checks num of args = 2
-        JUMP_NE(MAKE_VECTOR_NO_DEFAULT_VALUE);
+        CMP(FPARG(1), IMM(2)); 
+        JUMP_NE(MAKE_VECTOR_EMPTY);
 
-        /* If there is default value*/
         MOV(R1,FPARG(3));
-        JUMP(MAKE_VECTOR_BODY);
+        JUMP(MAKE_VECTOR_START);
 
-MAKE_VECTOR_NO_DEFAULT_VALUE:
-        CMP(FPARG(1),IMM(1)); /* make sure a value has been passed as an arg */
-        JUMP_NE(MAKE_VECTOR_INVALID_ARGUMENTS);
-
-        CMP(INDD(FPARG(IMM(2)), IMM(0)),T_INTEGER); //arg type is integer
-        JUMP_NE(MAKE_VECTOR_INVALID_ARGUMENTS);
-
+MAKE_VECTOR_EMPTY:
         MOV(R1, SOB_ZERO);
 
-MAKE_VECTOR_BODY:
-        MOV(R0,INDD(FPARG(2),1)); /* actual length of list */
-
-        /* Push items to stack */
+MAKE_VECTOR_START:
+        MOV(R0,INDD(FPARG(2),1)); 
+   
 MAKE_VECTOR_LOOP:
-        CMP(R0, 0);
+        CMP(R0, IMM(0));
         JUMP_EQ(MAKE_VECTOR_DONE);
-        PUSH(R1) ; //initialize the vector with 0
-        DECR(R0)           ;
+        PUSH(R1); 
+        SUB(R0, 1);
         JUMP(MAKE_VECTOR_LOOP);
 
 MAKE_VECTOR_DONE:
-        PUSH(INDD(FPARG(2),1)); /* arg count */
+        PUSH(INDD(FPARG(2),1));
         CALL(MAKE_SOB_VECTOR);
-        DROP(INDD(FPARG(2),1)); /* amount of arguments pushed */
-        DROP(1); /* length item */
-        
+        DROP(INDD(FPARG(2),1)); 
+        DROP(1); 
         POP(R1);
         POP(FP);
         RETURN;
-
-MAKE_VECTOR_INVALID_ARGUMENTS:
-        SHOW("Runtime error: MAKE_VECTOR invalid arguments", FPARG(1));
-        STOP_MACHINE;
-        return 1;

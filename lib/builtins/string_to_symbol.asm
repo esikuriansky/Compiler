@@ -4,92 +4,54 @@ STRING_TO_SYMBOL:
 	MOV(FP, SP);
 	PUSH(R1);
 	PUSH(R2);
+	PUSH(R3);
+	PUSH(R4);
+	PUSH(R5);
+	PUSH(R6);
 
-	/* verify arguments */
-	CMP(FPARG(1), 1);
-	JUMP_NE(STRING_TO_SYMBOL_INVALID_ARGUMENTS);
-
-	/* Take pointer to head of list */
 	MOV(R2, IND(SOB_SYM_LIST));
-
-	/* Load user argument string */
-	MOV(R4, FPARG(2));		/* string */
+	MOV(R4, FPARG(2));		
 	
-STRING_TO_SYMBOL_LOOP:
+STS_TO_SYMBOL_LOOP:
 	CMP(R2, SOB_NIL);
-	JUMP_EQ(STRING_TO_SYMBOL_NOT_FOUND);
+	JUMP_EQ(STS_SYMBOL_NOT_FOUND);
 
-	/* Load current symbol string*/
-	MOV(R3, INDD(R2, 1));	/* (car pair) => symbol */
-  	MOV(R3, INDD(R3, 1)); 	/*  symbol[1] => string */
+	MOV(R3, INDD(R2, 1));	
+  MOV(R3, INDD(R3, 1)); 	
 
-	/* Compare string length */
 	CMP(INDD(R4, 1), INDD(R3, 1));
-	JUMP_NE(STRING_CMP_NEXT);
+	JUMP_NE(STS_CMP_NEXT);
   	
-	/* Compare strings */
-	MOV(R5, INDD(R4, 1)); // ptr to first char
+	MOV(R5, INDD(R4, IMM(1)));
 	ADD(R5, 1);
-STRING_CMP_LOOP:
-	// SHOW("", R5);
-	CMP(R5, 1); /* if end*/
-	JUMP_EQ(STRING_FOUND);
 
-	/* if chars does not match - jump next*/
+STS_COMPARE_LOOP:
+	CMP(R5, IMM(1)); 
+	JUMP_EQ(STS_FOUND);
+
 	CMP(INDD(R4, R5), INDD(R3, R5));
-	JUMP_NE(STRING_CMP_NEXT);
-	// printf("Char: %c - %c\n", INDD(R4, R5), INDD(R3, R5));
+	JUMP_NE(STS_CMP_NEXT);
 
-	DECR(R5);
-	JUMP(STRING_CMP_LOOP);
+	SUB(R5, 1);
+	JUMP(STS_COMPARE_LOOP);
 
-STRING_CMP_DONE_AND_NOT_MATCH:
+STS_CMP_DONE_AND_NOT_MATCH:
 
+STS_CMP_NEXT:
+	MOV(R6, INDD(R2,2));
+	MOV(R2, R6);
+	JUMP(STS_TO_SYMBOL_LOOP);
 
-	// /* Check if symbol is allocated (sometimes the*/
-	// CMP(R1, T_SYMBOL);
-	// JUMP_NE(STRING_TO_SYMBOL_INVALID_ARGUMENTS);  /* should look for next symbol? */
-	// printf("X");
-	// PUSH(R3);
-	// CALL(WRITE_SOB);
-	// DROP(1);
-	// printf("Z\n");
-	// SHOW("R2 Value:", R2);
-
-	/* Find string */
-	// MOV(R2,INDD(R1,1));	/* R2 = Addr of String */
-	// SHOW("AAA", R2);
-
-	/* goto next symbol */
-	// SHOW("Next: ", INDD(R1,0));
-STRING_CMP_NEXT:
-	MOV(R2, INDD(R2,2));
-	JUMP(STRING_TO_SYMBOL_LOOP);
-
-// 	MOV(R2,INDD(R1,0));
-// 	PUSH(R2);
-// 	PUSH(FPARG(IMM(2)));
-// 	CALL(STRING_COMPARE);
-// 	DROP(2);
-// 	CMP(R0,SOB_BOOLEAN_TRUE);
-// 	JUMP_NE(STRING_TO_SYMBOL_SEARCH_STRING_LOOP);
-// 	JUMP(STRING_TO_SYMBOL_END);
-
-STRING_FOUND:
+STS_FOUND:
 	MOV(R0, INDD(R2, 1));
-	JUMP(STRING_TO_SYM_EXIT);
+	JUMP(DONE_STS_TO_SYM);
 
-
-STRING_TO_SYMBOL_NOT_FOUND:
-	// SHOW("dine", R0);
-
-	/* make symbol*/
-	PUSH(R4); /* the original string */
+STS_SYMBOL_NOT_FOUND:
+	PUSH(R4); 
 	CALL(MAKE_SOB_SYMBOL);
 	DROP(1);
-	MOV(R1, R0); /* save ptr*/
+	MOV(R1, R0); 
 
-	/* Allocate Link-Chain (3 items) */
 	PUSH(IND(SOB_SYM_LIST));
 	PUSH(R1);
 	CALL(MAKE_SOB_PAIR);
@@ -97,14 +59,12 @@ STRING_TO_SYMBOL_NOT_FOUND:
 	MOV(IND(SOB_SYM_LIST), R0);
 	MOV(R0, R1);
 
-
-STRING_TO_SYM_EXIT:
+DONE_STS_TO_SYM:
+	POP(R6);
+	POP(R5);
+	POP(R4);
+	POP(R3);
 	POP(R2);
 	POP(R1);
 	POP(FP);
 	RETURN;
-
-STRING_TO_SYMBOL_INVALID_ARGUMENTS:
-    SHOW("Runtime error: STRING_TO_SYMBOL Invalid arguments: ",FPARG(1));
-    STOP_MACHINE;
-    return 1;

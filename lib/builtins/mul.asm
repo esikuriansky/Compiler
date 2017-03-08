@@ -48,8 +48,6 @@ MUL_ONE_ARG_CHECK:
 
 
 
-///// LOOP //////
-
 MUL_LOOP:
 
 	MOV(R4, FPARG(R2 + 2));
@@ -77,7 +75,6 @@ MUL_WITH_FRACTION:
 	JUMP_EQ(PRE_MULTIPLY_END);
 	JUMP(MUL_LOOP);
 
-///// LOOP END //////
 
 PRE_MULTIPLY_END:
   MOV(R0, R3);

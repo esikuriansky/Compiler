@@ -1393,8 +1393,8 @@
 			(address (number->string (car exists-resolve))))
 		;; body
 		; (if (not exists-resolve) (compilation-error "[!] FVAR: symbol does not exist." fvar))
-		(if (equal? fvar 'append)
-				(disp address "append-cgen-define"))
+		; (if (equal? fvar 'append)
+				; (disp address "append-cgen-define"))
 		(string-append 
 																			newl 
 			"// ---define--- "  						newl
@@ -1943,7 +1943,7 @@
 
 (define (get-primitive-label name)
 	(cond  
-		((equal? name "apply") "L_APPLY") ; apply 
+		((equal? name "apply") "APPLY") ; apply 
 		((equal? name "+") "PLUS") ; + variadic
 		((equal? name "<") "LOWER");; < variadic
 		((equal? name ">") "GREATER"); > variadic

@@ -2,25 +2,22 @@
 ZERO:
         PUSH(FP);
         MOV(FP, SP);
-        
-        MOV(R0,IMM(SOB_BOOL_TRUE));   
-
         CMP(INDD(FPARG(2),0),T_INTEGER); 
-        JUMP_NE(ZERO_MUST_BE_FRACTION);
-
+        JUMP_NE(ZERO_CHECK_FRACTION);
         CMP(IMM(0),INDD(FPARG(2),1));
-        JUMP_EQ(ZERO_DONE);
-        
-        //it's not zero
-        MOV(R0,IMM(SOB_BOOL_FALSE));
-        JUMP(ZERO_DONE);
+        JUMP_EQ(ZERO_DONE_TRUE);
+        JUMP(ZERO_DONE_FALSE);
 
-ZERO_MUST_BE_FRACTION:
-
+ZERO_CHECK_FRACTION:
         CMP(IMM(0), INDD(FPARG(2), 2));
-        JUMP_EQ(ZERO_DONE);
-        MOV(R0,IMM(SOB_BOOL_FALSE));
+        JUMP_EQ(ZERO_DONE_TRUE);
 
-ZERO_DONE:
+ZERO_DONE_FALSE:
+        MOV(R0,IMM(SOB_BOOL_FALSE)); 
+        POP(FP);
+        RETURN;  
+
+ZERO_DONE_TRUE:
+        MOV(R0,IMM(SOB_BOOL_TRUE));   
         POP(FP);
         RETURN;
